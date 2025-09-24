@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme -->
+    <style name="Base.Theme.Jai_Kisan" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Set global background color -->
+        <item name="android:windowBackground">@color/app_background</item>
+
+
+    </style>
+
+    <style name="Theme.Jai_Kisan" parent="Base.Theme.Jai_Kisan" />
+
+</resources>

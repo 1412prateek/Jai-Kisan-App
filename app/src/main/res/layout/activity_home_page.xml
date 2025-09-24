@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#F9F6ED">
+
+    <!-- App Logo at the Top -->
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/jai_kisan_logo"
+        android:contentDescription="App Logo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- App Title -->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/homeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="किसान की जीत, देश की प्रगति"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#388E3C"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/logoImageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- ROW 1 -->
+    <!-- Detect Disease -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardDetectDisease"
+        style="@style/Widget.Material3.CardView.Elevated"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginTop="24dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp"
+        app:rippleColor="?attr/colorControlHighlight"
+        app:layout_constraintTop_toBottomOf="@id/homeTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/cardVoiceAssistant"
+        app:layout_constraintWidth_percent="0.45">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@android:drawable/ic_menu_camera" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Detect Disease\n(रोग की पहचान)"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textColor="#000"
+                android:layout_marginTop="8dp" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Voice Assistant -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardVoiceAssistant"
+        style="@style/Widget.Material3.CardView.Elevated"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="8dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp"
+        app:rippleColor="?attr/colorControlHighlight"
+        app:layout_constraintTop_toBottomOf="@id/homeTitle"
+        app:layout_constraintStart_toEndOf="@id/cardDetectDisease"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.45">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@android:drawable/ic_btn_speak_now" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Voice Assistant\n(आवाज़ सहायक)"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textColor="#000"
+                android:layout_marginTop="8dp" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- ROW 2 -->
+    <!-- Mandi Prices -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardMandi"
+        style="@style/Widget.Material3.CardView.Elevated"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp"
+        app:rippleColor="?attr/colorControlHighlight"
+        app:layout_constraintTop_toBottomOf="@id/cardDetectDisease"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/cardHistory"
+        app:layout_constraintWidth_percent="0.45">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@android:drawable/ic_menu_info_details" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mandi Prices\n(मंडी के भाव)"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textColor="#000"
+                android:layout_marginTop="8dp" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Read History -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardHistory"
+        style="@style/Widget.Material3.CardView.Elevated"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp"
+        app:rippleColor="?attr/colorControlHighlight"
+        app:layout_constraintTop_toBottomOf="@id/cardVoiceAssistant"
+        app:layout_constraintStart_toEndOf="@id/cardMandi"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.45">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@android:drawable/ic_menu_recent_history" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Read History\n(इतिहास पढ़ें)"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textColor="#000"
+                android:layout_marginTop="8dp" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- ROW 3 -->
+    <!-- Weather Info -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardWeather"
+        style="@style/Widget.Material3.CardView.Elevated"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp"
+        app:rippleColor="?attr/colorControlHighlight"
+        app:layout_constraintTop_toBottomOf="@id/cardMandi"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/cardSchemes"
+        app:layout_constraintWidth_percent="0.45">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@android:drawable/ic_menu_compass" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Weather Info\n(मौसम जानकारी)"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textColor="#000"
+                android:layout_marginTop="8dp" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Govt Schemes -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardSchemes"
+        style="@style/Widget.Material3.CardView.Elevated"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp"
+        app:rippleColor="?attr/colorControlHighlight"
+        app:layout_constraintTop_toBottomOf="@id/cardHistory"
+        app:layout_constraintStart_toEndOf="@id/cardWeather"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.45">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@android:drawable/ic_menu_agenda" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Govt Schemes\n(सरकारी योजनाएं)"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textColor="#000"
+                android:layout_marginTop="8dp" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
