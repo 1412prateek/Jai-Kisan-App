@@ -1,159 +1,217 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
+    android:orientation="vertical"
     android:background="@color/app_background"
-    android:padding="16dp">
+    android:fitsSystemWindows="true"
+    tools:context=".DetectDiseaseActivity">
 
-    <LinearLayout
+    <!-- The stylish, floating toolbar with the new theme -->
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
 
-        <!-- 🔹 Top Banner / Illustration -->
-        <ImageView
-            android:id="@+id/diseaseBanner"
-            android:layout_width="330dp"
-            android:layout_height="200dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/card_bg_round"
-            android:contentDescription="Detect Disease Banner"
-            android:scaleType="centerCrop"
-            android:src="@drawable/diseasebanner"
-
-            app:cardPreventCornerOverlap="false"
-            app:cardUseCompatPadding="true" />
-
-
-
-        
-
-        <!-- 🔹 Subtitle -->
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Upload or capture a leaf image to detect plant disease.\nपौधे की पत्ती की छवि अपलोड करें या कैप्चर करें।"
-            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-            android:gravity="center"
-            android:layout_marginBottom="16dp"/>
-
-        <!-- 🔹 Image Preview Card -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardImagePreview"
             android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="6dp"
-            app:cardBackgroundColor="@android:color/white">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="25dp"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="#FFCC80">
 
-            <FrameLayout
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="?attr/actionBarSize"
+                app:title="Photo Expert / फोटो विशेषज्ञ"
+                app:titleTextColor="@color/text_on_sandy_brown"
+                app:navigationIconTint="@color/text_on_sandy_brown" />
 
-                <!-- Placeholder Image -->
-                <ImageView
-                    android:id="@+id/imagePreview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerInside"
-                    android:src="@android:drawable/ic_menu_report_image"
-                    android:contentDescription="Selected Image"/>
-
-                <!-- Overlay Text for Placeholder -->
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/placeholderText"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="No Image Selected\nकोई छवि चयनित नहीं"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    android:textColor="@android:color/darker_gray"/>
-            </FrameLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- 🔹 Buttons: Capture & Upload -->
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginBottom="16dp">
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="16dp">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnCaptureImage"
-                style="@style/Widget.Material3.Button"
-                android:layout_width="0dp"
+            <!-- ✅ IMPROVEMENT: The description text is now inside its own elevated card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Capture Photo\nफोटो लें"
-                app:icon="@android:drawable/ic_menu_camera"
-                app:iconGravity="textStart"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true"
+                app:cardBackgroundColor="@android:color/white">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnUploadImage"
-                style="@style/Widget.Material3.Button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Upload Image\nछवि अपलोड करें"
-                app:icon="@android:drawable/ic_menu_gallery"
-                app:iconGravity="textStart"
-                android:layout_marginStart="8dp"/>
-        </LinearLayout>
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    android:text="Analyze any crop, leaf, or fruit. Capture or upload a photo for an expert report.\nकिसी भी फसल, पत्ती या फल का विश्लेषण करें। विशेषज्ञ रिपोर्ट पाने के लिए फोटो खींचें या अपलोड करें।"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+            </com.google.android.material.card.MaterialCardView>
 
-        <!-- 🔹 Detect Disease Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnDetectDisease"
-            style="@style/Widget.Material3.Button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Detect Disease\nबीमारी पहचानें"
-            app:icon="@android:drawable/ic_menu_search"
-            app:iconGravity="textStart"
-            android:layout_marginBottom="20dp"/>
 
-        <!-- 🔹 Result Card -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardResult"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="6dp"
-            app:cardBackgroundColor="@android:color/white">
+            <!-- Card background changed to white -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardImagePreview"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imagePreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="Selected Image"/>
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/placeholderText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="No Image Selected\nकोई छवि चयनित नहीं"
+                        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                        android:textColor="@color/theme_reseda_green"/>
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="16dp">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tvDiseaseName"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCaptureImage"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Disease: "
-                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                    android:textColor="@color/green"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="8dp"/>
+                    android:layout_weight="1"
+                    android:text="Capture\nफोटो लें"
+                    app:icon="@drawable/ic_modern_camera"
+                    app:iconGravity="textStart"
+                    app:backgroundTint="@color/theme_wheat"
+                    android:textColor="@color/text_on_sandy_brown"
+                    app:iconTint="@color/text_on_sandy_brown"
+                    android:layout_marginEnd="8dp"/>
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tvDiseaseInfo"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnUploadImage"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Upload\nअपलोड करें"
+                    app:icon="@drawable/ic_modern_gallery"
+                    app:iconGravity="textStart"
+                    app:backgroundTint="@color/theme_wheat"
+                    android:textColor="@color/text_on_sandy_brown"
+                    app:iconTint="@color/text_on_sandy_brown"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDetectDisease"
+                style="@style/Widget.Material3.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Analyze Photo\nफोटो का विश्लेषण करें"
+                app:icon="@drawable/ic_modern_search"
+                app:backgroundTint="@color/theme_reseda_green"
+                app:iconGravity="textStart"
+                android:layout_marginBottom="20dp"/>
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/loadingIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                app:indicatorColor="@color/theme_reseda_green"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Card background changed to white -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Disease details and preventive measures will appear here.\nबीमारी का विवरण और निवारक उपाय यहां दिखाई देंगे।"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    android:layout_marginBottom="8dp"/>
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tvDiseaseName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Analysis Report"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                        android:textColor="@color/theme_reseda_green"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp"/>
 
-    </LinearLayout>
-</ScrollView>
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tvDiseaseInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Details will appear here."
+                        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                        android:textColor="@color/text_on_sandy_brown"
+                        android:layout_marginBottom="16dp"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnShare"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="Share / साझा करें"
+                        app:strokeColor="@color/theme_reseda_green"
+                        android:textColor="@color/theme_reseda_green"
+                        app:iconTint="@color/theme_reseda_green"
+                        app:icon="@drawable/ic_modern_share" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
+

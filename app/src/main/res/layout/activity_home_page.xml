@@ -56,10 +56,11 @@
             android:gravity="center"
             android:orientation="vertical">
 
+            <!-- ✅ IMPROVEMENT: Modern Icon -->
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@android:drawable/ic_menu_camera" />
+                android:src="@drawable/ic_home_detect" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
@@ -97,10 +98,11 @@
             android:gravity="center"
             android:orientation="vertical">
 
+            <!-- ✅ IMPROVEMENT: Modern Icon -->
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@android:drawable/ic_btn_speak_now" />
+                android:src="@drawable/ic_home_voice" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
@@ -129,7 +131,7 @@
         app:rippleColor="?attr/colorControlHighlight"
         app:layout_constraintTop_toBottomOf="@id/cardDetectDisease"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/cardHistory"
+        app:layout_constraintEnd_toStartOf="@+id/cardHowToUse"
         app:layout_constraintWidth_percent="0.45">
 
         <LinearLayout
@@ -138,10 +140,11 @@
             android:gravity="center"
             android:orientation="vertical">
 
+            <!-- ✅ IMPROVEMENT: Modern Icon -->
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@android:drawable/ic_menu_info_details" />
+                android:src="@drawable/ic_home_mandi" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
@@ -155,9 +158,9 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Read History -->
+    <!-- How to Use -->
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardHistory"
+        android:id="@+id/cardHowToUse"
         style="@style/Widget.Material3.CardView.Elevated"
         android:layout_width="0dp"
         android:layout_height="150dp"
@@ -182,12 +185,12 @@
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@android:drawable/ic_menu_recent_history" />
+                android:src="@drawable/ic_how_to_use" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Read History\n(इतिहास पढ़ें)"
+                android:text="How to Use\n(कैसे इस्तेमाल करे)"
                 android:textAlignment="center"
                 android:textSize="16sp"
                 android:textColor="#000"
@@ -220,10 +223,11 @@
             android:gravity="center"
             android:orientation="vertical">
 
+            <!-- ✅ IMPROVEMENT: Modern Icon -->
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@android:drawable/ic_menu_compass" />
+                android:src="@drawable/ic_home_weather" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
@@ -250,7 +254,7 @@
         app:cardCornerRadius="16dp"
         app:cardElevation="6dp"
         app:rippleColor="?attr/colorControlHighlight"
-        app:layout_constraintTop_toBottomOf="@id/cardHistory"
+        app:layout_constraintTop_toBottomOf="@id/cardHowToUse"
         app:layout_constraintStart_toEndOf="@id/cardWeather"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintWidth_percent="0.45">
@@ -261,10 +265,11 @@
             android:gravity="center"
             android:orientation="vertical">
 
+            <!-- ✅ IMPROVEMENT: Modern Icon -->
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@android:drawable/ic_menu_agenda" />
+                android:src="@drawable/ic_home_schemes" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
@@ -279,3 +284,4 @@
     </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

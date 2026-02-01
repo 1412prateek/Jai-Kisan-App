@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/app_background"
+    android:fitsSystemWindows="true"
+    tools:context=".HowToUseActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/theme_celadon">
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="How to Use / कैसे इस्तेमाल करे"
+            app:titleTextColor="@color/theme_black_bean"
+            app:navigationIconTint="@color/theme_black_bean" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Section 1: Photo Expert -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/theme_mint_cream"
+                app:cardCornerRadius="16dp"
+                android:layout_marginBottom="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1. Photo Expert / फोटो विशेषज्ञ"
+                        android:textColor="@color/theme_black_bean"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/theme_caput_mortuum"
+                        android:text="- Tap 'Capture' or 'Upload' to select an image.\n- Press 'Analyze Photo' to get a detailed report.\n- Use the 'Share' button to send the report to others.\n\n- छवि चुनने के लिए 'फोटो लें' या 'अपलोड करें' पर टैप करें।\n- विस्तृत रिपोर्ट पाने के लिए 'फोटो का विश्लेषण करें' दबाएं।\n- रिपोर्ट दूसरों को भेजने के लिए 'साझा करें' बटन का उपयोग करें।" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginTop="12dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/howto_detect"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Section 2: Mandi Prices -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/theme_mint_cream"
+                app:cardCornerRadius="16dp"
+                android:layout_marginBottom="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2. Mandi Prices / मंडी भाव"
+                        android:textColor="@color/theme_black_bean"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/theme_caput_mortuum"
+                        android:text="- Select your State, District, and Crop.\n- Choose a date range and sorting order.\n- Tap 'Preview' to see the latest prices.\n\n- अपना राज्य, जिला और फसल चुनें।\n- तारीख सीमा और क्रम चुनें।\n- नवीनतम मूल्य देखने के लिए 'पूर्वावलोकन' पर टैप करें।" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginTop="12dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/howto_mandi"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ✅ IMPROVEMENT: Section 3: Weather Info -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/theme_mint_cream"
+                app:cardCornerRadius="16dp"
+                android:layout_marginBottom="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3. Weather Info / मौसम जानकारी"
+                        android:textColor="@color/theme_black_bean"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/theme_caput_mortuum"
+                        android:text="- Automatically detects your location.\n- Shows current temperature and conditions.\n- Provides a 5-day forecast.\n\n- यह स्वचालित रूप से आपके स्थान का पता लगाता है।\n- वर्तमान तापमान और स्थिति दिखाता है।\n- 5-दिन का पूर्वानुमान प्रदान करता है।" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginTop="12dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/howto_weather"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ✅ IMPROVEMENT: Section 4: Government Schemes -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/theme_mint_cream"
+                app:cardCornerRadius="16dp"
+                android:layout_marginBottom="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4. Govt Schemes / सरकारी योजनाएं"
+                        android:textColor="@color/theme_black_bean"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/theme_caput_mortuum"
+                        android:text="- A list of important schemes for farmers.\n- Click on any scheme to read more details.\n- Find out about benefits and how to apply.\n\n- किसानों के लिए महत्वपूर्ण योजनाओं की सूची।\n- अधिक विवरण पढ़ने के लिए किसी भी योजना पर क्लिक करें।\n- लाभ और आवेदन करने के तरीके के बारे में जानें।" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginTop="12dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/howto_schemes"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
+

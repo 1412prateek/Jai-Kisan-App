@@ -10,7 +10,9 @@ public class HomePageActivity extends AppCompatActivity {
 
     CardView cardWeather; // Existing Weather card
     CardView cardMandi;   // Existing Mandi Prices card
-    CardView cardSchemes; // ✅ Government Schemes card
+    CardView cardSchemes; // Government Schemes card
+    CardView cardHowToUse;
+    CardView cardVoiceAssistant; // ✅ IMPROVEMENT: Added the Voice Assistant card
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +29,7 @@ public class HomePageActivity extends AppCompatActivity {
             }
         });
 
-        // ✅ Initialize Mandi Prices card
+        // Initialize Mandi Prices card
         cardMandi = findViewById(R.id.cardMandi);
         cardMandi.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,7 +39,7 @@ public class HomePageActivity extends AppCompatActivity {
             }
         });
 
-        // ✅ Initialize Government Schemes card
+        // Initialize Government Schemes card
         cardSchemes = findViewById(R.id.cardSchemes);
         cardSchemes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,12 +49,32 @@ public class HomePageActivity extends AppCompatActivity {
             }
         });
 
-        // ✅ Initialize Detect Disease card
+        // Initialize Detect Disease card
         CardView cardDetectDisease = findViewById(R.id.cardDetectDisease);
         cardDetectDisease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomePageActivity.this, DetectDiseaseActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Initialize the How to Use card
+        cardHowToUse = findViewById(R.id.cardHowToUse);
+        cardHowToUse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomePageActivity.this, HowToUseActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // ✅ IMPROVEMENT: Initialize the Voice Assistant card and set its click listener
+        cardVoiceAssistant = findViewById(R.id.cardVoiceAssistant);
+        cardVoiceAssistant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomePageActivity.this, VoiceAssistantActivity.class);
                 startActivity(intent);
             }
         });

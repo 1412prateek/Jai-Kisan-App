@@ -6,15 +6,61 @@
     <!-- Your custom background color -->
     <color name="app_background">#F9F6ED</color>
     <color name="green">#2E7D32</color>
+
+    <!-- ✅ THE FIX: Added the missing teal color back to resolve the build error. -->
     <color name="teal_700">#018786</color>
-    <color name="purple_500">#6200EE</color> <!-- Material default purple -->
+
+    <!-- ✅ IMPROVEMENT: New Orange Theme Colors -->
+    <color name="orange_primary">#F57C00</color> <!-- A strong, rich orange -->
+    <color name="orange_secondary_container">#FFE0B2</color> <!-- A light, complementary orange -->
+    <color name="on_orange_secondary_container">#4E2600</color> <!-- Dark text for the light orange -->
+    <color name="card_filled_background">#F5F1E9</color>
+
+    <color name="orange_primary_light">#FF9800</color> <!-- A slightly lighter, vibrant orange -->
+
+    <!-- ✅ IMPROVEMENT: New elegant, light brown for the primary button -->
+    <color name="brown_button_color">#D7CCC8</color>
+
+    <!-- ✅ IMPROVEMENT: New beautiful cream-yellow color for the cards -->
+    <color name="card_cream_yellow_background">#FAF3E0</color>
+
+    <!-- ✅ IMPROVEMENT: New Elegant Lilac & Rose Color Palette -->
+    <color name="theme_misty_rose">#fde8e9</color> <!-- For Card Backgrounds -->
+    <color name="theme_fairy_tale">#e3bac6</color> <!-- For Toolbar & Tonal Buttons -->
+    <color name="theme_lilac">#bc9ec1</color> <!-- For Primary Buttons & Highlights -->
+    <color name="theme_paynes_gray">#596475</color> <!-- For Card Outlines -->
+    <color name="theme_raisin_black">#1f2232</color> <!-- For Text on Light Backgrounds -->
+
+    <!-- ✅ IMPROVEMENT: Your New Full Green & Earth Tones Palette -->
+    <color name="theme_reseda_green">#6a8d73</color>    <!-- For Primary Buttons & Highlights -->
+    <color name="theme_light_yellow">#f4fdd9</color>  <!-- For Main Card Backgrounds -->
+    <color name="theme_nyanza">#e4ffe1</color>        <!-- For Result Card Backgrounds -->
+    <color name="theme_wheat">#ffe8c2</color>         <!-- For Tonal Buttons -->
+    <color name="theme_sandy_brown">#f0a868</color>  <!-- For the Toolbar -->
+    <color name="text_on_sandy_brown">#3E2006</color>  <!-- Dark text for light backgrounds -->
+
+    <!-- ✅ IMPROVEMENT: New Cambridge Blue & Mint Cream Palette -->
+    <color name="theme_cambridge_blue">#79b791</color> <!-- For Card Image Tint -->
+    <color name="theme_celadon">#abd1b5</color>      <!-- For Toolbar Background -->
+    <color name="theme_mint_cream">#edf4ed</color>    <!-- For Card Backgrounds -->
+    <color name="theme_caput_mortuum">#51291e</color>   <!-- For Subtitle Text -->
+    <color name="theme_black_bean">#301014</color>      <!-- For Title Text & Toolbar Text -->
+
+    <!-- ... your other colors are here ... -->
+
+    <!-- ✅ IMPROVEMENT: New Vibrant & Cheerful "Sky Blue" Theme -->
+    <color name="theme_sky_blue_primary">#29B6F6</color>     <!-- A bright, cheerful blue -->
+    <color name="theme_sky_blue_tonal">#E1F5FE</color>       <!-- A very light blue for secondary buttons -->
+    <color name="text_on_sky_blue_tonal">#01579B</color>   <!-- A dark blue for text on light backgrounds -->
 
 
-    <array name="progress_indicator_colors">
-        <item>@color/teal_700</item>
-        <item>@color/purple_500</item>
-        <item>@color/green</item>
-    </array>
-
+    <color name="alert_danger_bg">#F8D7DA</color>
+    <color name="alert_danger_text_and_icon">#721C24</color>
+    <color name="alert_safe_bg">@color/theme_celadon</color>
+    <color name="alert_safe_text_and_icon">@color/theme_black_bean</color>
 
 </resources>
+
+
+
+

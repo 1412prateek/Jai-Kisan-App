@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/colorSurface">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="45dp"
+            android:layout_marginBottom="8dp"
+            app:cardCornerRadius="32dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#FFCC80">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="Voice Assistant / आवाज़ सहायक"
+                app:titleTextAppearance="?attr/textAppearanceTitleLarge"
+                app:titleTextColor="#5D4037"
+                app:navigationIcon="@drawable/ic_arrow_back_24"
+                app:navigationIconTint="#5D4037" />
+
+        </com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="24dp">
+
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="पूछने के लिए टैप करें\nTap to Ask"
+                android:textAlignment="center"
+                android:textAppearance="?attr/textAppearanceHeadlineMedium"
+                android:textColor="?attr/colorOnSurface"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="32dp"/>
+
+            <ImageButton
+                android:id="@+id/btnMic"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:src="@drawable/ic_mic"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Microphone"
+                android:scaleType="fitCenter"
+                android:padding="16dp"
+                app:tint="#4CAF50"/>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:indeterminateTint="#4CAF50"
+                android:visibility="gone"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:visibility="visible"
+                style="?attr/materialCardViewFilledStyle"
+                app:cardBackgroundColor="?attr/colorSurfaceContainer"
+                app:cardCornerRadius="32dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="top">
+
+                        <TextView
+                            android:id="@+id/tvResultHindi"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="नमस्ते! मैं आपकी कृषि सहायता के लिए यहाँ हूँ।"
+                            android:textAppearance="?attr/textAppearanceBodyLarge"
+                            android:lineSpacingMultiplier="1.4"
+                            android:textColor="?attr/colorOnSurface" />
+
+                        <ImageButton
+                            android:id="@+id/btnSpeakHindi"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_volume_up_24"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="Play Hindi Audio"
+                            app:tint="#FF9800" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?attr/colorOutlineVariant"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="top">
+
+                        <TextView
+                            android:id="@+id/tvResultEnglish"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Hello! I am here to assist you with agriculture."
+                            android:textAppearance="?attr/textAppearanceBodyLarge"
+                            android:lineSpacingMultiplier="1.4"
+                            android:textColor="?attr/colorOnSurface" />
+
+                        <ImageButton
+                            android:id="@+id/btnSpeakEnglish"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_volume_up_24"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="Play English Audio"
+                            app:tint="#2196F3" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

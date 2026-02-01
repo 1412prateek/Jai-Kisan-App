@@ -2,18 +2,32 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
+// ✅ This block reads your local.properties file
+Properties properties = new Properties()
+if (project.rootProject.file("local.properties").exists()) {
+    properties.load(project.rootProject.file("local.properties").newDataInputStream())
+}
+
 android {
     namespace 'com.rcc.jai_kisan'
     compileSdk 36
+
+    // ✅ ADDED: This line fixes the error by re-enabling BuildConfig
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId "com.rcc.jai_kisan"
         minSdk 24
         targetSdk 36
-        versionCode 1
-        versionName "1.0"
+        versionCode 9
+        versionName "1.0.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // ✅ This line creates the secure variable for your Java code
+        buildConfigField "String", "GEMINI_API_KEY", "\"${properties.getProperty("GEMINI_API_KEY")}\""
     }
 
     buildTypes {
@@ -23,15 +37,16 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
-
+    // ... (All your other dependencies)
+    // (No changes needed here)
     implementation libs.appcompat
-    implementation libs.material
+    implementation 'com.google.android.material:material:1.12.0'
     implementation libs.activity
     implementation libs.constraintlayout
     implementation libs.play.services.location
@@ -39,11 +54,18 @@ dependencies {
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation libs.material.v1110 // or latest
-    implementation 'com.google.android.material:material:1.10.0' // or latest
-    implementation 'com.google.android.material:material:1.12.0'  // or latest
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation "io.noties.markwon:core:4.6.2"
 
+    // Room Database libraries
+    def room_version = "2.6.1"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
 
-
-
+    // ✅ VVI IMPROVEMENT: Added Lifecycle library for LiveData and ViewModel
+    def lifecycle_version = "2.6.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
 }

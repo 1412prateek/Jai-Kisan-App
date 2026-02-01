@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+
+
     <application
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -39,12 +42,23 @@
         <activity android:name=".DetectDiseaseActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".HowToUseActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".VoiceAssistantActivity"
+            android:exported="false" />
+
+
+
 
 
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
 
 

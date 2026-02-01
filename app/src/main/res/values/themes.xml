@@ -1,10 +1,20 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.Jai_Kisan" parent="Theme.Material3.Light.NoActionBar">
 
-    <!-- Base application theme -->
-    <style name="Base.Theme.Jai_Kisan" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Set global background color -->
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+
         <item name="android:windowBackground">@color/app_background</item>
 
+        <item name="android:fontFamily">@font/poppins</item>
+
+        <item name="colorPrimary">@color/green</item>
+        <item name="colorPrimaryVariant">@color/green</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/green</item>
+        <item name="colorSecondaryVariant">@color/green</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
 
     </style>
 

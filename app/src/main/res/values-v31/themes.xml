@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- ✅ This theme is ONLY for Android 12 (API 31) and newer. -->
+    <!-- It inherits from DynamicColors, which pulls colors from the user's wallpaper. -->
+    <style name="Base.Theme.Jai_Kisan" parent="Theme.Material3.DynamicColors.Light.NoActionBar">
+
+        <!-- ✅ Sets your permanent background color, overriding the dynamic one. -->
+        <item name="android:windowBackground">@color/app_background</item>
+
+        <!-- ✅ Ensures the status bar color matches the dynamic toolbar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+
+    </style>
+</resources>
