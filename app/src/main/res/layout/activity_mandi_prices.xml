@@ -33,7 +33,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:titleTextColor="@color/text_on_sandy_brown"
+                app:navigationIcon="@drawable/ic_arrow_back_24"
                 app:navigationIconTint="@color/text_on_sandy_brown" />
+
+
 
         </com.google.android.material.card.MaterialCardView>
 

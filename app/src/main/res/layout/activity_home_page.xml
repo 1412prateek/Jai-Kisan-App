@@ -6,7 +6,6 @@
     android:padding="16dp"
     android:background="#F9F6ED">
 
-    <!-- App Logo at the Top -->
     <ImageView
         android:id="@+id/logoImageView"
         android:layout_width="120dp"
@@ -18,7 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- App Title -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/homeTitle"
         android:layout_width="wrap_content"
@@ -32,8 +30,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- ROW 1 -->
-    <!-- Detect Disease -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardDetectDisease"
         style="@style/Widget.Material3.CardView.Elevated"
@@ -56,7 +52,6 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <!-- ✅ IMPROVEMENT: Modern Icon -->
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
@@ -74,7 +69,6 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Voice Assistant -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardVoiceAssistant"
         style="@style/Widget.Material3.CardView.Elevated"
@@ -98,7 +92,6 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <!-- ✅ IMPROVEMENT: Modern Icon -->
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
@@ -116,8 +109,6 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- ROW 2 -->
-    <!-- Mandi Prices -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardMandi"
         style="@style/Widget.Material3.CardView.Elevated"
@@ -140,7 +131,6 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <!-- ✅ IMPROVEMENT: Modern Icon -->
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
@@ -158,7 +148,6 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- How to Use -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardHowToUse"
         style="@style/Widget.Material3.CardView.Elevated"
@@ -199,8 +188,6 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- ROW 3 -->
-    <!-- Weather Info -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardWeather"
         style="@style/Widget.Material3.CardView.Elevated"
@@ -214,7 +201,7 @@
         app:rippleColor="?attr/colorControlHighlight"
         app:layout_constraintTop_toBottomOf="@id/cardMandi"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/cardSchemes"
+        app:layout_constraintEnd_toStartOf="@+id/cardFarmingTools"
         app:layout_constraintWidth_percent="0.45">
 
         <LinearLayout
@@ -223,7 +210,6 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <!-- ✅ IMPROVEMENT: Modern Icon -->
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
@@ -241,9 +227,8 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Govt Schemes -->
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardSchemes"
+        android:id="@+id/cardFarmingTools"
         style="@style/Widget.Material3.CardView.Elevated"
         android:layout_width="0dp"
         android:layout_height="150dp"
@@ -265,16 +250,16 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <!-- ✅ IMPROVEMENT: Modern Icon -->
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/ic_home_schemes" />
+                android:src="@drawable/ic_construction_24"
+                app:tint="#000000" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Govt Schemes\n(सरकारी योजनाएं)"
+                android:text="Farming Tools\n(खेती उपकरण)"
                 android:textAlignment="center"
                 android:textSize="16sp"
                 android:textColor="#000"
@@ -284,4 +269,3 @@
     </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

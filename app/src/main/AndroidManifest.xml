@@ -36,11 +36,35 @@
         <activity android:name=".MandiPricesActivity"
             android:exported="false" />
 
-        <activity android:name=".GovernmentSchemesActivity"
-            android:exported="false" />
 
         <activity android:name=".DetectDiseaseActivity"
             android:exported="true" />
+
+
+<!--        //farming tools-->
+
+        <activity
+            android:name=".FarmingToolsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".FertilizerCalculatorActivity"
+            android:exported="false" />
+
+
+        <activity android:name=".IrrigationPlannerActivity"
+            android:exported="false" />
+
+        <activity android:name=".CostCalculatorActivity"
+            android:exported="false" />
+
+
+
+
+
+        <activity
+            android:name=".YieldEstimatorActivity"
+            android:exported="false" />
 
         <activity
             android:name=".HowToUseActivity"

@@ -10,7 +10,7 @@ public class HomePageActivity extends AppCompatActivity {
 
     CardView cardWeather; // Existing Weather card
     CardView cardMandi;   // Existing Mandi Prices card
-    CardView cardSchemes; // Government Schemes card
+    CardView cardFarmingTools; // ✅ Farming Tools hub
     CardView cardHowToUse;
     CardView cardVoiceAssistant; // ✅ IMPROVEMENT: Added the Voice Assistant card
 
@@ -39,13 +39,12 @@ public class HomePageActivity extends AppCompatActivity {
             }
         });
 
-        // Initialize Government Schemes card
-        cardSchemes = findViewById(R.id.cardSchemes);
-        cardSchemes.setOnClickListener(new View.OnClickListener() {
+        // ✅ Farming Tools card — launches FarmingToolsActivity hub
+        cardFarmingTools = findViewById(R.id.cardFarmingTools);
+        cardFarmingTools.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomePageActivity.this, GovernmentSchemesActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(HomePageActivity.this, FarmingToolsActivity.class));
             }
         });
 
