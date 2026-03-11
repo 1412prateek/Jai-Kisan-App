@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#E5E5D8"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="32dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="0dp"
+            app:cardUseCompatPadding="true"
+            app:cardBackgroundColor="#E07854">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="Yield Estimator / उपज अनुमानक"
+                app:titleTextColor="#1A1A1A"
+                app:navigationIcon="@drawable/ic_arrow_back_24"
+                app:navigationIconTint="#1A1A1A" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="20dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Yield Estimator / उपज अनुमानक"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="#212121"
+                        android:fontFamily="sans-serif"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@+id/btn_close"
+                        android:layout_marginEnd="8dp" />
+
+                    <ImageButton
+                        android:id="@+id/btn_close"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_close"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Close"
+                        app:tint="#757575"
+                        android:padding="6dp" />
+                </RelativeLayout>
+
+                <Space android:layout_height="20dp" android:layout_width="match_parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select Crop / फसल चुनें"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#212121"
+                    android:fontFamily="sans-serif" />
+
+                <Space android:layout_height="8dp" android:layout_width="match_parent" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_crop_dropdown"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Crop Type">
+                    <AutoCompleteTextView
+                        android:id="@+id/dropdown_crop"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:textSize="14sp"
+                        android:textColor="#212121"
+                        android:fontFamily="sans-serif" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Space android:layout_height="16dp" android:layout_width="match_parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Land Area / जमीन का क्षेत्रफल"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#212121"
+                    android:fontFamily="sans-serif" />
+
+                <Space android:layout_height="8dp" android:layout_width="match_parent" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_area_input"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Area (Acres)">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/input_area"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Space android:layout_height="20dp" android:layout_width="match_parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_estimate"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="Estimate Yield / उपज का अनुमान लगाएं"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif"
+                    app:backgroundTint="#1565C0"
+                    app:cornerRadius="50dp"
+                    app:rippleColor="#0D47A1" />
+
+                <LinearLayout
+                    android:id="@+id/result_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:layout_marginTop="20dp"
+                    android:background="#E3F2FD"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Estimated Yield / अनुमानित उपज"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="#1565C0"
+                        android:fontFamily="sans-serif"
+                        android:layout_marginBottom="12dp" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:layout_marginBottom="6dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                            android:text="Yield per Acre" android:textSize="14sp" android:textColor="#424242" android:fontFamily="sans-serif" />
+                        <TextView android:id="@+id/tv_yield_per_acre" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="--" android:textSize="14sp" android:textStyle="bold" android:textColor="#212121" android:fontFamily="sans-serif" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:layout_marginBottom="12dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                            android:text="Total Yield" android:textSize="14sp" android:textColor="#424242" android:fontFamily="sans-serif" />
+                        <TextView android:id="@+id/tv_total_yield" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="--" android:textSize="14sp" android:textStyle="bold" android:textColor="#212121" android:fontFamily="sans-serif" />
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#BBDEFB" android:layout_marginBottom="12dp" />
+
+                    <TextView android:id="@+id/tv_yield_summary" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:text="Final Summary" android:textSize="13sp" android:textColor="#1565C0" android:fontFamily="sans-serif"
+                        android:layout_marginBottom="16dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_share"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:text="Share Result / परिणाम साझा करें"
+                        android:textColor="#1565C0"
+                        android:fontFamily="sans-serif"
+                        app:strokeColor="#1565C0"
+                        app:cornerRadius="50dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </ScrollView>
+
+</LinearLayout>
