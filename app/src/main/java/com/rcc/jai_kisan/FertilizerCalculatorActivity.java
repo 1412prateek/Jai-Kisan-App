@@ -2,7 +2,6 @@ package com.rcc.jai_kisan;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -13,67 +12,29 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
-/**
- * FertilizerCalculatorActivity
- *
- * Allows the user to select a crop and enter land area (in acres),
- * then calculates the recommended N, P, K fertilizer dosage.
- *
- * Design rules enforced:
- * - Toolbar: #E07854 (terracotta), NOT colorPrimary
- * - Screen background: #E5E5D8 (set in layout XML)
- * - Calculate button: pill-shape (50dp), match_parent, #2E7D32
- * - Validation error: Snackbar (NOT Toast or AlertDialog)
- * - Results: slide-down within same screen (NOT new Activity)
- */
 public class FertilizerCalculatorActivity extends AppCompatActivity {
 
-    // Views
     private View rootView;
-    private AutoCompleteTextView cropDropdown;
+    private AutoCompleteTextView cropDropdown, stateDropdown, unitDropdown;
     private TextInputEditText areaInput;
-    private LinearLayout resultSection;
-    private TextView tvNitrogen, tvPhosphorus, tvPotassium;
-    private TextView tvTotalSummary, tvTotalValues;
+    private View resultSection;
+    private TextView tvUreaBags, tvDapBags, tvMopBags;
+    private TextView tvNRow, tvPRow, tvKRow, tvNanoUrea;
 
-    // ─── Fertilizer NPK rates per acre (kg/acre) ─────────────────────────────
-    // Source: ICAR baseline recommendations for major Indian crops
-    // Format: { N, P, K } per acre
-    private static final double[][] NPK_RATES = {
-            // Wheat / गेहूं
-            { 55.0, 30.0, 15.0 },
-            // Rice / चावल
-            { 50.0, 25.0, 25.0 },
-            // Maize / मक्का
-            { 60.0, 30.0, 20.0 },
-            // Cotton / कपास
-            { 50.0, 25.0, 25.0 },
-            // Sugarcane / गन्ना
-            { 80.0, 35.0, 40.0 },
-            // Soybean / सोयाबीन
-            { 20.0, 40.0, 20.0 },
-            // Mustard / सरसों
-            { 45.0, 20.0, 15.0 },
-            // Potato / आलू
-            { 75.0, 40.0, 75.0 }
-    };
+    private final Map<String, Map<String, Double>> regionUnitMap = new HashMap<>();
 
-    // Bilingual crop names — MUST match dropdown order exactly
-    private static final String[] CROPS = {
-            "Wheat / गेहूं",
-            "Rice / चावल",
-            "Maize / मक्का",
-            "Cotton / कपास",
-            "Sugarcane / गन्ना",
-            "Soybean / सोयाबीन",
-            "Mustard / सरसों",
-            "Potato / आलू"
+    // Nutrient data per acre: {N, P, K}
+    private static final double[][] NPK_BASE_RATES = {
+            {55.0, 30.0, 15.0}, {50.0, 25.0, 25.0}, {60.0, 30.0, 20.0}, {50.0, 25.0, 25.0},
+            {80.0, 35.0, 40.0}, {20.0, 40.0, 20.0}, {45.0, 20.0, 15.0}, {75.0, 40.0, 75.0},
+            {40.0, 20.0, 20.0}, {35.0, 25.0, 25.0}
     };
 
     @Override
@@ -81,146 +42,145 @@ public class FertilizerCalculatorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fertilizer_calculator);
 
-        // Bind views
+        initializeRegionalUnits();
+
         rootView = findViewById(R.id.root_view);
         cropDropdown = findViewById(R.id.dropdown_crop);
+        stateDropdown = findViewById(R.id.dropdown_state);
+        unitDropdown = findViewById(R.id.dropdown_unit);
         areaInput = findViewById(R.id.input_area);
         resultSection = findViewById(R.id.result_section);
-        tvNitrogen = findViewById(R.id.tv_nitrogen);
-        tvPhosphorus = findViewById(R.id.tv_phosphorus);
-        tvPotassium = findViewById(R.id.tv_potassium);
-        tvTotalSummary = findViewById(R.id.tv_total_summary);
-        tvTotalValues = findViewById(R.id.tv_total_values);
 
-        // Toolbar — back arrow calls finish()
+        tvUreaBags = findViewById(R.id.tv_urea_bags);
+        tvDapBags = findViewById(R.id.tv_dap_bags);
+        tvMopBags = findViewById(R.id.tv_mop_bags);
+
+        tvNRow = findViewById(R.id.tv_n_row);
+        tvPRow = findViewById(R.id.tv_p_row);
+        tvKRow = findViewById(R.id.tv_k_row);
+        tvNanoUrea = findViewById(R.id.tv_nano_urea);
+
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        // Card close button (×) — also calls finish()
         ImageButton btnClose = findViewById(R.id.btn_close);
-        btnClose.setOnClickListener(v -> finish());
+        if (btnClose != null) btnClose.setOnClickListener(v -> finish());
 
-        // Setup crop dropdown (ExposedDropdownMenu)
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_dropdown_item_1line,
-                CROPS);
-        cropDropdown.setAdapter(adapter);
+        // 1. Populate Crops
+        String[] crops = {"Wheat / गेहूं", "Rice / धान", "Maize / मक्का", "Cotton / कपास", "Sugarcane / गन्ना", "Soybean / सोयाबीन", "Mustard / सरसों", "Potato / आलू", "Onion / प्याज", "Chili / मिर्च"};
+        cropDropdown.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, crops));
 
-        // Calculate button
-        MaterialButton btnCalculate = findViewById(R.id.btn_calculate);
-        btnCalculate.setOnClickListener(v -> calculateFertilizer());
+        // 2. Populate States
+        String[] allStates = {
+                "Andhra Pradesh / आंध्र प्रदेश", "Arunachal Pradesh / अरुणाचल प्रदेश", "Assam / असम", "Bihar / बिहार", "Chhattisgarh / छत्तीसगढ़", "Goa / गोवा", "Gujarat / गुजरात", "Haryana / हरियाणा", "Himachal Pradesh / हिमाचल प्रदेश", "Jharkhand / झारखंड", "Karnataka / कर्नाटक", "Kerala / केरल", "Madhya Pradesh / मध्य प्रदेश", "Maharashtra / महाराष्ट्र", "Manipur / मणिपुर", "Meghalaya / मेघालय", "Mizoram / मिजोरम", "Nagaland / नागालैंड", "Odisha / ओडिशा", "Punjab / पंजाब", "Rajasthan / राजस्थान", "Sikkim / सिक्किम", "Tamil Nadu / तमिलनाडु", "Telangana / तेलंगाना", "Tripura / त्रिपुरा", "Uttar Pradesh / उत्तर प्रदेश", "Uttarakhand / उत्तराखंड", "West Bengal / पश्चिम बंगाल", "Delhi / दिल्ली", "Jammu & Kashmir / जम्मू और कश्मीर", "Ladakh / लद्दाख"
+        };
+        stateDropdown.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, allStates));
 
-        // Share button
-        MaterialButton btnShare = findViewById(R.id.btn_share);
-        btnShare.setOnClickListener(v -> shareResult());
+        stateDropdown.setOnItemClickListener((parent, view, position, id) -> loadUnitsForState(allStates[position]));
+
+        findViewById(R.id.btn_calculate).setOnClickListener(v -> calculateProFertilizer());
+        findViewById(R.id.btn_share).setOnClickListener(v -> shareResult());
     }
 
-    /**
-     * Validates inputs and triggers fertilizer calculation.
-     * Shows Snackbar on validation failure — NOT Toast or AlertDialog.
-     */
-    private void calculateFertilizer() {
-        String crop = cropDropdown.getText().toString().trim();
-        String areaStr = areaInput.getText() != null
-                ? areaInput.getText().toString().trim()
-                : "";
+    private void initializeRegionalUnits() {
+        Map<String, Double> universal = new HashMap<>();
+        universal.put("Acre / एकड़", 1.0);
+        universal.put("Hectare / हेक्टेयर", 2.47);
 
-        // FIXED: Replaced R.string.error_fill_fields with hardcoded text
-        if (crop.isEmpty() || areaStr.isEmpty()) {
-            Snackbar.make(rootView,
-                    "Please fill all fields / कृपया सभी फ़ील्ड भरें",
-                    Snackbar.LENGTH_SHORT).show();
+        Map<String, Double> north = new HashMap<>(universal);
+        north.put("Bigha / बीघा", 0.625); north.put("Kanal / कनाल", 0.125);
+
+        Map<String, Double> south = new HashMap<>(universal);
+        south.put("Cent / सेंट", 0.01); south.put("Guntha / गुंठा", 0.025);
+
+        Map<String, Double> east = new HashMap<>(universal);
+        east.put("Katha / कट्ठा", 0.031); east.put("Decimal / डेसीमल", 0.01);
+
+        regionUnitMap.put("NORTH", north); regionUnitMap.put("SOUTH", south);
+        regionUnitMap.put("EAST", east); regionUnitMap.put("WEST", south);
+    }
+
+    private void loadUnitsForState(String state) {
+        String region = "NORTH";
+        if (state.contains("Tamil") || state.contains("Karnataka") || state.contains("Kerala") || state.contains("Andhra")) region = "SOUTH";
+        else if (state.contains("Bengal") || state.contains("Bihar") || state.contains("Assam")) region = "EAST";
+
+        Map<String, Double> units = regionUnitMap.get(region);
+        if (units != null) {
+            String[] names = units.keySet().toArray(new String[0]);
+            unitDropdown.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, names));
+            unitDropdown.setText(names[0], false);
+        }
+    }
+
+    private void calculateProFertilizer() {
+        String crop = cropDropdown.getText().toString();
+        String state = stateDropdown.getText().toString();
+        String unit = unitDropdown.getText().toString();
+        String areaVal = areaInput.getText().toString();
+
+        if (crop.isEmpty() || state.isEmpty() || unit.isEmpty() || areaVal.isEmpty()) {
+            Snackbar.make(rootView, "Please fill all info / कृपया जानकारी भरें", Snackbar.LENGTH_SHORT).show();
             return;
         }
 
-        double area;
-        try {
-            area = Double.parseDouble(areaStr);
-            if (area <= 0)
-                throw new NumberFormatException("Area must be positive");
-        } catch (NumberFormatException e) {
-            Snackbar.make(rootView,
-                    "Please enter a valid area / कृपया वैध क्षेत्रफल दर्ज करें",
-                    Snackbar.LENGTH_SHORT).show();
-            return;
-        }
+        // Get conversion factor
+        String region = "NORTH";
+        if (state.contains("Tamil") || state.contains("Karnataka") || state.contains("Kerala") || state.contains("Andhra")) region = "SOUTH";
+        else if (state.contains("Bengal") || state.contains("Bihar") || state.contains("Assam")) region = "EAST";
 
-        // Get NPK rates for selected crop
-        int cropIndex = getCropIndex(crop);
-        double[] rates = (cropIndex >= 0) ? NPK_RATES[cropIndex] : new double[] { 40.0, 20.0, 15.0 };
+        double acres = Double.parseDouble(areaVal) * regionUnitMap.get(region).get(unit);
 
-        double nitrogen = rates[0] * area;
-        double phosphorus = rates[1] * area;
-        double potassium = rates[2] * area;
+        // Find crop index
+        int idx = 0;
+        String[] crops = {"Wheat / गेहूं", "Rice / धान", "Maize / मक्का", "Cotton / कपास", "Sugarcane / गन्ना", "Soybean / सोयाबीन", "Mustard / सरसों", "Potato / आलू", "Onion / प्याज", "Chili / मिर्च"};
+        for(int i=0; i<crops.length; i++) { if(crops[i].equals(crop)) idx = i; }
 
-        showResultCard(nitrogen, phosphorus, potassium, rates, area);
+        double[] rates = NPK_BASE_RATES[idx];
+        double netN = rates[0] * acres;
+        double netP = rates[1] * acres;
+        double netK = rates[2] * acres;
+
+        // Bag Conversion
+        double dapKg = netP / 0.46;
+        double ureaKg = Math.max(0, (netN - (dapKg * 0.18)) / 0.46);
+        double mopKg = netK / 0.60;
+
+        // Nano Urea: 1 bottle (500ml) replaces 1 bag of Urea (approx 45kg N-content equivalent)
+        int nanoBottles = (int) Math.ceil(ureaKg / 45.0);
+
+        displayResults(netN, netP, netK, ureaKg, dapKg, mopKg, nanoBottles, rates);
     }
 
-    /**
-     * Returns the index of the selected crop in the NPK_RATES array.
-     * Matches by prefix since the full bilingual string is shown.
-     */
-    private int getCropIndex(String selectedCrop) {
-        for (int i = 0; i < CROPS.length; i++) {
-            if (selectedCrop.equalsIgnoreCase(CROPS[i]))
-                return i;
-        }
-        return -1; // fallback
+    private void displayResults(double n, double p, double k, double u, double d, double m, int nano, double[] base) {
+        // 1. NPK Summary Row Style
+        tvNRow.setText(String.format(Locale.getDefault(), "Nitrogen (N) / नाइट्रोजन:   %.0f kg/acre → %.1f kg", base[0], n));
+        tvPRow.setText(String.format(Locale.getDefault(), "Phosphorus (P) / फॉस्फोरस:   %.0f kg/acre → %.1f kg", base[1], p));
+        tvKRow.setText(String.format(Locale.getDefault(), "Potassium (K) / पोटेशियम:   %.0f kg/acre → %.1f kg", base[2], k));
+
+        // 2. Shopping List (Bags + Loose)
+        tvUreaBags.setText(formatBagString("Urea / यूरिया", u));
+        tvDapBags.setText(formatBagString("DAP / डीएपी", d));
+        tvMopBags.setText(formatBagString("MOP / एमओपी", m));
+
+        // 3. Nano Urea
+        tvNanoUrea.setText(String.format(Locale.getDefault(), "%d Bottle(s) of 500ml\n(यूरिया की जगह %d बोतल नैनो यूरिया का प्रयोग करें)", nano, nano));
+
+        resultSection.setVisibility(View.VISIBLE);
+        resultSection.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
     }
 
-    /**
-     * Populates and animates the result section into view.
-     * Result expands WITHIN the same screen — does NOT open a new Activity.
-     */
-    private void showResultCard(double nitrogen, double phosphorus,
-            double potassium, double[] rates, double area) {
-        // Populate result TextViews
-        tvNitrogen.setText(String.format(Locale.getDefault(),
-                "%s kg/acre → %.1f kg", formatDouble(rates[0]), nitrogen));
-        tvPhosphorus.setText(String.format(Locale.getDefault(),
-                "%s kg/acre → %.1f kg", formatDouble(rates[1]), phosphorus));
-        tvPotassium.setText(String.format(Locale.getDefault(),
-                "%s kg/acre → %.1f kg", formatDouble(rates[2]), potassium));
-
-        tvTotalSummary.setText(String.format(Locale.getDefault(),
-                "Total for %.1f acres / %.1f एकड़ के लिए:", area, area));
-        tvTotalValues.setText(String.format(Locale.getDefault(),
-                "N: %.1f kg   P: %.1f kg   K: %.1f kg",
-                nitrogen, phosphorus, potassium));
-
-        // Animate slide-down if not already visible
-        if (resultSection.getVisibility() != View.VISIBLE) {
-            resultSection.setVisibility(View.VISIBLE);
-            Animation slideDown = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left);
-            slideDown.setDuration(350);
-            resultSection.startAnimation(slideDown);
-        }
-    }
-
-    private String formatDouble(double value) {
-        if (value == (long) value)
-            return String.valueOf((long) value);
-        return String.valueOf(value);
+    private String formatBagString(String label, double totalKg) {
+        int bags = (int) (totalKg / 50);
+        int loose = (int) (totalKg % 50);
+        return String.format(Locale.getDefault(), "%s: %d Bags + %d kg loose\n(%d बैग और %d किलो खुला)", label, bags, loose, bags, loose);
     }
 
     private void shareResult() {
-        String crop = cropDropdown.getText().toString();
-        String areaStr = areaInput.getText() != null ? areaInput.getText().toString() : "0";
-        String n = tvNitrogen.getText().toString();
-        String p = tvPhosphorus.getText().toString();
-        String k = tvPotassium.getText().toString();
-
-        String message = "🌾 Fertilizer Recommendation / उर्वरक अनुशंसा\n" +
-                "Crop / फसल: " + crop + "\n" +
-                "Area / क्षेत्र: " + areaStr + " acres\n\n" +
-                "N: " + n + "\nP: " + p + "\nK: " + k + "\n\n" +
-                "— Jai Kisan App";
-
-        android.content.Intent shareIntent = new android.content.Intent(android.content.Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
-        startActivity(android.content.Intent.createChooser(shareIntent, "Share / साझा करें"));
+        String res = "🌾 Fertilizer Advice\n" + tvUreaBags.getText() + "\n" + tvDapBags.getText() + "\n— Jai Kisan";
+        android.content.Intent i = new android.content.Intent(android.content.Intent.ACTION_SEND);
+        i.setType("text/plain"); i.putExtra(android.content.Intent.EXTRA_TEXT, res);
+        startActivity(android.content.Intent.createChooser(i, "Share"));
     }
 }

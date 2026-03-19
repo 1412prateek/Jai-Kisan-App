@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#E5E5D8"
-    android:fitsSystemWindows="true">
+    android:background="#E5E5D8">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -35,194 +34,151 @@
                 app:titleTextColor="#1A1A1A"
                 app:navigationIcon="@drawable/ic_arrow_back_24"
                 app:navigationIconTint="#1A1A1A" />
-
         </com.google.android.material.card.MaterialCardView>
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:clipToPadding="false">
 
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="20dp"
-            app:cardBackgroundColor="#FFFFFF"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="4dp">
+            android:orientation="vertical"
+            android:paddingBottom="30dp">
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="24dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Yield Estimator / उपज अनुमानक"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textColor="#212121"
-                        android:fontFamily="sans-serif"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_toStartOf="@+id/btn_close"
-                        android:layout_marginEnd="8dp" />
-
-                    <ImageButton
-                        android:id="@+id/btn_close"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_close"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="Close"
-                        app:tint="#757575"
-                        android:padding="6dp" />
-                </RelativeLayout>
-
-                <Space android:layout_height="20dp" android:layout_width="match_parent" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Select Crop / फसल चुनें"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="#212121"
-                    android:fontFamily="sans-serif" />
-
-                <Space android:layout_height="8dp" android:layout_width="match_parent" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layout_crop_dropdown"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Crop Type">
-                    <AutoCompleteTextView
-                        android:id="@+id/dropdown_crop"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="none"
-                        android:textSize="14sp"
-                        android:textColor="#212121"
-                        android:fontFamily="sans-serif" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <Space android:layout_height="16dp" android:layout_width="match_parent" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Land Area / जमीन का क्षेत्रफल"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="#212121"
-                    android:fontFamily="sans-serif" />
-
-                <Space android:layout_height="8dp" android:layout_width="match_parent" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layout_area_input"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Enter Area (Acres)">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/input_area"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberDecimal"
-                        android:textSize="14sp"
-                        android:fontFamily="sans-serif" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <Space android:layout_height="20dp" android:layout_width="match_parent" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_estimate"
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:text="Estimate Yield / उपज का अनुमान लगाएं"
-                    android:textColor="#FFFFFF"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif"
-                    app:backgroundTint="#1565C0"
-                    app:cornerRadius="50dp"
-                    app:rippleColor="#0D47A1" />
+                android:layout_margin="16dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp">
 
                 <LinearLayout
-                    android:id="@+id/result_section"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone"
-                    android:layout_marginTop="20dp"
-                    android:background="#E3F2FD"
-                    android:padding="16dp">
+                    android:padding="24dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Estimated Yield / अनुमानित उपज"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:textColor="#1565C0"
-                        android:fontFamily="sans-serif"
-                        android:layout_marginBottom="12dp" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Yield Pro / उपज अनुमानक"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="#212121" />
+                        <ImageButton
+                            android:id="@+id/btn_close"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_alignParentEnd="true"
+                            android:src="@drawable/ic_close"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            app:tint="#757575" />
+                    </RelativeLayout>
 
+                    <Space android:layout_height="24dp" android:layout_width="match_parent" />
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="1. Select Crop / फसल चुनें" android:textStyle="bold" android:textColor="#1565C0" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp">
+                        <AutoCompleteTextView android:id="@+id/dropdown_crop" android:layout_width="match_parent"
+                            android:layout_height="wrap_content" android:hint="Crop Type" android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Space android:layout_height="16dp" android:layout_width="match_parent" />
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="2. Select State / राज्य चुनें" android:textStyle="bold" android:textColor="#1565C0" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp">
+                        <AutoCompleteTextView android:id="@+id/dropdown_state" android:layout_width="match_parent"
+                            android:layout_height="wrap_content" android:hint="Select State" android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Space android:layout_height="16dp" android:layout_width="match_parent" />
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="3. Land Area / जमीन का विवरण" android:textStyle="bold" android:textColor="#1565C0" />
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                        android:orientation="horizontal" android:layout_marginBottom="6dp">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                            android:text="Yield per Acre" android:textSize="14sp" android:textColor="#424242" android:fontFamily="sans-serif" />
-                        <TextView android:id="@+id/tv_yield_per_acre" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="--" android:textSize="14sp" android:textStyle="bold" android:textColor="#212121" android:fontFamily="sans-serif" />
+                        android:orientation="horizontal" android:layout_marginTop="8dp">
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1.2" android:layout_marginEnd="8dp">
+                            <AutoCompleteTextView android:id="@+id/dropdown_unit" android:layout_width="match_parent"
+                                android:layout_height="wrap_content" android:hint="Unit" android:inputType="none" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:hint="Area">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/input_area"
+                                android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                        android:orientation="horizontal" android:layout_marginBottom="12dp">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                            android:text="Total Yield" android:textSize="14sp" android:textColor="#424242" android:fontFamily="sans-serif" />
-                        <TextView android:id="@+id/tv_total_yield" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="--" android:textSize="14sp" android:textStyle="bold" android:textColor="#212121" android:fontFamily="sans-serif" />
-                    </LinearLayout>
-
-                    <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#BBDEFB" android:layout_marginBottom="12dp" />
-
-                    <TextView android:id="@+id/tv_yield_summary" android:layout_width="match_parent" android:layout_height="wrap_content"
-                        android:text="Final Summary" android:textSize="13sp" android:textColor="#1565C0" android:fontFamily="sans-serif"
-                        android:layout_marginBottom="16dp" />
+                    <Space android:layout_height="24dp" android:layout_width="match_parent" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_share"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="44dp"
-                        android:text="Share Result / परिणाम साझा करें"
-                        android:textColor="#1565C0"
-                        android:fontFamily="sans-serif"
-                        app:strokeColor="#1565C0"
-                        app:cornerRadius="50dp" />
+                        android:id="@+id/btn_estimate"
+                        android:layout_width="match_parent" android:layout_height="52dp"
+                        android:text="Estimate Yield / उपज का अनुमान" android:textStyle="bold"
+                        app:backgroundTint="#1565C0" app:cornerRadius="50dp" />
 
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/result_section"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:visibility="gone" android:layout_marginTop="20dp"
+                        app:cardBackgroundColor="#E3F2FD" app:cardCornerRadius="16dp" app:cardElevation="0dp">
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:orientation="vertical" android:padding="16dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Estimated Yield / अनुमानित उपज" android:textStyle="bold" android:textColor="#1565C0" android:layout_marginBottom="12dp" />
+                            <TextView android:id="@+id/tv_yield_per_acre" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="--" android:textColor="#212121" android:layout_marginBottom="4dp"/>
+                            <TextView android:id="@+id/tv_total_yield" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="--" android:textColor="#212121" android:layout_marginBottom="12dp"/>
+                            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#BBDEFB" android:layout_marginBottom="12dp" />
+                            <TextView android:id="@+id/tv_yield_summary" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="--" android:textSize="13sp" android:textColor="#424242" android:layout_marginBottom="16dp" />
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_share" style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="match_parent" android:layout_height="44dp"
+                                android:text="Share Advice / सलाह साझा करें" android:textColor="#1565C0"
+                                app:strokeColor="#1565C0" app:cornerRadius="50dp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#15000000"
+                app:cardCornerRadius="12dp">
+
+                <TextView
+                    android:id="@+id/tv_disclaimer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:textAlignment="center"
+                    android:textSize="11sp"
+                    android:textColor="#524F4F"
+                    android:lineSpacingExtra="2dp"
+                    android:text="* Disclaimer: These results are automated suggestions based on general data. Actual field conditions vary. Consult a local agriculture specialist before making final decisions. \n अस्वीकरण: ये परिणाम सामान्य डेटा पर आधारित स्वचालित सुझाव हैं। वास्तविक स्थिति भिन्न हो सकती है। अंतिम निर्णय लेने से पहले स्थानीय कृषि विशेषज्ञ से सलाह लें।" />
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
     </ScrollView>
-
 </LinearLayout>

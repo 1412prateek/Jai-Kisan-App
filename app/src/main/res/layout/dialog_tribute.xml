@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardCornerRadius="32dp"
+    app:cardElevation="0dp"
+    android:clipToPadding="false"
+    app:cardPreventCornerOverlap="true"
+    app:cardBackgroundColor="@color/black">
+
+    <FrameLayout
+        android:id="@+id/tributeOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="12dp"> <com.google.android.material.card.MaterialCardView
+        android:id="@+id/tributeCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:cardCornerRadius="32dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="#FFFFFF">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/btnCloseTribute"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="8dp"
+                android:padding="12dp"
+                android:elevation="10dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                app:tint="#BDBDBD" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp"
+
+                    android:gravity="center">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="130dp"
+                        android:layout_height="130dp"
+                        app:cardCornerRadius="65dp"
+                        app:strokeWidth="3dp"
+                        app:strokeColor="#A08E5B"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginBottom="16dp">
+                        <ImageView
+                            android:id="@+id/imgGrandfather"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/baba" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="IN LOVING MEMORY OF"
+                        android:letterSpacing="0.2"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#A08E5B"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Late Shri Ramchandra Chaudhary"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:textColor="#2D3436"
+                        android:textAlignment="center"
+                        android:layout_marginTop="4dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1936 – 2025"
+                        android:textSize="14sp"
+                        android:textColor="#7F8C8D"
+                        android:layout_marginTop="2dp"/>
+
+                    <View
+                        android:layout_width="60dp"
+                        android:layout_height="2dp"
+                        android:background="#A08E5B"
+                        android:layout_marginVertical="20dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dedicated to the man who believed in my dreams before I did. This journey would never have been possible without your blessings."
+                        android:textSize="16sp"
+                        android:textColor="#4A4A4A"
+                        android:lineSpacingExtra="5dp"
+                        android:justificationMode="inter_word"
+                        android:textAlignment="center"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="This one is for you, Baba."
+                        android:textSize="18sp"
+                        android:textStyle="bold|italic"
+                        android:textColor="#2D3436"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="– Prateek Kumar"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="#2D3436"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#E6E6E6"
+                        android:layout_marginVertical="16dp"/>
+
+
+
+                </LinearLayout>
+            </ScrollView>
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+    </FrameLayout>
+</com.google.android.material.card.MaterialCardView>

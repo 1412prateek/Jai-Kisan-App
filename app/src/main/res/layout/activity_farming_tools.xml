@@ -17,13 +17,15 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp"
             app:cardCornerRadius="32dp"
-            app:cardElevation="4dp"
+            app:cardElevation="6dp"
+            app:cardMaxElevation="6dp"
+            app:cardUseCompatPadding="false"
             app:strokeWidth="0dp"
-            app:cardUseCompatPadding="true"
             app:cardBackgroundColor="#E07854">
 
             <com.google.android.material.appbar.MaterialToolbar
@@ -43,24 +45,30 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:clipToPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="20dp"
+            android:clipToPadding="false"
+            android:clipChildren="false">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_fertilizer"
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="24dp"
+                android:layout_marginHorizontal="4dp"
                 android:clickable="true"
                 android:focusable="true"
                 app:cardBackgroundColor="#FFFFFF"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="4dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="8dp"
+                app:cardMaxElevation="8dp"
+                app:cardUseCompatPadding="false"
                 app:rippleColor="?attr/colorControlHighlight">
 
                 <LinearLayout
@@ -92,7 +100,6 @@
                         android:textSize="14sp"
                         android:textColor="#757575"
                         android:layout_marginTop="4dp" />
-
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -100,12 +107,15 @@
                 android:id="@+id/card_yield"
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="24dp"
+                android:layout_marginHorizontal="4dp"
                 android:clickable="true"
                 android:focusable="true"
                 app:cardBackgroundColor="#FFFFFF"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="4dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="8dp"
+                app:cardMaxElevation="8dp"
+                app:cardUseCompatPadding="false"
                 app:rippleColor="?attr/colorControlHighlight">
 
                 <LinearLayout
@@ -137,7 +147,6 @@
                         android:textSize="14sp"
                         android:textColor="#757575"
                         android:layout_marginTop="4dp" />
-
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -145,12 +154,15 @@
                 android:id="@+id/card_irrigation"
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="24dp"
+                android:layout_marginHorizontal="4dp"
                 android:clickable="true"
                 android:focusable="true"
                 app:cardBackgroundColor="#FFFFFF"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="4dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="8dp"
+                app:cardMaxElevation="8dp"
+                app:cardUseCompatPadding="false"
                 app:rippleColor="?attr/colorControlHighlight">
 
                 <LinearLayout
@@ -182,7 +194,6 @@
                         android:textSize="14sp"
                         android:textColor="#757575"
                         android:layout_marginTop="4dp" />
-
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -190,12 +201,15 @@
                 android:id="@+id/card_cost"
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="32dp"
+                android:layout_marginHorizontal="4dp"
                 android:clickable="true"
                 android:focusable="true"
                 app:cardBackgroundColor="#FFFFFF"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="4dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="8dp"
+                app:cardMaxElevation="8dp"
+                app:cardUseCompatPadding="false"
                 app:rippleColor="?attr/colorControlHighlight">
 
                 <LinearLayout
@@ -227,7 +241,6 @@
                         android:textSize="14sp"
                         android:textColor="#757575"
                         android:layout_marginTop="4dp" />
-
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

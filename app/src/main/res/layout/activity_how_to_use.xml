@@ -31,7 +31,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Section 1: Photo Expert -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -65,7 +64,6 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Section 2: Mandi Prices -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -99,7 +97,6 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- ✅ IMPROVEMENT: Section 3: Weather Info -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -133,7 +130,6 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- ✅ IMPROVEMENT: Section 4: Government Schemes -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -148,7 +144,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="4. Govt Schemes / सरकारी योजनाएं"
+                        android:text="4. Voice Assistant / आवाज़ सहायक"
                         android:textColor="@color/theme_black_bean"
                         android:textStyle="bold"
                         android:textAppearance="@style/TextAppearance.Material3.TitleLarge"/>
@@ -157,17 +153,49 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:textColor="@color/theme_caput_mortuum"
-                        android:text="- A list of important schemes for farmers.\n- Click on any scheme to read more details.\n- Find out about benefits and how to apply.\n\n- किसानों के लिए महत्वपूर्ण योजनाओं की सूची।\n- अधिक विवरण पढ़ने के लिए किसी भी योजना पर क्लिक करें।\n- लाभ और आवेदन करने के तरीके के बारे में जानें।" />
+                        android:text="- Tap the Microphone icon and ask your question.\n- Speak clearly in your preferred language.\n- Get instant solutions and listen to them via audio.\n\n- माइक्रोफोन आइकन पर टैप करें और अपना प्रश्न पूछें।\n- अपनी पसंदीदा भाषा में स्पष्ट रूप से बोलें।\n- त्वरित समाधान प्राप्त करें और उन्हें ऑडियो के माध्यम से सुनें।" />
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
+                        android:layout_height="250dp"
                         android:layout_marginTop="12dp"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/howto_schemes"/>
+                        android:src="@drawable/howto_voice"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/theme_mint_cream"
+                app:cardCornerRadius="16dp"
+                android:layout_marginBottom="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5. Farming Tools / खेती उपकरण"
+                        android:textColor="@color/theme_black_bean"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/theme_caput_mortuum"
+                        android:text="- Access specialized calculators for your farm.\n- Calculate fertilizers, yield, and irrigation needs.\n- Manage costs efficiently with the cost calculator.\n\n- अपने खेत के लिए विशेष कैलकुलेटर तक पहुंचें।\n- उर्वरक, उपज और सिंचाई की आवश्यकताओं की गणना करें।\n- लागत कैलकुलेटर के साथ लागत का कुशलतापूर्वक प्रबंधन करें।" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:layout_marginTop="12dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/howto_tools"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
-

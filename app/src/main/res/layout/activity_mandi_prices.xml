@@ -44,7 +44,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:fillViewport="true">
 
         <LinearLayout
@@ -292,6 +293,61 @@
                     android:textColor="@color/theme_black_bean"
                     android:text="Prices will be shown here / यहाँ कीमतें दिखाई जाएँगी।" />
             </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#15000000"
+                app:cardCornerRadius="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <!-- Title -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="⚠ Disclaimer / अस्वीकरण"
+                        android:textStyle="bold"
+                        android:textSize="12sp"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:layout_marginBottom="6dp"/>
+
+                    <!-- English -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="11sp"
+                        android:textColor="#444444"
+                        android:lineSpacingExtra="2dp"
+                        android:justificationMode="inter_word"
+                        android:text="This report is generated using AI-based analysis and estimated market patterns. Actual mandi prices may vary depending on location and market conditions."
+                        android:layout_marginBottom="6dp"/>
+
+                    <!-- Hindi -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="11sp"
+                        android:textColor="#444444"
+                        android:lineSpacingExtra="2dp"
+                        android:justificationMode="inter_word"
+                        android:text="यह रिपोर्ट AI आधारित विश्लेषण और अनुमानित बाजार प्रवृत्तियों पर आधारित है। वास्तविक मंडी कीमतें स्थान और बाजार की स्थिति के अनुसार भिन्न हो सकती हैं।"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </ScrollView>
+
+
 </LinearLayout>

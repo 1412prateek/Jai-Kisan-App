@@ -6,6 +6,8 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.google.android.material.card.MaterialCardView;
+
 public class HomePageActivity extends AppCompatActivity {
 
     CardView cardWeather; // Existing Weather card
@@ -77,5 +79,16 @@ public class HomePageActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // About
+        MaterialCardView cardAbout = findViewById(R.id.cardAboutDeveloper);
+        cardAbout.setOnClickListener(v -> {
+            Intent intent = new Intent(HomePageActivity.this, AboutDeveloperActivity.class);
+            startActivity(intent);
+        });
+
+
+
+
     }
 }

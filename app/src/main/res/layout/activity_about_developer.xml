@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9F6ED"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="20dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            app:cardCornerRadius="65dp"
+            app:strokeWidth="3dp"
+            app:strokeColor="#A69659"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp">
+            <ImageView
+                android:id="@+id/imgGrandfather"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/jai_kisan_logo_copy" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Jai Kisan"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="#1B1B1B"
+            android:layout_marginTop="-10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="मेरी मिट्टी मेरे किसान"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#388E3C"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="20dp"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginVertical="8dp"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="3dp"
+            app:cardMaxElevation="6dp"
+            app:cardPreventCornerOverlap="true"
+            app:strokeColor="@color/white"
+            app:cardBackgroundColor="#FFFFFF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:text="About Jai Kisan"
+                    android:textStyle="bold"
+                    android:textSize="17sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="A comprehensive digital tool for farmers featuring crop disease detection, mandi market prices, weather updates and AI-powered assistance designed to support modern agriculture."
+                    android:textSize="13sp"
+                    android:textColor="#555555"
+                    android:lineSpacingExtra="3dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E6E6E6"
+                    android:layout_marginVertical="16dp"/>
+
+                <TextView
+                    android:text="Developer"
+                    android:textStyle="bold"
+                    android:textSize="17sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:text="Prateek Kumar"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="#333333"
+                    android:layout_marginTop="6dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:text="Founder – RSVP Studios"
+                    android:textSize="13sp"
+                    android:textColor="#777777"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E6E6E6"
+                    android:layout_marginVertical="16dp"/>
+
+                <TextView
+                    android:text="About RSVP Studios"
+                    android:textStyle="bold"
+                    android:textSize="17sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="RSVP Studios is an independent development studio dedicated to building meaningful and practical technology solutions that improve real-world lives."
+                    android:textSize="13sp"
+                    android:textColor="#666666"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E6E6E6"
+                    android:layout_marginVertical="16dp"/>
+
+                <TextView
+                    android:text="Contact"
+                    android:textStyle="bold"
+                    android:textSize="17sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEmail"
+                    style="@style/Widget.Material3.Button.ElevatedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Email Support"
+                    app:backgroundTint="#FFFFFF"
+                    app:icon="@android:drawable/ic_dialog_email"
+                    app:iconTint="#388E3C"
+                    android:textColor="#333333"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnLinkedIn"
+                    style="@style/Widget.Material3.Button.ElevatedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="LinkedIn"
+                    app:backgroundTint="#FFFFFF"
+                    app:icon="@drawable/ic_linkedin"
+                    app:iconTint="#0077B5"
+                    android:textColor="#333333"/>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnMemory"
+            style="@style/Widget.Material3.Button.ElevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="In Loving Memory"
+            android:textColor="#605435"
+
+            app:icon="@drawable/ic_tribute_flower"
+            app:iconTint="@null"
+            app:iconSize="32dp"
+            app:iconPadding="10dp"
+
+            app:backgroundTint="#F2EFE4"
+            android:paddingHorizontal="24dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRateApp"
+            style="@style/Widget.Material3.Button.ElevatedButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="⭐ Rate this App"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:backgroundTint="#388E3C"
+            android:textColor="#FFFFFF"
+            app:cardElevation="6dp"
+            android:layout_marginTop="24dp"/>
+
+        <TextView
+            android:id="@+id/appVersionText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Version 1.0.3"
+            android:textSize="12sp"
+            android:textColor="#999999"
+            android:layout_marginTop="32dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="© 2026 RSVP Studios. All Rights Reserved."
+            android:textSize="11sp"
+            android:textColor="#AAAAAA"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="24dp"/>
+
+    </LinearLayout>
+</ScrollView>

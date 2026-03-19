@@ -40,6 +40,12 @@
         <activity android:name=".DetectDiseaseActivity"
             android:exported="true" />
 
+<!--        //About-->
+        
+        <activity android:name=".AboutDeveloperActivity"
+            android:exported="false"/>
+
+
 
 <!--        //farming tools-->
 
@@ -57,9 +63,6 @@
 
         <activity android:name=".CostCalculatorActivity"
             android:exported="false" />
-
-
-
 
 
         <activity

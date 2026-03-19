@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#E5E5D8"
-    android:fitsSystemWindows="true">
+    android:background="#E5E5D8">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -24,12 +23,11 @@
             app:cardCornerRadius="32dp"
             app:cardElevation="4dp"
             app:cardBackgroundColor="#E07854">
-
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:title="Cost Calculator / लागत कैलकुलेटर"
+                app:title="Financial Pro / बजट और लाभ"
                 app:titleTextColor="#1A1A1A"
                 app:navigationIcon="@drawable/ic_arrow_back_24"
                 app:navigationIconTint="#1A1A1A" />
@@ -38,82 +36,123 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:clipToPadding="false">
 
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            app:cardBackgroundColor="#FFFFFF"
-            app:cardCornerRadius="20dp">
+            android:orientation="vertical"
+            android:paddingBottom="30dp">
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="24dp">
+                android:layout_margin="16dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Seed Cost (₹) / बीज की लागत">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/input_seed_cost"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberDecimal" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:orientation="vertical"
+                    android:padding="24dp">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:hint="Labor Cost (₹) / मजदूरी">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/input_labor_cost"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberDecimal" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="1. Production Costs / उत्पादन लागत" android:textStyle="bold" android:textColor="#E64A19" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:hint="Fuel &amp; Tractor (₹) / ईंधन और ट्रैक्टर">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/input_fuel_cost"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberDecimal" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:hint="Seed / बीज (₹)">
+                        <com.google.android.material.textfield.TextInputEditText android:id="@+id/input_seed" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_calculate_cost"
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:layout_marginTop="24dp"
-                    android:text="Calculate Total / कुल गणना"
-                    app:backgroundTint="#E64A19"
-                    app:cornerRadius="50dp" />
+                    <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:hint="Fertilizer &amp; Pesticide / खाद और दवा (₹)">
+                        <com.google.android.material.textfield.TextInputEditText android:id="@+id/input_fertilizer" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:hint="Labor &amp; Machinery / मजदूर और मशीन (₹)">
+                        <com.google.android.material.textfield.TextInputEditText android:id="@+id/input_labor" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:hint="Transport &amp; Others / परिवहन और अन्य (₹)">
+                        <com.google.android.material.textfield.TextInputEditText android:id="@+id/input_other" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Space android:layout_height="24dp" android:layout_width="match_parent" />
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="2. Expected Harvest / अनुमानित पैदावार" android:textStyle="bold" android:textColor="#2E7D32" />
+
+                    <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:hint="Total Yield / कुल पैदावार (Quintals)">
+                        <com.google.android.material.textfield.TextInputEditText android:id="@+id/input_yield" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:hint="Selling Price / भाव (₹ per Q)">
+                        <com.google.android.material.textfield.TextInputEditText android:id="@+id/input_price" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_calculate_cost"
+                        android:layout_width="match_parent" android:layout_height="52dp" android:layout_marginTop="24dp"
+                        android:text="Financial Analysis / विश्लेषण करें" app:backgroundTint="#E64A19" app:cornerRadius="50dp" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/result_section"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:visibility="gone" android:layout_marginTop="20dp"
+                        app:cardBackgroundColor="#FDFDF7" app:cardCornerRadius="16dp" app:strokeWidth="1dp" app:strokeColor="#E0E0E0">
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:orientation="vertical" android:padding="16dp">
+
+                            <TextView android:id="@+id/tv_net_profit" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="22sp" android:textStyle="bold" android:textColor="#2E7D32" android:gravity="center" android:layout_marginBottom="12dp" />
+
+                            <TextView android:id="@+id/tv_margin" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="14sp" android:textColor="#424242" android:layout_marginBottom="4dp"/>
+                            <TextView android:id="@+id/tv_break_even" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="14sp" android:textColor="#424242" android:layout_marginBottom="12dp"/>
+
+                            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" android:layout_marginBottom="12dp" />
+
+                            <TextView android:id="@+id/tv_advice_title" android:layout_width="match_parent" android:layout_height="wrap_content" android:textStyle="bold" android:textColor="#212121" android:layout_marginBottom="4dp" />
+                            <TextView android:id="@+id/tv_advice_desc" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="13sp" android:textColor="#616161" android:layout_marginBottom="16dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_share" style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="match_parent" android:layout_height="44dp"
+                                android:text="Share Report / साझा करें" android:textColor="#E64A19" app:strokeColor="#E64A19" app:cornerRadius="50dp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#15000000"
+                app:cardCornerRadius="12dp">
 
                 <TextView
-                    android:id="@+id/tv_total_cost_result"
+                    android:id="@+id/tv_disclaimer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:gravity="center"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="#D84315"
-                    android:visibility="gone" />
+                    android:padding="12dp"
+                    android:textAlignment="center"
+                    android:textSize="11sp"
+                    android:textColor="#524F4F"
+                    android:lineSpacingExtra="2dp"
+                    android:text="* Disclaimer: These results are automated suggestions based on general data. Actual field conditions vary. Consult a local agriculture specialist before making final decisions. \n अस्वीकरण: ये परिणाम सामान्य डेटा पर आधारित स्वचालित सुझाव हैं। वास्तविक स्थिति भिन्न हो सकती है। अंतिम निर्णय लेने से पहले स्थानीय कृषि विशेषज्ञ से सलाह लें।" />
+            </com.google.android.material.card.MaterialCardView>
 
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
     </ScrollView>
 </LinearLayout>

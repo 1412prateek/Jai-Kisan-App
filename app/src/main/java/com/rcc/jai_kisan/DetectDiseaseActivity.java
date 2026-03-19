@@ -59,7 +59,7 @@ public class DetectDiseaseActivity extends AppCompatActivity {
     // USE THIS EXACT MODEL NAME
     // FASTER VERSION (4 Billion Parameters instead of 12)
     private static final String GEMINI_URL =
-            "https://generativelanguage.googleapis.com/v1beta/models/gemma-3-4b-it:generateContent?key="
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key="
                     + GEMINI_API_KEY;
 
     private ImageView imagePreview;

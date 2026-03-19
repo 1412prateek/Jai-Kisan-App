@@ -2,7 +2,6 @@ package com.rcc.jai_kisan;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -13,58 +12,35 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
-/**
- * YieldEstimatorActivity
- *
- * Allows the user to select a crop and enter land area (in acres),
- * then estimates the expected yield in quintals.
- *
- * Design rules enforced:
- * - Toolbar: #E07854 (terracotta), NOT colorPrimary
- * - Screen background: #E5E5D8 (set in layout XML)
- * - Estimate button: pill-shape (50dp), match_parent, #1565C0 (Royal Blue)
- * - Validation error: Snackbar (NOT Toast or AlertDialog)
- * - Results: slide-down within same screen (NOT new Activity)
- */
 public class YieldEstimatorActivity extends AppCompatActivity {
 
-    // Views
     private View rootView;
-    private AutoCompleteTextView cropDropdown;
+    private AutoCompleteTextView cropDropdown, stateDropdown, unitDropdown;
     private TextInputEditText areaInput;
-    private LinearLayout resultSection;
+    private View resultSection;
     private TextView tvYieldPerAcre, tvTotalYield, tvYieldSummary;
 
-    // ─── Baseline yield in quintals/acre ─────────────────────────────────────
-    // Source: ICAR / Ministry of Agriculture average yield data
-    private static final double[] BASE_YIELD_QUINTALS_PER_ACRE = {
-            16.0, // Wheat / गेहूं
-            18.0, // Rice / चावल
-            20.0, // Maize / मक्का
-            10.0, // Cotton / कपास (seed cotton)
-            280.0, // Sugarcane / गन्ना (high volume crop)
-            8.0, // Soybean / सोयाबीन
-            7.0, // Mustard / सरसों
-            75.0 // Potato / आलू
+    // Mapping logic matching Fertilizer Calculator
+    private final Map<String, Map<String, Double>> regionUnitMap = new HashMap<>();
+
+    private static final String[] CROPS = {
+            "Wheat / गेहूं", "Rice / चावल", "Maize / मक्का", "Cotton / कपास",
+            "Sugarcane / गन्ना", "Soybean / सोयाबीन", "Mustard / सरसों", "Potato / आलू",
+            "Onion / प्याज", "Chili / मिर्च"
     };
 
-    // Bilingual crop names — MUST match NPK_RATES order in
-    // FertilizerCalculatorActivity
-    private static final String[] CROPS = {
-            "Wheat / गेहूं",
-            "Rice / चावल",
-            "Maize / मक्का",
-            "Cotton / कपास",
-            "Sugarcane / गन्ना",
-            "Soybean / सोयाबीन",
-            "Mustard / सरसों",
-            "Potato / आलू"
+    // Avg Yields in Quintals per Acre
+    private static final double[] AVG_YIELDS = {18.5, 20.0, 22.0, 10.0, 320.0, 8.5, 7.2, 85.0, 70.0, 15.0};
+
+    private static final String[] STATES = {
+            "Andhra Pradesh / आंध्र प्रदेश", "Arunachal Pradesh / अरुणाचल प्रदेश", "Assam / असम", "Bihar / बिहार", "Chhattisgarh / छत्तीसगढ़", "Goa / गोवा", "Gujarat / गुजरात", "Haryana / हरियाणा", "Himachal Pradesh / हिमाचल प्रदेश", "Jharkhand / झारखंड", "Karnataka / कर्नाटक", "Kerala / केरल", "Madhya Pradesh / मध्य प्रदेश", "Maharashtra / महाराष्ट्र", "Manipur / मणिपुर", "Meghalaya / मेघालय", "Mizoram / मिजोरम", "Nagaland / नागालैंड", "Odisha / ओडिशा", "Punjab / पंजाब", "Rajasthan / राजस्थान", "Sikkim / सिक्किम", "Tamil Nadu / तमिलनाडु", "Telangana / तेलंगाना", "Tripura / त्रिपुरा", "Uttar Pradesh / उत्तर प्रदेश", "Uttarakhand / उत्तराखंड", "West Bengal / पश्चिम बंगाल", "Delhi / दिल्ली", "Jammu & Kashmir / जम्मू और कश्मीर", "Ladakh / लद्दाख", "Puducherry / पुडुचेरी", "Andaman & Nicobar / अंडमान और निकोबार"
     };
 
     @Override
@@ -72,128 +48,140 @@ public class YieldEstimatorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_yield_estimator);
 
-        // Bind views
+        initializeRegionalUnits();
+
         rootView = findViewById(R.id.root_view);
         cropDropdown = findViewById(R.id.dropdown_crop);
+        stateDropdown = findViewById(R.id.dropdown_state);
+        unitDropdown = findViewById(R.id.dropdown_unit);
         areaInput = findViewById(R.id.input_area);
         resultSection = findViewById(R.id.result_section);
+
         tvYieldPerAcre = findViewById(R.id.tv_yield_per_acre);
         tvTotalYield = findViewById(R.id.tv_total_yield);
         tvYieldSummary = findViewById(R.id.tv_yield_summary);
 
-        // Toolbar — back arrow calls finish()
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        // Card close button (×) — also calls finish()
         ImageButton btnClose = findViewById(R.id.btn_close);
-        btnClose.setOnClickListener(v -> finish());
+        if (btnClose != null) btnClose.setOnClickListener(v -> finish());
 
-        // Setup crop dropdown (ExposedDropdownMenu)
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_dropdown_item_1line,
-                CROPS);
-        cropDropdown.setAdapter(adapter);
+        // Adapters
+        cropDropdown.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, CROPS));
+        stateDropdown.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, STATES));
 
-        // Estimate button
-        MaterialButton btnEstimate = findViewById(R.id.btn_estimate);
-        btnEstimate.setOnClickListener(v -> estimateYield());
+        // Regional logic trigger
+        stateDropdown.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedState = STATES[position];
+            loadUnitsForState(selectedState);
+        });
 
-        // Share button
-        MaterialButton btnShare = findViewById(R.id.btn_share);
-        btnShare.setOnClickListener(v -> shareResult());
+        findViewById(R.id.btn_estimate).setOnClickListener(v -> calculateYield());
+        findViewById(R.id.btn_share).setOnClickListener(v -> shareResult());
     }
 
-    /**
-     * Validates inputs and triggers yield estimation.
-     * Shows Snackbar on validation failure — NOT Toast or AlertDialog.
-     */
-    private void estimateYield() {
-        String crop = cropDropdown.getText().toString().trim();
-        String areaStr = areaInput.getText() != null
-                ? areaInput.getText().toString().trim()
-                : "";
+    private void initializeRegionalUnits() {
+        // Shared Universal Units
+        Map<String, Double> universal = new HashMap<>();
+        universal.put("Acre / एकड़", 1.0);
+        universal.put("Hectare / हेक्टेयर", 2.47);
+        universal.put("Sq. Ft / वर्ग फुट", 0.0000229);
 
-        // FIXED: Replaced R.string.error_fill_fields with hardcoded text
-        if (crop.isEmpty() || areaStr.isEmpty()) {
-            Snackbar.make(rootView,
-                    "Please fill all fields / कृपया सभी फ़ील्ड भरें",
-                    Snackbar.LENGTH_SHORT).show();
+        // Regional Definitions
+        Map<String, Double> north = new HashMap<>(universal);
+        north.put("Bigha / बीघा", 0.625);
+        north.put("Kanal / कनाल", 0.125);
+        north.put("Biswa / बिस्वा", 0.031);
+        north.put("Killa / किल्ला", 1.0);
+
+        Map<String, Double> south = new HashMap<>(universal);
+        south.put("Cent / सेंट", 0.01);
+        south.put("Guntha / गुंठा", 0.025);
+        south.put("Ankanam / अंकनम", 0.0016);
+
+        Map<String, Double> east = new HashMap<>(universal);
+        east.put("Katha / कट्ठा", 0.031);
+        east.put("Decimal / डेसीमल", 0.01);
+        east.put("Chatak / छटाक", 0.004);
+
+        Map<String, Double> west = new HashMap<>(universal);
+        west.put("Vigha / विघा", 0.4);
+        west.put("Guntha / गुंठा", 0.025);
+
+        regionUnitMap.put("NORTH", north);
+        regionUnitMap.put("SOUTH", south);
+        regionUnitMap.put("EAST", east);
+        regionUnitMap.put("WEST", west);
+    }
+
+    private void loadUnitsForState(String state) {
+        String region = "NORTH"; // Default
+        if (state.contains("Tamil") || state.contains("Karnataka") || state.contains("Kerala") || state.contains("Andhra") || state.contains("Telangana")) region = "SOUTH";
+        else if (state.contains("Bengal") || state.contains("Bihar") || state.contains("Assam") || state.contains("Odisha")) region = "EAST";
+        else if (state.contains("Gujarat") || state.contains("Maharashtra") || state.contains("Goa")) region = "WEST";
+
+        Map<String, Double> units = regionUnitMap.get(region);
+        if (units != null) {
+            String[] unitNames = units.keySet().toArray(new String[0]);
+            unitDropdown.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, unitNames));
+            unitDropdown.setText(unitNames[0], false);
+        }
+    }
+
+    private void calculateYield() {
+        String crop = cropDropdown.getText().toString();
+        String state = stateDropdown.getText().toString();
+        String unit = unitDropdown.getText().toString();
+        String areaStr = areaInput.getText() != null ? areaInput.getText().toString() : "";
+
+        if (crop.isEmpty() || state.isEmpty() || unit.isEmpty() || areaStr.isEmpty()) {
+            Snackbar.make(rootView, "Please fill all fields / कृपया पूरी जानकारी दें", Snackbar.LENGTH_SHORT).show();
             return;
         }
 
-        double area;
-        try {
-            area = Double.parseDouble(areaStr);
-            if (area <= 0)
-                throw new NumberFormatException("Area must be positive");
-        } catch (NumberFormatException e) {
-            Snackbar.make(rootView,
-                    "Please enter a valid area / कृपया वैध क्षेत्रफल दर्ज करें",
-                    Snackbar.LENGTH_SHORT).show();
-            return;
-        }
+        // Determine region again for calculation factor
+        String region = "NORTH";
+        if (state.contains("Tamil") || state.contains("Karnataka") || state.contains("Kerala") || state.contains("Andhra") || state.contains("Telangana")) region = "SOUTH";
+        else if (state.contains("Bengal") || state.contains("Bihar") || state.contains("Assam") || state.contains("Odisha")) region = "EAST";
+        else if (state.contains("Gujarat") || state.contains("Maharashtra") || state.contains("Goa")) region = "WEST";
 
-        // Look up base yield
-        int cropIndex = getCropIndex(crop);
-        double baseYield = (cropIndex >= 0) ? BASE_YIELD_QUINTALS_PER_ACRE[cropIndex] : 15.0;
-        double totalYield = baseYield * area;
+        double conversion = regionUnitMap.get(region).get(unit);
+        double acres = Double.parseDouble(areaStr) * conversion;
 
-        showYieldResult(baseYield, totalYield, area, crop);
-    }
-
-    /**
-     * Returns the index of the selected crop in the BASE_YIELD array.
-     */
-    private int getCropIndex(String selectedCrop) {
+        // Get index for crop yield
+        int idx = 0;
         for (int i = 0; i < CROPS.length; i++) {
-            if (selectedCrop.equalsIgnoreCase(CROPS[i]))
-                return i;
+            if (CROPS[i].equals(crop)) idx = i;
         }
-        return -1;
-    }
 
-    /**
-     * Populates and animates the result section into view.
-     * Result expands WITHIN the same screen — does NOT open a new Activity.
-     */
-    private void showYieldResult(double baseYield, double totalYield,
-            double area, String crop) {
+        double avgAcre = AVG_YIELDS[idx];
+        double total = avgAcre * acres;
+
+        // Bilingual result display
         tvYieldPerAcre.setText(String.format(Locale.getDefault(),
-                "%.1f quintals", baseYield));
-        tvTotalYield.setText(String.format(Locale.getDefault(),
-                "%.1f quintals", totalYield));
-        tvYieldSummary.setText(String.format(Locale.getDefault(),
-                "%s on %.1f acres\n%.1f quintals total estimated",
-                crop, area, totalYield));
+                "Avg Yield / औसत पैदावार: %.1f Quintals/Acre", avgAcre));
 
-        // Animate slide-down if not already visible
-        if (resultSection.getVisibility() != View.VISIBLE) {
-            resultSection.setVisibility(View.VISIBLE);
-            Animation slideDown = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left);
-            slideDown.setDuration(350);
-            resultSection.startAnimation(slideDown);
-        }
+        tvTotalYield.setText(String.format(Locale.getDefault(),
+                "Total Estimate / कुल अनुमान: %.1f Quintals (क्विंटल)", total));
+
+        tvYieldSummary.setText(String.format(Locale.getDefault(),
+                "Estimation for %s on %.2f Acres area. Based on %s regional averages.",
+                crop.split("/")[1].trim(), acres, state.split("/")[1].trim()));
+
+        resultSection.setVisibility(View.VISIBLE);
+        resultSection.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
     }
 
     private void shareResult() {
-        String crop = cropDropdown.getText().toString();
-        String areaStr = areaInput.getText() != null ? areaInput.getText().toString() : "0";
-        String perAcre = tvYieldPerAcre.getText().toString();
-        String total = tvTotalYield.getText().toString();
-
-        String message = "🌾 Yield Estimate / उपज अनुमान\n" +
-                "Crop / फसल: " + crop + "\n" +
-                "Area / क्षेत्र: " + areaStr + " acres\n\n" +
-                "Yield per Acre: " + perAcre + "\n" +
-                "Total Yield: " + total + "\n\n" +
+        String msg = "🌾 Jai Kisan Yield Estimate\n" +
+                tvYieldPerAcre.getText().toString() + "\n" +
+                tvTotalYield.getText().toString() + "\n" +
                 "— Jai Kisan App";
-
-        android.content.Intent shareIntent = new android.content.Intent(android.content.Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
-        startActivity(android.content.Intent.createChooser(shareIntent, "Share / साझा करें"));
+        android.content.Intent i = new android.content.Intent(android.content.Intent.ACTION_SEND);
+        i.setType("text/plain");
+        i.putExtra(android.content.Intent.EXTRA_TEXT, msg);
+        startActivity(android.content.Intent.createChooser(i, "Share Estimate"));
     }
 }
