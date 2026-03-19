@@ -15,6 +15,26 @@
 *   **Voice Assistant:** An intelligent, voice-activated assistant powered by the **Gemini API** that helps you find answers and guidance hands-free while working in the field.
 *   **How To Use Guide:** Detailed instructions and an intuitive help section ensuring farmers can easily navigate the app.
 
+## 📱 Live Application
+
+The application is publicly available on the Google Play Store:
+
+https://play.google.com/store/apps/details?id=com.rcc.jai_kisan
+
+## 📅 Project Timeline
+
+- **Oct 21, 2025** – Initial Alpha Release (Closed Testing - Alpha)
+- **Oct 24, 2025** – Internal Testing Release
+- **Nov 17, 2025** – Open Testing Release (Available to Testers) and Full Rollout (Available to Everyone) – Live on Google Play Store
+- **Mar 16, 2026** – Production Release (v1.0.3 - Safety & UI Update) – Live on Google Play Store
+
+*All releases and updates are verifiable via Google Play Console records.*
+
+## 🔄 Version History
+
+- v1.0 – Initial release and testing phases
+- v1.0.3 – Safety & UI Update (Production Release)
+
 ## 🛠️ Tech Stack & Architecture
 
 *   **Language:** Java (Android API 24 to API 36)
@@ -62,7 +82,7 @@ The app requires the following key permissions to function fully:
 
 ## 👨‍💻 Developed By & Ownership
 
-This application is conceptualized, designed, and developed by **Prateek Kumar**.
+This application is independently conceptualized, architected, designed, and fully developed by **Prateek Kumar**.
 
 ## ⚖️ License & Intellectual Property
 
@@ -72,7 +92,8 @@ This application is conceptualized, designed, and developed by **Prateek Kumar**
 *   **Ownership:** The **Jai Kisan** app, its core ideas, source code, UI/UX designs, and all related intellectual property are the sole property of **Prateek Kumar**.
 *   **Publisher:** This application is published and distributed under **RSVP Studios**.
 *   **Studio Ownership:** **RSVP Studios** is wholly and exclusively owned by **Prateek Kumar**.
-*   **Exclusive Usage:** The application, its source code, and all associated functionalities are strictly intended for demonstrative purposes and are authorized for use **exclusively by Prateek Kumar and his designated team members**.
+*   **Exclusive Usage:** The application is owned and maintained by Prateek Kumar under RSVP Studios. Any collaboration or usage requires explicit permission from the owner.
+*   **Usage Restriction:** The source code and all associated functionalities are strictly intended for demonstrative and educational purposes only. Any usage, reproduction, or distribution requires explicit permission from the owner.
 *   **Rights Reserved:** All current assets, mechanics, and any future associated work or updates are strictly protected. No part of this application, its concept, or its presentation may be reproduced, distributed, copied, or transmitted in any form or by any means without the prior written permission of the owner.
 *   **Protection:** This project is protected as intellectual property to prevent unauthorized replication of the app, its ideas, or its execution.
 
