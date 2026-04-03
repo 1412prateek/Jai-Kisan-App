@@ -15,12 +15,35 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Locale;
 
+import android.util.Log;
+import androidx.annotation.NonNull;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import io.noties.markwon.Markwon;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class IrrigationPlannerActivity extends AppCompatActivity {
 
     private View rootView;
     private AutoCompleteTextView cropDropdown, soilDropdown, methodDropdown;
     private View resultSection;
     private TextView tvInterval, tvCriticalStage, tvExpertTip;
+    private CircularProgressIndicator loadingIndicator;
+    private TextView tvAiInsight;
+    private Markwon markwon;
+
+    private static final String GEMINI_API_KEY = BuildConfig.GEMINI_API_KEY;
+    private static final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemma-3-4b-it:generateContent?key=" + GEMINI_API_KEY;
 
     private static final String[] CROPS = {
             "Wheat / गेहूं", "Rice / धान", "Maize / मक्का", "Sugarcane / गन्ना",
@@ -43,6 +66,8 @@ public class IrrigationPlannerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_irrigation_planner);
 
+        markwon = Markwon.create(this);
+
         rootView = findViewById(R.id.root_view);
         cropDropdown = findViewById(R.id.dropdown_crop);
         soilDropdown = findViewById(R.id.dropdown_soil);
@@ -52,6 +77,9 @@ public class IrrigationPlannerActivity extends AppCompatActivity {
         tvInterval = findViewById(R.id.tv_interval);
         tvCriticalStage = findViewById(R.id.tv_critical_stage);
         tvExpertTip = findViewById(R.id.tv_expert_tip);
+        
+        loadingIndicator = findViewById(R.id.loadingIndicator);
+        tvAiInsight = findViewById(R.id.tv_ai_insight);
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -64,6 +92,13 @@ public class IrrigationPlannerActivity extends AppCompatActivity {
         cropDropdown.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, CROPS));
         soilDropdown.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, SOILS));
         methodDropdown.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, METHODS));
+
+        // Autofill logic from Photo Expert
+        String autofillCrop = getIntent().getStringExtra("autofill_crop");
+        if (autofillCrop != null && !autofillCrop.isEmpty()) {
+            cropDropdown.setText(autofillCrop, false);
+            Snackbar.make(rootView, "Crop Auto-Selected: " + autofillCrop, Snackbar.LENGTH_SHORT).show();
+        }
 
         findViewById(R.id.btn_calculate_irrigation).setOnClickListener(v -> calculateIrrigation());
 
@@ -115,6 +150,7 @@ public class IrrigationPlannerActivity extends AppCompatActivity {
         }
 
         displayResults(interval, critical, tip);
+        fetchAIAdvise("Irrigation Advice", "Crop: " + crop + ", Soil: " + soil + ", Method: " + method + ". Give 2 extremely short bullet tips on efficient irrigation in English and Hindi separately. Keep it beneath 50 words.");
     }
 
     private void displayResults(int interval, String critical, String tip) {
@@ -127,6 +163,63 @@ public class IrrigationPlannerActivity extends AppCompatActivity {
 
         resultSection.setVisibility(View.VISIBLE);
         resultSection.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
+    }
+
+    private void fetchAIAdvise(String contextTitle, String promptText) {
+        runOnUiThread(() -> {
+            loadingIndicator.setVisibility(View.VISIBLE);
+            tvAiInsight.setVisibility(View.GONE);
+        });
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
+
+        String prompt = "You are an agricultural expert. Provide a lightning-fast practical tip.\n\n" +
+                "Context: " + contextTitle + "\n" + promptText + "\n\n" +
+                "Format: 1 short practical sentence in English, an empty line, then the exact translation in Hindi. Do NOT use bullet points, asterisks, or any labels like 'English' or 'Hindi'.";
+
+        JsonObject textPart = new JsonObject();
+        textPart.addProperty("text", prompt);
+        JsonArray parts = new JsonArray();
+        parts.add(textPart);
+        JsonObject content = new JsonObject();
+        content.add("parts", parts);
+        JsonArray contents = new JsonArray();
+        contents.add(content);
+        JsonObject requestJson = new JsonObject();
+        requestJson.add("contents", contents);
+
+        RequestBody body = RequestBody.create(requestJson.toString(), MediaType.get("application/json; charset=utf-8"));
+        Request request = new Request.Builder().url(GEMINI_URL).post(body).build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                runOnUiThread(() -> {
+                    loadingIndicator.setVisibility(View.GONE);
+                });
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                final String responseBody = response.body() != null ? response.body().string() : "";
+                runOnUiThread(() -> {
+                    loadingIndicator.setVisibility(View.GONE);
+                    try {
+                        if (response.isSuccessful()) {
+                            JsonObject json = JsonParser.parseString(responseBody).getAsJsonObject();
+                            String resultText = json.getAsJsonArray("candidates").get(0).getAsJsonObject()
+                                    .getAsJsonObject("content").getAsJsonArray("parts").get(0).getAsJsonObject().get("text").getAsString().trim();
+                            tvExpertTip.append("\n\n✨ " + resultText);
+                        }
+                    } catch (Exception e) {
+                        // ignore error quietly
+                    }
+                });
+            }
+        });
     }
 
     private void shareSchedule() {

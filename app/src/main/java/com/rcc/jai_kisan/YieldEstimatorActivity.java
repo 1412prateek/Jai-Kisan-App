@@ -19,6 +19,23 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import android.util.Log;
+import androidx.annotation.NonNull;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import io.noties.markwon.Markwon;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class YieldEstimatorActivity extends AppCompatActivity {
 
     private View rootView;
@@ -26,6 +43,12 @@ public class YieldEstimatorActivity extends AppCompatActivity {
     private TextInputEditText areaInput;
     private View resultSection;
     private TextView tvYieldPerAcre, tvTotalYield, tvYieldSummary;
+    private CircularProgressIndicator loadingIndicator;
+    private TextView tvAiInsight;
+    private Markwon markwon;
+
+    private static final String GEMINI_API_KEY = BuildConfig.GEMINI_API_KEY;
+    private static final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemma-3-4b-it:generateContent?key=" + GEMINI_API_KEY;
 
     // Mapping logic matching Fertilizer Calculator
     private final Map<String, Map<String, Double>> regionUnitMap = new HashMap<>();
@@ -48,6 +71,7 @@ public class YieldEstimatorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_yield_estimator);
 
+        markwon = Markwon.create(this);
         initializeRegionalUnits();
 
         rootView = findViewById(R.id.root_view);
@@ -60,6 +84,9 @@ public class YieldEstimatorActivity extends AppCompatActivity {
         tvYieldPerAcre = findViewById(R.id.tv_yield_per_acre);
         tvTotalYield = findViewById(R.id.tv_total_yield);
         tvYieldSummary = findViewById(R.id.tv_yield_summary);
+        
+        loadingIndicator = findViewById(R.id.loadingIndicator);
+        tvAiInsight = findViewById(R.id.tv_ai_insight);
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -77,6 +104,13 @@ public class YieldEstimatorActivity extends AppCompatActivity {
             String selectedState = STATES[position];
             loadUnitsForState(selectedState);
         });
+
+        // Autofill logic from Photo Expert
+        String autofillCrop = getIntent().getStringExtra("autofill_crop");
+        if (autofillCrop != null && !autofillCrop.isEmpty()) {
+            cropDropdown.setText(autofillCrop, false);
+            Snackbar.make(rootView, "Crop Auto-Selected: " + autofillCrop, Snackbar.LENGTH_SHORT).show();
+        }
 
         findViewById(R.id.btn_estimate).setOnClickListener(v -> calculateYield());
         findViewById(R.id.btn_share).setOnClickListener(v -> shareResult());
@@ -172,6 +206,65 @@ public class YieldEstimatorActivity extends AppCompatActivity {
 
         resultSection.setVisibility(View.VISIBLE);
         resultSection.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
+        fetchAIAdvise("Yield Estimate", "Crop: " + crop + ", Area: " + areaStr + " " + unit + ", State: " + state + ". Give 2 extremely short bullet tips on maximizing yield in English and Hindi separately. Keep it beneath 50 words.");
+    }
+
+    private void fetchAIAdvise(String contextTitle, String promptText) {
+        runOnUiThread(() -> {
+            loadingIndicator.setVisibility(View.VISIBLE);
+            tvAiInsight.setVisibility(View.GONE);
+        });
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
+
+        String prompt = "You are an agricultural expert. Provide a lightning-fast practical tip.\n\n" +
+                "Context: " + contextTitle + "\n" + promptText + "\n\n" +
+                "Format: 1 short practical sentence in English, an empty line, then the exact translation in Hindi. Do NOT use bullet points, asterisks, or any labels like 'English' or 'Hindi'.";
+
+        JsonObject textPart = new JsonObject();
+        textPart.addProperty("text", prompt);
+        JsonArray parts = new JsonArray();
+        parts.add(textPart);
+        JsonObject content = new JsonObject();
+        content.add("parts", parts);
+        JsonArray contents = new JsonArray();
+        contents.add(content);
+        JsonObject requestJson = new JsonObject();
+        requestJson.add("contents", contents);
+
+        RequestBody body = RequestBody.create(requestJson.toString(), MediaType.get("application/json; charset=utf-8"));
+        Request request = new Request.Builder().url(GEMINI_URL).post(body).build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                runOnUiThread(() -> {
+                    loadingIndicator.setVisibility(View.GONE);
+                });
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                final String responseBody = response.body() != null ? response.body().string() : "";
+                runOnUiThread(() -> {
+                    loadingIndicator.setVisibility(View.GONE);
+                    try {
+                        if (response.isSuccessful()) {
+                            JsonObject json = JsonParser.parseString(responseBody).getAsJsonObject();
+                            String resultText = json.getAsJsonArray("candidates").get(0).getAsJsonObject()
+                                    .getAsJsonObject("content").getAsJsonArray("parts").get(0).getAsJsonObject().get("text").getAsString().trim();
+                            // Append AI insight cleanly instead of markdown formatting
+                            tvYieldSummary.append("\n\n✨ " + resultText);
+                        }
+                    } catch (Exception e) {
+                        // ignore error quietly
+                    }
+                });
+            }
+        });
     }
 
     private void shareResult() {

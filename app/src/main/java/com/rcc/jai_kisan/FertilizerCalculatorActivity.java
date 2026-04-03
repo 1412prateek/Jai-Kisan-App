@@ -19,6 +19,23 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import android.util.Log;
+import androidx.annotation.NonNull;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import io.noties.markwon.Markwon;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class FertilizerCalculatorActivity extends AppCompatActivity {
 
     private View rootView;
@@ -27,6 +44,14 @@ public class FertilizerCalculatorActivity extends AppCompatActivity {
     private View resultSection;
     private TextView tvUreaBags, tvDapBags, tvMopBags;
     private TextView tvNRow, tvPRow, tvKRow, tvNanoUrea;
+    private CircularProgressIndicator loadingIndicator;
+    private TextView tvAiInsight;
+    private Markwon markwon;
+
+    private String suggestedFertsExtra = "";
+
+    private static final String GEMINI_API_KEY = BuildConfig.GEMINI_API_KEY;
+    private static final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemma-3-4b-it:generateContent?key=" + GEMINI_API_KEY;
 
     private final Map<String, Map<String, Double>> regionUnitMap = new HashMap<>();
 
@@ -42,6 +67,7 @@ public class FertilizerCalculatorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fertilizer_calculator);
 
+        markwon = Markwon.create(this);
         initializeRegionalUnits();
 
         rootView = findViewById(R.id.root_view);
@@ -59,6 +85,9 @@ public class FertilizerCalculatorActivity extends AppCompatActivity {
         tvPRow = findViewById(R.id.tv_p_row);
         tvKRow = findViewById(R.id.tv_k_row);
         tvNanoUrea = findViewById(R.id.tv_nano_urea);
+        
+        loadingIndicator = findViewById(R.id.loadingIndicator);
+        tvAiInsight = findViewById(R.id.tv_ai_insight);
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -78,6 +107,17 @@ public class FertilizerCalculatorActivity extends AppCompatActivity {
         stateDropdown.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, allStates));
 
         stateDropdown.setOnItemClickListener((parent, view, position, id) -> loadUnitsForState(allStates[position]));
+
+        // Autofill logic from Photo Expert
+        String autofillCrop = getIntent().getStringExtra("autofill_crop");
+        if (autofillCrop != null && !autofillCrop.isEmpty()) {
+            cropDropdown.setText(autofillCrop, false);
+            Snackbar.make(rootView, "Crop Auto-Selected: " + autofillCrop, Snackbar.LENGTH_SHORT).show();
+        }
+
+        if (getIntent().hasExtra("suggested_fertilizers")) {
+            suggestedFertsExtra = getIntent().getStringExtra("suggested_fertilizers");
+        }
 
         findViewById(R.id.btn_calculate).setOnClickListener(v -> calculateProFertilizer());
         findViewById(R.id.btn_share).setOnClickListener(v -> shareResult());
@@ -151,6 +191,14 @@ public class FertilizerCalculatorActivity extends AppCompatActivity {
         int nanoBottles = (int) Math.ceil(ureaKg / 45.0);
 
         displayResults(netN, netP, netK, ureaKg, dapKg, mopKg, nanoBottles, rates);
+        
+        String promptContext = "Crop: " + crop + ", Area: " + areaVal + " " + unit + ". ";
+        if (!suggestedFertsExtra.isEmpty()) {
+            promptContext += "IMPORTANT: Farmer is treating a disease, you must strongly mention/incorporate using these cures: " + suggestedFertsExtra + " ";
+        }
+        promptContext += "Give a short tip on nutrient application.";
+        
+        fetchAIAdvise("Fertilizer Advice", promptContext);
     }
 
     private void displayResults(double n, double p, double k, double u, double d, double m, int nano, double[] base) {
@@ -167,8 +215,70 @@ public class FertilizerCalculatorActivity extends AppCompatActivity {
         // 3. Nano Urea
         tvNanoUrea.setText(String.format(Locale.getDefault(), "%d Bottle(s) of 500ml\n(यूरिया की जगह %d बोतल नैनो यूरिया का प्रयोग करें)", nano, nano));
 
+        if (!suggestedFertsExtra.isEmpty()) {
+            tvNanoUrea.append("\n\n🩺 Special Disease Cures / विशेष रोग उपचार:\n" + suggestedFertsExtra.replace(". ", "\n"));
+        }
+
         resultSection.setVisibility(View.VISIBLE);
         resultSection.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
+    }
+
+    private void fetchAIAdvise(String contextTitle, String promptText) {
+        runOnUiThread(() -> {
+            loadingIndicator.setVisibility(View.VISIBLE);
+            tvAiInsight.setVisibility(View.GONE);
+        });
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
+
+        String prompt = "You are an agricultural expert. Provide a lightning-fast practical tip.\n\n" +
+                "Context: " + contextTitle + "\n" + promptText + "\n\n" +
+                "Format: 1 short practical sentence in English, an empty line, then the exact translation in Hindi. Do NOT use bullet points, asterisks, or any labels like 'English' or 'Hindi'.";
+
+        JsonObject textPart = new JsonObject();
+        textPart.addProperty("text", prompt);
+        JsonArray parts = new JsonArray();
+        parts.add(textPart);
+        JsonObject content = new JsonObject();
+        content.add("parts", parts);
+        JsonArray contents = new JsonArray();
+        contents.add(content);
+        JsonObject requestJson = new JsonObject();
+        requestJson.add("contents", contents);
+
+        RequestBody body = RequestBody.create(requestJson.toString(), MediaType.get("application/json; charset=utf-8"));
+        Request request = new Request.Builder().url(GEMINI_URL).post(body).build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                runOnUiThread(() -> {
+                    loadingIndicator.setVisibility(View.GONE);
+                });
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                final String responseBody = response.body() != null ? response.body().string() : "";
+                runOnUiThread(() -> {
+                    loadingIndicator.setVisibility(View.GONE);
+                    try {
+                        if (response.isSuccessful()) {
+                            JsonObject json = JsonParser.parseString(responseBody).getAsJsonObject();
+                            String resultText = json.getAsJsonArray("candidates").get(0).getAsJsonObject()
+                                    .getAsJsonObject("content").getAsJsonArray("parts").get(0).getAsJsonObject().get("text").getAsString().trim();
+                            tvAiInsight.setVisibility(View.VISIBLE);
+                            tvAiInsight.setText("✨ Expert Advice / विशेषज्ञ सलाह:\n" + resultText);
+                        }
+                    } catch (Exception e) {
+                        // ignore error quietly
+                    }
+                });
+            }
+        });
     }
 
     private String formatBagString(String label, double totalKg) {

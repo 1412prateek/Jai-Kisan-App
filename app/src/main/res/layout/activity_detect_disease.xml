@@ -162,55 +162,418 @@
                 android:visibility="gone"
                 android:layout_marginBottom="16dp"/>
 
-            <!-- Card background changed to white -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardResult"
+            <LinearLayout
+                android:id="@+id/llResultsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="0dp"
-                app:cardBackgroundColor="@android:color/white">
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!-- HEADER CARD: Health Score & Status -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#E0E0E0"
+                    app:cardBackgroundColor="#FFFFFF">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="16dp"
+                        android:gravity="center_vertical">
+                        
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tvCropNameTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Crop Name"
+                                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                                android:textColor="#212121"
+                                android:textStyle="bold"/>
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tvHealthStatus"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="Status here"
+                                android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                                android:textColor="#757575"/>
+                        </LinearLayout>
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <com.google.android.material.progressindicator.CircularProgressIndicator
+                                android:id="@+id/progressHealthScore"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:indicatorSize="64dp"
+                                app:trackThickness="6dp"
+                                app:indicatorColor="#2E7D32"
+                                app:trackColor="#E8F5E9"
+                                app:trackCornerRadius="3dp"/>
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tvHealthScore"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="0"
+                                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                                android:textColor="#212121"
+                                android:textStyle="bold"/>
+                        </FrameLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- DISEASE TAG CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardDiseaseTag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="#FFEBEE">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/ic_pest"
+                            app:tint="#C62828" />
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tvDiseaseName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:text="Disease Name"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textColor="#C62828"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- SCIENTIFIC NAME TAG CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardScientific"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="#F3E5F5">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="14dp"
+                        android:gravity="center_vertical">
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tvScientificName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Scientific Name"
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="#6A1B9A"
+                            android:textStyle="italic"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- DOS SEPARATE CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardDos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#C5E1A5"
+                    app:cardBackgroundColor="#F1F8E9">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Do's / क्या करें"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                            android:textColor="#2E7D32"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp"/>
+                        <LinearLayout
+                            android:id="@+id/llDos"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- DONTS SEPARATE CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardDonts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#FFCDD2"
+                    app:cardBackgroundColor="#FFEBEE">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Don'ts / क्या न करें"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                            android:textColor="#C62828"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp"/>
+                        <LinearLayout
+                            android:id="@+id/llDonts"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- FERTILIZERS AND CURES CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardFertilizers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#B2EBF2"
+                    app:cardBackgroundColor="#E0F7FA">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Suggested Fertilizers &amp; Cures\nसुझाए गए उर्वरक और उपचार"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                            android:textColor="#006064"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp"/>
+                        <LinearLayout
+                            android:id="@+id/llFertilizers"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- FARMING TOOLS AUTOFILL LINKS -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Calculate Requirements (Auto-filled)\nआवश्यकताओं की गणना करें"
+                    android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                    android:textColor="#424242"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tvDiseaseName"
-                        android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp"
+                    android:weightSum="2">
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnFertilizerCalc"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Analysis Report"
-                        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                        android:textColor="@color/theme_reseda_green"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="8dp"/>
+                        android:layout_weight="1"
+                        android:layout_marginEnd="4dp"
+                        android:text="Fertilizers\nउर्वरक"
+                        app:backgroundTint="#FFF3E0"
+                        android:textColor="#E65100"/>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCostCalc"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="4dp"
+                        android:text="Costs\nखर्च"
+                        app:backgroundTint="#E8EAF6"
+                        android:textColor="#283593"/>
+                </LinearLayout>
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tvDiseaseInfo"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp"
+                    android:weightSum="2">
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnIrrigationCalc"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="4dp"
+                        android:text="Irrigation\nसिंचाई"
+                        app:backgroundTint="#E3F2FD"
+                        android:textColor="#1565C0"/>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnYieldCalc"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="4dp"
+                        android:text="Yield\nपैदावार"
+                        app:backgroundTint="#F3E5F5"
+                        android:textColor="#6A1B9A"/>
+                </LinearLayout>
+
+                <!-- FINAL SUMMARY CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardSummary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#B3E5FC"
+                    app:cardBackgroundColor="#E1F5FE">
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Details will appear here."
-                        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                        android:textColor="@color/text_on_sandy_brown"
-                        android:layout_marginBottom="16dp"/>
+                        android:orientation="vertical"
+                        android:padding="16dp">
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Summary / सारांश"
+                            android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                            android:textColor="#0277BD"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp"/>
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tvFinalSummary"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="..."
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="#000000"
+                            android:lineSpacingExtra="4dp"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
+                <!-- SURVIVAL CHANCE PROGRESS -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardSurvival"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#FFE082"
+                    app:cardBackgroundColor="#FFF8E1">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="16dp">
+                        
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Survival\nChance"
+                            android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
+                            android:textColor="#F57F17"
+                            android:textStyle="bold"
+                            android:layout_marginEnd="12dp"/>
+                            
+                        <com.google.android.material.progressindicator.LinearProgressIndicator
+                            android:id="@+id/progressSurvival"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:indicatorColor="#F57F17"
+                            app:trackColor="#FFE082"
+                            app:trackCornerRadius="4dp"
+                            app:trackThickness="8dp"
+                            android:layout_marginEnd="12dp"/>
+                            
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tvSurvivalScore"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0%"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textColor="#F57F17"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnOpenMaps"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="4dp"
+                        android:text="Find Centers\nकेंद्र खोजें"
+                        app:icon="@drawable/ic_modern_search"
+                        android:textSize="12sp"
+                        app:backgroundTint="#E8F5E9"
+                        android:textColor="#2E7D32"
+                        app:iconTint="#2E7D32"/>
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnShare"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:text="Share / साझा करें"
-                        app:strokeColor="@color/theme_reseda_green"
-                        android:textColor="@color/theme_reseda_green"
-                        app:iconTint="@color/theme_reseda_green"
-                        app:icon="@drawable/ic_modern_share" />
+                        android:layout_weight="1"
+                        android:layout_marginStart="4dp"
+                        android:text="Share Report\nसाझा करें"
+                        app:icon="@drawable/ic_modern_share"
+                        android:textSize="12sp"
+                        app:backgroundTint="#E3F2FD"
+                        android:textColor="#1565C0"
+                        app:iconTint="#1565C0"/>
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

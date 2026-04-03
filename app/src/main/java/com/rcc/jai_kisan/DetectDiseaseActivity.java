@@ -23,6 +23,8 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+import android.widget.LinearLayout;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -64,10 +66,11 @@ public class DetectDiseaseActivity extends AppCompatActivity {
 
     private ImageView imagePreview;
     private TextView placeholderText;
-    private MaterialCardView cardResult;
-    private TextView tvDiseaseName, tvDiseaseInfo;
-    private MaterialButton btnDetectDisease, btnShare;
-    private CircularProgressIndicator loadingIndicator;
+    private LinearLayout llResultsContainer, llDos, llDonts, llFertilizers;
+    private TextView tvCropNameTitle, tvHealthStatus, tvHealthScore, tvDiseaseName, tvScientificName, tvFinalSummary, tvSurvivalScore;
+    private CircularProgressIndicator progressHealthScore, loadingIndicator;
+    private LinearProgressIndicator progressSurvival;
+    private MaterialButton btnDetectDisease, btnShare, btnFertilizerCalc, btnCostCalc, btnIrrigationCalc, btnYieldCalc;
     private Markwon markwon;
     private Bitmap selectedBitmap = null;
     private String currentResultText = "";
@@ -90,16 +93,30 @@ public class DetectDiseaseActivity extends AppCompatActivity {
 
         imagePreview = findViewById(R.id.imagePreview);
         placeholderText = findViewById(R.id.placeholderText);
-        cardResult = findViewById(R.id.cardResult);
+        llResultsContainer = findViewById(R.id.llResultsContainer);
+        tvCropNameTitle = findViewById(R.id.tvCropNameTitle);
+        tvHealthStatus = findViewById(R.id.tvHealthStatus);
+        progressHealthScore = findViewById(R.id.progressHealthScore);
+        tvHealthScore = findViewById(R.id.tvHealthScore);
         tvDiseaseName = findViewById(R.id.tvDiseaseName);
-        tvDiseaseInfo = findViewById(R.id.tvDiseaseInfo);
-        tvDiseaseInfo.setMovementMethod(LinkMovementMethod.getInstance());
+        tvScientificName = findViewById(R.id.tvScientificName);
+        llDos = findViewById(R.id.llDos);
+        llDonts = findViewById(R.id.llDonts);
+        llFertilizers = findViewById(R.id.llFertilizers);
+        tvFinalSummary = findViewById(R.id.tvFinalSummary);
+        progressSurvival = findViewById(R.id.progressSurvival);
+        tvSurvivalScore = findViewById(R.id.tvSurvivalScore);
 
         MaterialButton btnCaptureImage = findViewById(R.id.btnCaptureImage);
         MaterialButton btnUploadImage = findViewById(R.id.btnUploadImage);
         btnDetectDisease = findViewById(R.id.btnDetectDisease);
         loadingIndicator = findViewById(R.id.loadingIndicator);
         btnShare = findViewById(R.id.btnShare);
+
+        btnFertilizerCalc = findViewById(R.id.btnFertilizerCalc);
+        btnCostCalc = findViewById(R.id.btnCostCalc);
+        btnIrrigationCalc = findViewById(R.id.btnIrrigationCalc);
+        btnYieldCalc = findViewById(R.id.btnYieldCalc);
 
         btnCaptureImage.setOnClickListener(v -> {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -117,7 +134,7 @@ public class DetectDiseaseActivity extends AppCompatActivity {
             } else {
                 loadingIndicator.setVisibility(View.VISIBLE);
                 btnDetectDisease.setEnabled(false);
-                cardResult.setVisibility(View.GONE);
+                llResultsContainer.setVisibility(View.GONE);
                 callGeminiAPI(selectedBitmap);
             }
         });
@@ -130,6 +147,21 @@ public class DetectDiseaseActivity extends AppCompatActivity {
                 startActivity(Intent.createChooser(shareIntent, "Share Report via / रिपोर्ट साझा करें"));
             } else {
                 Toast.makeText(this, "No report to share.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // NEW: Google Maps Button Setup inside the Card
+        MaterialButton btnOpenMaps = findViewById(R.id.btnOpenMaps);
+        btnOpenMaps.setOnClickListener(v -> {
+            // Searches for nearby agriculture centers/equipment rentals
+            Uri gmmIntentUri = Uri.parse("geo:0,0?q=agricultural+equipment+and+fertilizer+store");
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            mapIntent.setPackage("com.google.android.apps.maps");
+            try {
+                startActivity(mapIntent);
+            } catch (Exception e) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=agricultural+equipment+and+fertilizer+store"));
+                startActivity(browserIntent);
             }
         });
     }
@@ -169,6 +201,89 @@ public class DetectDiseaseActivity extends AppCompatActivity {
     }
 
 
+    
+
+
+    private void populateActionList(LinearLayout container, JsonArray array, boolean isDo) {
+        container.removeAllViews();
+        int iconSize = (int) (24 * getResources().getDisplayMetrics().density);
+        int margin = (int) (12 * getResources().getDisplayMetrics().density);
+        
+        for (int i = 0; i < array.size(); i++) {
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setPadding(0, 0, 0, margin);
+            
+            ImageView icon = new ImageView(this);
+            icon.setLayoutParams(new LinearLayout.LayoutParams(iconSize, iconSize));
+            if (isDo) {
+                icon.setImageResource(R.drawable.ic_check_circle);
+                icon.setColorFilter(android.graphics.Color.parseColor("#2E7D32"));
+            } else {
+                icon.setImageResource(R.drawable.ic_close);
+                icon.setColorFilter(android.graphics.Color.parseColor("#C62828"));
+            }
+            
+            TextView tv = new TextView(this);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(margin, 0, 0, 0);
+            tv.setLayoutParams(params);
+            tv.setText(array.get(i).getAsString());
+            tv.setTextColor(android.graphics.Color.parseColor("#333333"));
+            tv.setTextSize(14f);
+            
+            row.addView(icon);
+            row.addView(tv);
+            container.addView(row);
+        }
+    }
+
+    private void populateFertilizerList(LinearLayout container, JsonArray array) {
+        container.removeAllViews();
+        int iconSize = (int) (24 * getResources().getDisplayMetrics().density);
+        int margin = (int) (12 * getResources().getDisplayMetrics().density);
+        
+        for (int i = 0; i < array.size(); i++) {
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setPadding(0, 0, 0, margin);
+            
+            ImageView icon = new ImageView(this);
+            icon.setLayoutParams(new LinearLayout.LayoutParams(iconSize, iconSize));
+            // Use pest icon with teal tint to represent cures
+            icon.setImageResource(R.drawable.ic_pest);
+            icon.setColorFilter(android.graphics.Color.parseColor("#00838F"));
+            
+            TextView tv = new TextView(this);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(margin, 0, 0, 0);
+            tv.setLayoutParams(params);
+            tv.setText(array.get(i).getAsString());
+            tv.setTextColor(android.graphics.Color.parseColor("#004D40"));
+            tv.setTextSize(14f);
+            
+            row.addView(icon);
+            row.addView(tv);
+            container.addView(row);
+        }
+    }
+
+    private String getSanitizedCropName(String raw) {
+        String lowerRaw = raw.toLowerCase();
+        String[] CROPS = {"Wheat / गेहूं", "Rice / धान", "Maize / मक्का", "Cotton / कपास", "Sugarcane / गन्ना", "Soybean / सोयाबीन", "Mustard / सरसों", "Potato / आलू", "Onion / प्याज", "Chili / मिर्च", "Millets / बाजरा", "Pulses / दालें"};
+        for (String c : CROPS) {
+            String primary = c.split("/")[0].trim().toLowerCase();
+            if (lowerRaw.contains(primary)) return c;
+        }
+        return raw;
+    }
+
     private void callGeminiAPI(Bitmap bitmap) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(60, TimeUnit.SECONDS)
@@ -182,27 +297,30 @@ public class DetectDiseaseActivity extends AppCompatActivity {
 
         JsonArray parts = new JsonArray();
         JsonObject textPart = new JsonObject();
-        String prompt = "You are an agricultural expert for Indian farmers. Analyze this image.\n" +
-                "Your response MUST be in a clean, fully bilingual, and point-wise format. For EACH section, follow these rules exactly:\n" +
-                "1. Create a single bold heading line with the English heading, a space, a forward slash, a space, and then the bold Hindi heading.\n" +
-                "2. On the next line, write the complete English description for that section using bullet points (`- `).\n" +
-                "3. Leave one empty line for a paragraph break.\n" +
-                "4. On the next line, write the complete Hindi translation for that description, also using bullet points (`- `).\n\n" +
-                "**Crucial Example of the required format for every section:**\n" +
-                "**Possible Diseases / संभावित रोग**\n" +
-                "- The leaf shows signs of Bacterial Leaf Streak.\n" +
-                "- This is common in maize crops during humid weather.\n\n" +
-                "- पत्ती पर बैक्टीरियल लीफ स्ट्रीक के लक्षण दिखाई दे रहे हैं।\n" +
-                "- यह आर्द्र मौसम के दौरान मक्के की फसलों में आम है।\n\n" +
-                "**VERY IMPORTANT FOR 'Government Schemes' SECTION:** After the description, you MUST provide a link using Markdown syntax. The link text MUST be 'Click here for more information / अधिक जानकारी के लिए यहां क्लिक करें'. The URL should be a genuine, official government portal like https://agricoop.gov.in/.\n\n" +
-                "Now, provide your full analysis for the image using this exact, point-wise, fully bilingual format for all these sections:\n" +
-                "- Introduction\n" +
-                "- Crop Name\n" +
-                "- Health Status\n" +
-                "- Possible Diseases\n" +
-                "- Survival Chance\n" +
-                "- Recommended Medicines\n" +
-                "- Government Schemes";
+        String prompt = "You are an agricultural expert for Indian farmers. Analyze this image and respond EXACTLY in JSON format.\n" +
+                "DO NOT wrap the response in ```json ``` markdown tags.\n" +
+                "Your response MUST be fully bilingual. For text fields, First write the English meaning, leave one line drop, then write the Hindi meaning.\n" +
+                "Construct the JSON exactly matching these keys:\n" +
+                "{\n" +
+                "  \"crop_name\": \"Crop name in English / Hindi (e.g. Wheat / गेहूँ)\",\n" +
+                "  \"health_status\": \"Short severity string (e.g. Severely Infected / गंभीर रूप से संक्रमित)\",\n" +
+                "  \"health_score\": 45,\n" +
+                "  \"disease_name\": \"Name of the disease (e.g. Leaf Rust / पत्ती का रतुआ रोग)\",\n" +
+                "  \"scientific_names\": \"Scientific/Botanical names of pathogens if any (e.g. Puccinia triticina)\",\n" +
+                "  \"survival_chance\": 85,\n" +
+                "  \"dos\": [\n" +
+                "    \"Short Action 1 in English / Hindi\",\n" +
+                "    \"Action 2 in English / Hindi\"\n" +
+                "  ],\n" +
+                "  \"donts\": [\n" +
+                "    \"Avoid Action 1 in English / Hindi\"\n" +
+                "  ],\n" +
+                "  \"suggested_fertilizers\": [\n" +
+                "    \"Fertilizer 1 exact details in English / Hindi\",\n" +
+                "    \"Cure 2 in English / Hindi\"\n" +
+                "  ],\n" +
+                "  \"final_summary\": \"A short 2-3 line summary in English and Hindi.\"\n" +
+                "}";
         textPart.addProperty("text", prompt);
 
         parts.add(textPart);
@@ -234,9 +352,10 @@ public class DetectDiseaseActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 runOnUiThread(() -> {
-                    tvDiseaseName.setText("Error");
-                    tvDiseaseInfo.setText("Failed to connect. Please check your internet connection.\nकनेक्शन विफल। कृपया अपना इंटरनेट कनेक्शन जांचें।\n" + e.getMessage());
-                    cardResult.setVisibility(View.VISIBLE);
+                    tvCropNameTitle.setText("Error");
+                    tvHealthScore.setText("0");
+                    if (tvFinalSummary != null) tvFinalSummary.setText("Failed to connect. Please check your internet connection.\nकनेक्शन विफल। कृपया अपना इंटरनेट कनेक्शन जांचें।\n" + e.getMessage());
+                    llResultsContainer.setVisibility(View.VISIBLE);
                     loadingIndicator.setVisibility(View.GONE);
                     btnDetectDisease.setEnabled(true);
                 });
@@ -248,13 +367,13 @@ public class DetectDiseaseActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     try {
                         if (!response.isSuccessful()) {
-                            tvDiseaseName.setText("API Error: " + response.code());
-                            tvDiseaseInfo.setText(responseBody);
-                            cardResult.setVisibility(View.VISIBLE);
+                            tvCropNameTitle.setText("API Error: " + response.code());
+                            if (tvFinalSummary != null) tvFinalSummary.setText(responseBody);
+                            llResultsContainer.setVisibility(View.VISIBLE);
                             return;
                         }
-                        JsonObject json = JsonParser.parseString(responseBody).getAsJsonObject();
-                        String result = json
+                        JsonObject rootJson = JsonParser.parseString(responseBody).getAsJsonObject();
+                        String rawJsonString = rootJson
                                 .getAsJsonArray("candidates")
                                 .get(0).getAsJsonObject()
                                 .getAsJsonObject("content")
@@ -262,16 +381,109 @@ public class DetectDiseaseActivity extends AppCompatActivity {
                                 .get(0).getAsJsonObject()
                                 .get("text").getAsString();
 
-                        currentResultText = result;
+                        // Clean up markdown ticks if Gemini included them
+                        if (rawJsonString.startsWith("```json")) {
+                            rawJsonString = rawJsonString.substring(7, rawJsonString.length() - 3).trim();
+                        } else if (rawJsonString.startsWith("```")) {
+                            rawJsonString = rawJsonString.substring(3, rawJsonString.length() - 3).trim();
+                        }
 
-                        tvDiseaseName.setText("Analysis Report (विश्लेषण रिपोर्ट)");
-                        markwon.setMarkdown(tvDiseaseInfo, result);
-                        cardResult.setVisibility(View.VISIBLE);
+                        JsonObject jsonResponse = JsonParser.parseString(rawJsonString).getAsJsonObject();
+                        
+                        String cropName = jsonResponse.has("crop_name") ? jsonResponse.get("crop_name").getAsString() : "Unknown Crop";
+                        String healthStatus = jsonResponse.has("health_status") ? jsonResponse.get("health_status").getAsString() : "N/A";
+                        int healthScore = jsonResponse.has("health_score") ? jsonResponse.get("health_score").getAsInt() : 0;
+                        String diseaseName = jsonResponse.has("disease_name") ? jsonResponse.get("disease_name").getAsString() : "N/A";
+                        String scientificName = jsonResponse.has("scientific_names") ? jsonResponse.get("scientific_names").getAsString() : "Unknown";
+                        int survivalChance = jsonResponse.has("survival_chance") ? jsonResponse.get("survival_chance").getAsInt() : 0;
+                        String finalSummary = jsonResponse.has("final_summary") ? jsonResponse.get("final_summary").getAsString() : "N/A";
+
+                        currentResultText = "Crop: " + cropName + "\nStatus: " + healthStatus + "\nDisease: " + diseaseName + "\n\nSummary:\n" + finalSummary;
+
+                        tvCropNameTitle.setText(cropName);
+                        tvHealthStatus.setText(healthStatus);
+                        tvHealthScore.setText(String.valueOf(healthScore));
+                        progressHealthScore.setProgressCompat(healthScore, true);
+
+                        if (healthScore >= 70) {
+                            progressHealthScore.setIndicatorColor(android.graphics.Color.parseColor("#2E7D32"));
+                        } else if (healthScore >= 40) {
+                            progressHealthScore.setIndicatorColor(android.graphics.Color.parseColor("#F9A825"));
+                        } else {
+                            progressHealthScore.setIndicatorColor(android.graphics.Color.parseColor("#C62828"));
+                        }
+                        
+                        tvDiseaseName.setText("Detected: " + diseaseName);
+                        tvScientificName.setText(scientificName);
+                        tvSurvivalScore.setText(survivalChance + "%");
+                        progressSurvival.setProgressCompat(survivalChance, true);
+                        markwon.setMarkdown(tvFinalSummary, finalSummary);
+
+                        if (jsonResponse.has("dos") && jsonResponse.get("dos").isJsonArray()) {
+                            populateActionList(llDos, jsonResponse.getAsJsonArray("dos"), true);
+                        } else {
+                            llDos.removeAllViews();
+                        }
+                        
+                        if (jsonResponse.has("donts") && jsonResponse.get("donts").isJsonArray()) {
+                            populateActionList(llDonts, jsonResponse.getAsJsonArray("donts"), false);
+                        } else {
+                            llDonts.removeAllViews();
+                        }
+
+                        if (jsonResponse.has("suggested_fertilizers") && jsonResponse.get("suggested_fertilizers").isJsonArray()) {
+                            populateFertilizerList(llFertilizers, jsonResponse.getAsJsonArray("suggested_fertilizers"));
+                        } else {
+                            llFertilizers.removeAllViews();
+                        }
+
+                        // Connect the Farming Tools intents with auto-filled Crop info
+                        String mappedCropStr = getSanitizedCropName(cropName);
+
+                        String suggestedFertsStr = "";
+                        if (jsonResponse.has("suggested_fertilizers") && jsonResponse.get("suggested_fertilizers").isJsonArray()) {
+                            JsonArray fertsArray = jsonResponse.getAsJsonArray("suggested_fertilizers");
+                            StringBuilder sb = new StringBuilder();
+                            for (int idx = 0; idx < fertsArray.size(); idx++) {
+                                sb.append(fertsArray.get(idx).getAsString()).append(". ");
+                            }
+                            suggestedFertsStr = sb.toString();
+                        }
+                        String finalSuggestedFertsStr = suggestedFertsStr;
+
+                        btnFertilizerCalc.setOnClickListener(vClick -> {
+                            Intent i = new Intent(DetectDiseaseActivity.this, FertilizerCalculatorActivity.class);
+                            i.putExtra("autofill_crop", mappedCropStr);
+                            if (!finalSuggestedFertsStr.isEmpty()) {
+                                i.putExtra("suggested_fertilizers", finalSuggestedFertsStr);
+                            }
+                            startActivity(i);
+                        });
+
+                        btnYieldCalc.setOnClickListener(vClick -> {
+                            Intent i = new Intent(DetectDiseaseActivity.this, YieldEstimatorActivity.class);
+                            i.putExtra("autofill_crop", mappedCropStr);
+                            startActivity(i);
+                        });
+
+                        btnIrrigationCalc.setOnClickListener(vClick -> {
+                            Intent i = new Intent(DetectDiseaseActivity.this, IrrigationPlannerActivity.class);
+                            i.putExtra("autofill_crop", mappedCropStr);
+                            startActivity(i);
+                        });
+
+                        btnCostCalc.setOnClickListener(vClick -> {
+                            Intent i = new Intent(DetectDiseaseActivity.this, CostCalculatorActivity.class);
+                            i.putExtra("autofill_crop", mappedCropStr);
+                            startActivity(i);
+                        });
+
+                        llResultsContainer.setVisibility(View.VISIBLE);
 
                     } catch (Exception e) {
-                        tvDiseaseName.setText("Error");
-                        tvDiseaseInfo.setText("Unexpected response from server.\nसर्वर से अप्रत्याशित प्रतिक्रिया।");
-                        cardResult.setVisibility(View.VISIBLE);
+                        tvCropNameTitle.setText("Error");
+                        if (tvFinalSummary != null) tvFinalSummary.setText("Unexpected response from server.\nसर्वर से अप्रत्याशित प्रतिक्रिया।\n" + e.getMessage());
+                        llResultsContainer.setVisibility(View.VISIBLE);
                     } finally {
                         loadingIndicator.setVisibility(View.GONE);
                         btnDetectDisease.setEnabled(true);
