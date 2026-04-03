@@ -15,8 +15,6 @@
 *   **Voice Assistant:** An intelligent, voice-activated assistant powered by the **Gemini API** that helps you find answers and guidance hands-free while working in the field.
 *   **How To Use Guide:** Detailed instructions and an intuitive help section ensuring farmers can easily navigate the app.
 
-
-
 ## 🛠️ Tech Stack & Architecture
 
 *   **Language:** Java (Android API 24 to API 36)
