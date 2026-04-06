@@ -15,6 +15,27 @@
 *   **Voice Assistant:** An intelligent, voice-activated assistant powered by the **Gemini API** that helps you find answers and guidance hands-free while working in the field.
 *   **How To Use Guide:** Detailed instructions and an intuitive help section ensuring farmers can easily navigate the app.
 
+  ## 📱 Live Application
+
+The application is publicly available on the Google Play Store:
+
+https://play.google.com/store/apps/details?id=com.rcc.jai_kisan
+
+## 📅 Project Timeline
+
+- **Oct 21, 2025** – Initial Alpha Release (Closed Testing - Alpha)
+- **Oct 24, 2025** – Internal Testing Release
+- **Nov 17, 2025** – Open Testing Release (Available to Testers) and Full Rollout (Available to Everyone) – Live on Google Play Store
+- **Mar 16, 2026** – Production Release (v1.0.3 - Safety & UI Update) – Live on Google Play Store
+
+*All releases and updates are verifiable via Google Play Console records.*
+
+## 🔄 Version History
+
+- v1.0 – Initial release and testing phases
+- v1.0.3 – Safety & UI Update (Production Release)![Uploading image.png…]()
+
+
 ## 🛠️ Tech Stack & Architecture
 
 *   **Language:** Java (Android API 24 to API 36)
