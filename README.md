@@ -15,7 +15,7 @@
 *   **Voice Assistant:** An intelligent, voice-activated assistant powered by the **Gemini API** that helps you find answers and guidance hands-free while working in the field.
 *   **How To Use Guide:** Detailed instructions and an intuitive help section ensuring farmers can easily navigate the app.
 
-## 📱 Live Application
+  ## 📱 Live Application
 
 The application is publicly available on the Google Play Store:
 
@@ -33,7 +33,8 @@ https://play.google.com/store/apps/details?id=com.rcc.jai_kisan
 ## 🔄 Version History
 
 - v1.0 – Initial release and testing phases
-- v1.0.3 – Safety & UI Update (Production Release)
+- v1.0.3 – Safety & UI Update (Production Release)![Uploading image.png…]()
+
 
 ## 🛠️ Tech Stack & Architecture
 
