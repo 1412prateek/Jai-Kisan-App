@@ -280,18 +280,301 @@
                 android:id="@+id/cardResult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="4dp"
                 app:cardUseCompatPadding="true"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="#F6EFF6">
-                <TextView
-                    android:id="@+id/tvPriceResults"
+                app:cardBackgroundColor="#FFFFFF">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:textColor="@color/theme_black_bean"
-                    android:text="Prices will be shown here / यहाँ कीमतें दिखाई जाएँगी।" />
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Modal Price & Trend Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:baselineAligned="false"
+                        android:layout_marginBottom="12dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Modal Price / सामान्य मूल्य"
+                                android:textColor="#1B5E20"
+                                android:textStyle="bold"
+                                android:textSize="12sp" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="bottom"
+                                android:layout_marginTop="2dp">
+
+                                <TextView
+                                    android:id="@+id/tvUiModalPrice"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="--"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"
+                                    android:textColor="#212121" />
+
+                                <TextView
+                                    android:id="@+id/tvUiModalPriceSuffix"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text=" / Q"
+                                    android:textSize="12sp"
+                                    android:textColor="#757575"
+                                    android:layout_marginStart="4dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="bottom"
+                                android:layout_marginTop="2dp">
+
+                                <TextView
+                                    android:id="@+id/tvUiModalPriceKg"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="--"
+                                    android:textSize="13sp"
+                                    android:textColor="#558B2F"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvUiModalPriceKgSuffix"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text=" / kg"
+                                    android:textSize="11sp"
+                                    android:textColor="#757575"
+                                    android:layout_marginStart="2dp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="end">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Market Trend / बाज़ार रुख"
+                                android:textColor="#1B5E20"
+                                android:textStyle="bold"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/tvUiTrend"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="--"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="#E65100"
+                                android:layout_marginTop="4dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Price Range -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="#F5F5F5"
+                        android:padding="8dp"
+                        android:layout_marginBottom="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Estimated Price Range / मूल्य सीमा: "
+                            android:textSize="11sp"
+                            android:textColor="#757575" />
+
+                        <TextView
+                            android:id="@+id/tvUiPriceRange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="--"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="#212121" />
+
+                        <TextView
+                            android:id="@+id/tvUiPriceRangeSuffix"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" / Q"
+                            android:textSize="11sp"
+                            android:textColor="#757575"
+                            android:layout_marginStart="2dp" />
+                    </LinearLayout>
+
+                    <!-- 7-Day Trend Chart -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="7-Day Price Trend / 7-दिनों का मूल्य रुझान"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="#1B5E20"
+                        android:layout_marginBottom="4dp" />
+
+                    <com.rcc.jai_kisan.PriceTrendChartView
+                        android:id="@+id/priceTrendChartView"
+                        android:layout_width="match_parent"
+                        android:layout_height="130dp"
+                        android:layout_marginBottom="6dp" />
+
+                    <TextView
+                        android:id="@+id/tvUiTrendDescEn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="11sp"
+                        android:textColor="#424242" />
+
+                    <TextView
+                        android:id="@+id/tvUiTrendDescHi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="11sp"
+                        android:textColor="#616161"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Weather Impact Section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:background="#FFF3E0"
+                        android:padding="10dp"
+                        android:layout_marginBottom="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="⚠ Weather Impact / मौसम का प्रभाव"
+                            android:textStyle="bold"
+                            android:textSize="11sp"
+                            android:textColor="#E65100" />
+
+                        <TextView
+                            android:id="@+id/tvUiWeatherImpactEn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:textSize="12sp"
+                            android:textColor="#5D4037" />
+
+                        <TextView
+                            android:id="@+id/tvUiWeatherImpactHi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textSize="12sp"
+                            android:textColor="#6D4C41" />
+
+                        <TextView
+                            android:id="@+id/tvUiWeatherImpact"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <!-- Farmer Advisory Section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:background="#E8F5E9"
+                        android:padding="10dp"
+                        android:layout_marginBottom="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="💡 Farmer Advisory / किसान सलाह"
+                            android:textStyle="bold"
+                            android:textSize="11sp"
+                            android:textColor="#2E7D32" />
+
+                        <TextView
+                            android:id="@+id/tvUiFarmerAdviceEn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:textSize="12sp"
+                            android:textColor="#1B5E20" />
+
+                        <TextView
+                            android:id="@+id/tvUiFarmerAdviceHi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textSize="12sp"
+                            android:textColor="#2E7D32" />
+
+                        <TextView
+                            android:id="@+id/tvUiFarmerAdvice"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <!-- Raw Response / Description fallback -->
+                    <TextView
+                        android:id="@+id/tvUiDescriptionEn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:textColor="#424242"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tvUiDescriptionHi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:textColor="#616161"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tvPriceResults"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
+
+                    <!-- Share Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSharePdf"
+                        style="@style/Widget.Material3.Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Share Report / रिपोर्ट साझा करें"
+                        app:icon="@drawable/ic_modern_share"
+                        app:backgroundTint="#2E7D32" />
+
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
 

@@ -21,13 +21,23 @@ android {
         applicationId "com.rcc.jai_kisan"
         minSdk 24
         targetSdk 36
-        versionCode 10
-        versionName "1.0.3"
+        versionCode 14
+        versionName "1.0.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // ✅ This line creates the secure variable for your Java code
         buildConfigField "String", "GEMINI_API_KEY", "\"${properties.getProperty("GEMINI_API_KEY")}\""
+        buildConfigField "String", "GEMINI_KEY_1", "\"${properties.getProperty("GEMINI_KEY_1")}\""
+        buildConfigField "String", "GEMINI_KEY_2", "\"${properties.getProperty("GEMINI_KEY_2")}\""
+        buildConfigField "String", "GEMINI_KEY_3", "\"${properties.getProperty("GEMINI_KEY_3")}\""
+        buildConfigField "String", "GEMINI_KEY_4", "\"${properties.getProperty("GEMINI_KEY_4")}\""
+        buildConfigField "String", "GEMINI_KEY_5", "\"${properties.getProperty("GEMINI_KEY_5")}\""
+        buildConfigField "String", "GEMINI_KEY_6", "\"${properties.getProperty("GEMINI_KEY_6")}\""
+        buildConfigField "String", "GEMINI_KEY_7", "\"${properties.getProperty("GEMINI_KEY_7")}\""
+        buildConfigField "String", "GEMINI_KEY_8", "\"${properties.getProperty("GEMINI_KEY_8")}\""
+        buildConfigField "String", "GEMINI_KEY_9", "\"${properties.getProperty("GEMINI_KEY_9")}\""
+        buildConfigField "String", "GEMINI_KEY_10", "\"${properties.getProperty("GEMINI_KEY_10")}\""
     }
 
     buildTypes {

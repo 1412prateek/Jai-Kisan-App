@@ -94,6 +94,7 @@
                         android:layout_marginTop="12dp" />
 
                     <TextView
+                        android:id="@+id/tv_sub_fertilizer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="उर्वरक कैलकुलेटर"
@@ -141,6 +142,7 @@
                         android:layout_marginTop="12dp" />
 
                     <TextView
+                        android:id="@+id/tv_sub_yield"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="उपज अनुमानक"
@@ -188,6 +190,7 @@
                         android:layout_marginTop="12dp" />
 
                     <TextView
+                        android:id="@+id/tv_sub_irrigation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="सिंचाई योजनाकार"
@@ -235,6 +238,7 @@
                         android:layout_marginTop="12dp" />
 
                     <TextView
+                        android:id="@+id/tv_sub_cost"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="लागत कैलकुलेटर"

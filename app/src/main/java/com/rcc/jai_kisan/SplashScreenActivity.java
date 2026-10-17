@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.widget.ProgressBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class SplashScreenActivity extends AppCompatActivity {
+public class SplashScreenActivity extends BaseActivity {
 
     private ProgressBar progressBar;
     private int progressStatus = 0;

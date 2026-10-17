@@ -36,7 +36,7 @@ import java.util.concurrent.Executors;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class WeatherActivity extends AppCompatActivity {
+public class WeatherActivity extends BaseActivity {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
