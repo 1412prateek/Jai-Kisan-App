@@ -26,22 +26,10 @@ public class IrrigationPlannerActivity extends BaseActivity {
     private View resultSection;
     private View resultPdfContainer;
     private TextView tvInterval, tvCriticalStage, tvExpertTip;
-
-    private static final String[] CROPS = {
-            "Wheat / \u0917\u0947\u0939\u0942\u0902", "Rice / \u092d\u093e\u0928", "Maize / \u092e\u0915\u094d\u0915\u093e", "Sugarcane / \u0917\u0928\u094d\u0928\u093e",
-            "Cotton / \u0915\u092a\u093e\u0938", "Soybean / \u0938\u094b\u092f\u093e\u092c\u0940\u0928", "Mustard / \u0938\u0930\u0938\u094b\u0902", "Potato / \u0906\u0932\u0942",
-            "Millets / \u092c\u093e\u091c\u0930\u093e", "Pulses / \u0926\u093e\u0932\u0947\u0902"
-    };
-
-    private static final String[] SOILS = {
-            "Alluvial / \u091c\u0932\u094b\u0922\u093c", "Black / \u0915\u093e\u0932\u0940 \u092e\u093f\u091f\u094d\u091f\u0940", "Red / \u0932\u093e\u0932 \u092e\u093f\u091f\u094d\u091f\u0940",
-            "Laterite / \u0932\u0948\u091f\u0947\u0930\u093e\u0907\u091f", "Sandy / \u0930\u0947\u0924\u0940\u0932\u0940 \u092e\u093f\u091f\u094d\u091f\u0940", "Clay / \u091a\u093f\u0915\u0928\u0940 \u092e\u093f\u091f\u094d\u091f\u0940"
-    };
-
-    private static final String[] METHODS = {
-            "Flood / \u0938\u0924\u0939 \u0938\u093f\u0902\u091a\u093e\u0908", "Drip / \u0921\u094d\u0930\u093f\u092a (\u091f\u092a\u0915)", "Sprinkler / \u092b\u0935\u094d\u0935\u093e\u0930\u093e",
-            "Furrow / \u0915\u0942\u0902\u0921\u093c \u0938\u093f\u0902\u091a\u093e\u0908", "Basin / \u0925\u093e\u0932\u093e \u0938\u093f\u0902\u091a\u093e\u0908"
-    };
+    private MaterialToolbar toolbar;
+    private TextView tvTitleIrrigationPro, tvTitleSelectCrop, tvTitleSelectSoil, tvTitleSelectMethod, tvTitleIrrigationAdvice, tvDisclaimer;
+    private com.google.android.material.textfield.TextInputLayout layoutDropdownCrop, layoutDropdownSoil, layoutDropdownMethod;
+    private com.google.android.material.button.MaterialButton btnCalculateIrrigation, btnShare;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,16 +47,30 @@ public class IrrigationPlannerActivity extends BaseActivity {
         tvCriticalStage = findViewById(R.id.tv_critical_stage);
         tvExpertTip = findViewById(R.id.tv_expert_tip);
 
-        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
 
         ImageButton btnClose = findViewById(R.id.btn_close);
         if (btnClose != null) btnClose.setOnClickListener(v -> finish());
 
+        tvTitleIrrigationPro = findViewById(R.id.tv_title_irrigation_pro);
+        tvTitleSelectCrop = findViewById(R.id.tv_title_select_crop);
+        layoutDropdownCrop = findViewById(R.id.layout_dropdown_crop);
+        tvTitleSelectSoil = findViewById(R.id.tv_title_select_soil);
+        layoutDropdownSoil = findViewById(R.id.layout_dropdown_soil);
+        tvTitleSelectMethod = findViewById(R.id.tv_title_select_method);
+        layoutDropdownMethod = findViewById(R.id.layout_dropdown_method);
+        btnCalculateIrrigation = findViewById(R.id.btn_calculate_irrigation);
+        tvTitleIrrigationAdvice = findViewById(R.id.tv_title_irrigation_advice);
+        btnShare = findViewById(R.id.btn_share);
+        tvDisclaimer = findViewById(R.id.tv_disclaimer);
+
         // Adapters
-        soilDropdown.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, SOILS));
-        methodDropdown.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, METHODS));
+        String[] soils = LanguageManager.getLocalizedSoils(this);
+        String[] methods = LanguageManager.getLocalizedMethods(this);
+        soilDropdown.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, soils));
+        methodDropdown.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, methods));
 
         // Dynamic crop dropdown selection and insertion
         String[] defaultCrops = LanguageManager.getLocalizedCrops(this);
@@ -99,12 +101,62 @@ public class IrrigationPlannerActivity extends BaseActivity {
             cropDropdown.setText(selectedCropString, false);
         }
 
-        findViewById(R.id.btn_calculate_irrigation).setOnClickListener(v -> calculateIrrigation());
-        findViewById(R.id.btn_share).setOnClickListener(v -> shareSchedule());
+        if (btnCalculateIrrigation != null) btnCalculateIrrigation.setOnClickListener(v -> calculateIrrigation());
+        if (btnShare != null) btnShare.setOnClickListener(v -> shareSchedule());
         // AdMob banner
         AdManager.loadBanner(this, (android.widget.FrameLayout) findViewById(R.id.adBannerContainer));
 
-        // Keep fields empty for user selection. No auto-fill or auto-execute.
+        localizeUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        localizeUI();
+    }
+
+    private void localizeUI() {
+        if (toolbar != null) {
+            toolbar.setTitle(LanguageManager.getDual(this, "Irrigation Planner", "irrigation_planner"));
+        }
+        if (tvTitleIrrigationPro != null) {
+            tvTitleIrrigationPro.setText(LanguageManager.getDual(this, "Irrigation Pro", "irrigation_planner"));
+        }
+        if (tvTitleSelectCrop != null) {
+            tvTitleSelectCrop.setText("1. " + LanguageManager.getDual(this, "Select Crop", "select_crop"));
+        }
+        if (layoutDropdownCrop != null) {
+            layoutDropdownCrop.setHint(LanguageManager.getDual(this, "Crop Type", "crop"));
+        }
+        if (tvTitleSelectSoil != null) {
+            tvTitleSelectSoil.setText("2. " + LanguageManager.getDual(this, "Select Soil", "soil_type"));
+        }
+        if (layoutDropdownSoil != null) {
+            layoutDropdownSoil.setHint(LanguageManager.getDual(this, "Soil Type", "soil_type"));
+        }
+        if (tvTitleSelectMethod != null) {
+            tvTitleSelectMethod.setText("3. " + LanguageManager.getDual(this, "Method", "irrigation_method"));
+        }
+        if (layoutDropdownMethod != null) {
+            layoutDropdownMethod.setHint(LanguageManager.getDual(this, "Method", "irrigation_method"));
+        }
+        if (btnCalculateIrrigation != null) {
+            btnCalculateIrrigation.setText(LanguageManager.getDual(this, "Plan Irrigation", "generate_plan"));
+        }
+        if (tvTitleIrrigationAdvice != null) {
+            tvTitleIrrigationAdvice.setText(LanguageManager.getDual(this, "Irrigation Advice", "irrigation_report"));
+        }
+        if (btnShare != null) {
+            btnShare.setText(LanguageManager.getDual(this, "Share Schedule", "share_report"));
+        }
+        if (tvDisclaimer != null) {
+            if (LanguageManager.isEnglishOnly(this)) {
+                tvDisclaimer.setText("* Disclaimer: These results are automated suggestions based on general data. Actual field conditions vary. Consult a local agriculture specialist before making final decisions.");
+            } else {
+                tvDisclaimer.setText("* Disclaimer: These results are automated suggestions based on general data. Actual field conditions vary. Consult a local agriculture specialist before making final decisions.\n\n"
+                        + LanguageManager.getRegional(this, "disclaimer_body", "अस्वीकरण: ये परिणाम सामान्य डेटा पर आधारित स्वचालित सुझाव हैं। वास्तविक स्थिति भिन्न हो सकती है।"));
+            }
+        }
     }
 
     private void calculateIrrigation() {
@@ -113,64 +165,60 @@ public class IrrigationPlannerActivity extends BaseActivity {
         String method = methodDropdown.getText().toString();
 
         if (crop.isEmpty() || soil.isEmpty() || method.isEmpty()) {
-            Snackbar.make(rootView, "Please fill all fields / \u0915\u094d\u0930\u092a\u092f\u093e \u092a\u0942\u0930\u0940 \u091c\u093e\u0928\u0915\u093e\u0930\u0940 \u0926\u0947\u0902", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(rootView, LanguageManager.getDual(this, "Please fill all fields", "select_crop"), Snackbar.LENGTH_SHORT).show();
             return;
         }
 
         // 1. Calculate Base Interval (Days) based on Soil Type
         int interval = 10;
-        if (soil.contains("Sandy")) interval = 7;      // Sandy dries fast
-        else if (soil.contains("Clay")) interval = 18;  // Clay holds water
-        else if (soil.contains("Black")) interval = 15; // Black soil holds moisture well
+        String soilLower = soil.toLowerCase();
+        if (soilLower.contains("sandy")) interval = 7;
+        else if (soilLower.contains("clay")) interval = 18;
+        else if (soilLower.contains("black")) interval = 15;
 
         // 2. Adjust based on Method
-        if (method.contains("Drip")) interval -= 3; // Drip needs very frequent small amounts
-        else if (method.contains("Sprinkler")) interval -= 1;
+        String methodLower = method.toLowerCase();
+        if (methodLower.contains("drip")) interval -= 3;
+        else if (methodLower.contains("sprinkler")) interval -= 1;
 
-        // 3. Define Bilingual Critical Growth Stages and Tips
-        String critical;
-        String tip;
-
-        if (crop.contains("Wheat")) {
-            critical = "CRI Stage (21 days) & Flowering.\n\u0939\u0930 \u091a\u0930\u0923 (21 \u0926\u093f\u0928) \u0914\u0930 \u092b\u0942\u0932 \u0906\u0928\u0947 \u0915\u093e \u0938\u092e\u092f\u0964";
-            tip = "Avoid water stress during the CRI stage to ensure root growth.\n\u091c\u092c\u0924\u0915 \u091c\u095c\u094b\u0902 \u0915\u0947 \u0935\u093f\u0915\u093e\u0938 \u0915\u0947 \u0932\u093f\u090f \u0938\u0940\u0906\u0930\u0906\u0908 \u091a\u0930\u0923 \u0915\u0947 \u0926\u094c\u0930\u093e\u0928 \u092a\u093e\u0928\u0940 \u0915\u0940 \u0915\u092e\u0940 \u092a\u0930 \u0927\u094d\u092f\u093e\u0928 \u0926\u0947\u0902\u0964";
-        } else if (crop.contains("Rice")) {
-            interval = 4; // Paddy needs frequent water
-            critical = "Tillering to Grain Filling.\n\u0915\u0932\u094d\u0932\u0947 \u092b\u0942\u091f\u0928\u0947 \u0938\u0947 \u0926\u093e\u0928\u093e \u092d\u0930\u0928\u0947 \u0924\u0915\u0964";
-            tip = "Keep 5cm water level for flood method.\n\u0938\u0924\u0939 \u0938\u093f\u0902\u091a\u093e\u0908 \u0915\u0947 \u0932\u093f\u090f \u096b \u0938\u0947\u092e\u0940 \u092a\u093e\u0928\u0940 \u0915\u093e \u0938\u094d\u0924\u0930 \u092c\u0928\u093e\u090f \u0930\u0916\u0947\u0902\u0964";
-        } else if (crop.contains("Sugarcane")) {
-            interval += 2;
-            critical = "Formative Stage (60-130 Days).\n\u092a\u094d\u0930\u093e\u0930\u0902\u092d\u093f\u0915 \u0935\u093f\u0915\u093e\u0938 \u091a\u0930\u0923 (\u096c\u0962-\u0967\u0969\u0962 \u0926\u093f\u0928)\u0964";
-            tip = "Deep irrigation is required for long intervals.\n\u0932\u0902\u092c\u0947 \u0905\u0902\u0924\u0930\u093e\u0932 \u0915\u0947 \u0932\u093f\u090f \u0917\u0939\u0930\u0940 \u0938\u093f\u0902\u091a\u093e\u0908 \u0915\u094d\u0930\u0940 \u0906\u0935\u0936\u094d\u092f\u0915\u0924\u093e \u0939\u094b\u0924\u0940 \u0939\u0948\u0964";
-        } else if (crop.contains("Potato")) {
-            interval = Math.max(5, interval - 2);
-            critical = "Stolon formation & Tuberization.\n\u0938\u094d\u091f\u094b\u0932\u0928 \u092c\u0928\u0928\u093e \u0914\u0930 \u0915\u0902\u0926 \u092c\u0928\u0928\u093e\u0964";
-            tip = "Light but frequent irrigation is best for tubers.\n\u0915\u0902\u0926\u094b\u0902 \u0915\u0947 \u0932\u093f\u090f \u0939\u0932\u094d\u0915\u0940 \u0932\u0947\u0915\u093f\u0928 \u092c\u093e\u0930-\u092c\u093e\u0930 \u0938\u093f\u0902\u091a\u093e\u0908 \u0938\u092c\u0938\u0947 \u0905\u091a\u094d\u091b\u0940 \u0939\u094b\u0924\u0940 \u0939\u0948\u0964";
-        } else {
-            critical = "Active Vegetative Growth.\n\u0938\u0915\u094d\u0930\u093f\u092f \u0935\u0928\u0938\u094d\u092a\u0924\u093f \u0935\u093f\u0915\u093e\u0938 \u0915\u093e \u091a\u0930\u0923\u0964";
-            tip = "Monitor soil moisture at 15cm depth.\n\u0967\u096b \u0938\u0947\u092e\u0940 \u0915\u0940 \u0917\u0939\u0930\u093e\u0938\u094d \u092a\u0930 \u092e\u093f\u091f\u094d\u091f\u0940 \u0915\u0940 \u0928\u092e\u0940 \u0915\u0940 \u0928\u093f\u0917\u0930\u093e\u0928\u0940 \u0915\u0930\u0947\u0902\u0964";
-        }
+        // 3. Define Dynamic Critical Growth Stages and Tips
+        String critical = LanguageManager.getLocalizedIrrigationStage(this, crop);
+        String tip = LanguageManager.getLocalizedIrrigationTip(this, crop);
 
         // Add real-time AI insights based on crop health
         int healthScore = getIntent().getIntExtra("health_score", -1);
         if (healthScore != -1) {
-            String aiRecommendation = "\n\n\uD83E\uDDFE Real-time AI Health Recommendation:\nCrop health score is " + healthScore + "/100. "
-                    + (healthScore < 60 ? "Reduce water quantity per cycle but irrigate more frequently to avoid root stress and fungus spread." : "Crop is in stable condition. Continue normal watering schedule.")
-                    + "\n\n\uD83E\uDDFE \u0935\u093e\u0938\u094d\u0924\u0935\u093f\u0915 \u0938\u092e\u092f \u090f\u0906\u0908 \u0938\u093f\u0902\u091a\u093e\u0908 \u0938\u0932\u093e\u0939:\n\u092b\u0938\u0932 \u0915\u093e \u0938\u094d\u0935\u093e\u0938\u094d\u0925\u094d\u092f \u0938\u094d\u0915\u094b\u0930 " + healthScore + "/100 \u0939\u0948\u0964 "
-                    + (healthScore < 60 ? "\u091c\u095c \u0924\u0928\u093e\u0935 \u0914\u0930 \u0915\u0935\u0915 \u092b\u0948\u0932\u0928\u0947 \u0938\u0947 \u092c\u091a\u0928\u0947 \u0915\u0930\u0947\u0902 \u092a\u093e\u0928\u0940 \u0915\u0940 \u092e\u093e\u0924\u094d\u0930\u093e \u0915\u092e \u0915\u0930\u0947\u0902 \u0932\u0947\u0915\u093f\u0928 \u0905\u0927\u093f\u0915 \u092e\u093e\u0924\u094d\u0930\u093e \u092e\u0947\u0902 \u0938\u093f\u0902\u091a\u093e\u0908 \u0915\u0930\u0947\u0902\u0964" : "\u092b\u0938\u0932 \u0938\u094d\u0925\u093f\u0930 \u0938\u094d\u0925\u093f\u0924\u093f \u092e\u0947\u0902 \u0939\u0948\u0964 \u0938\u093e\u092e\u093e\u0928\u094d\u092f \u0938\u093f\u0902\u091a\u093e\u0908 \u091c\u093e\u0930\u0940 \u0930\u0916\u0947\u0902\u0964") + ")";
-            tip = tip + aiRecommendation;
+            if (LanguageManager.isEnglishOnly(this)) {
+                String aiRec = "\n\n🤖 Real-time AI Health Recommendation:\nCrop health score is " + healthScore + "/100. "
+                        + (healthScore < 60 ? "Reduce water quantity per cycle but irrigate more frequently to avoid root stress and fungus spread." : "Crop is in stable condition. Continue normal watering schedule.");
+                tip = tip + aiRec;
+            } else {
+                String aiRec = "\n\n🤖 Real-time AI Health Recommendation:\nCrop health score is " + healthScore + "/100. "
+                        + (healthScore < 60 ? "Reduce water quantity per cycle but irrigate more frequently to avoid root stress and fungus spread." : "Crop is in stable condition. Continue normal watering schedule.")
+                        + "\n(" + LanguageManager.getRegional(this, "ai_advisory", "एआई सिंचाई सलाह") + ": " + healthScore + "/100)";
+                tip = tip + aiRec;
+            }
         }
 
         displayResults(interval, critical, tip);
     }
 
     private void displayResults(int interval, String critical, String tip) {
-        tvInterval.setText(String.format(Locale.getDefault(),
-                "Irrigation Interval: Every %d days\n\u0938\u093f\u0902\u091a\u093e\u0908 \u0915\u093e \u0905\u0902\u0924\u0930\u093e\u0932: \u0939\u0930 %d \u0926\u093f\u0928\u094b\u0902 \u092e\u0947\u0902", interval, interval));
+        String intervalText;
+        if (LanguageManager.isEnglishOnly(this)) {
+            intervalText = String.format(Locale.getDefault(), "Irrigation Interval: Every %d days", interval);
+        } else {
+            intervalText = String.format(Locale.getDefault(), "Irrigation Interval: Every %d days\n%s: %d %s",
+                    interval,
+                    LanguageManager.getRegional(this, "irrigation_interval", "सिंचाई का अंतराल"),
+                    interval,
+                    LanguageManager.getRegional(this, "days", "दिन"));
+        }
+        tvInterval.setText(intervalText);
 
-        tvCriticalStage.setText("Critical Stage / \u092e\u0939\u0924\u094d\u0935\u092a\u0942\u0930\u094d\u0923 \u091a\u0930\u0923:\n" + critical);
+        tvCriticalStage.setText(LanguageManager.getDual(this, "Critical Stage", "critical_stage") + ":\n" + critical);
 
-        tvExpertTip.setText("Expert Tip / \u0935\u093f\u0936\u0947\u0937\u091c\u094d\u091e \u0938\u0932\u093e\u0939:\n" + tip);
+        tvExpertTip.setText(LanguageManager.getDual(this, "Expert Tip", "expert_tip") + ":\n" + tip);
 
         resultSection.setVisibility(View.VISIBLE);
         resultSection.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
@@ -178,7 +226,7 @@ public class IrrigationPlannerActivity extends BaseActivity {
 
     private void shareSchedule() {
         if (resultSection.getVisibility() != View.VISIBLE) {
-            Snackbar.make(rootView, "Please plan first / पहले योजना बनाएं", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(rootView, LanguageManager.getDual(this, "Please plan first", "generate_plan"), Snackbar.LENGTH_SHORT).show();
             return;
         }
 

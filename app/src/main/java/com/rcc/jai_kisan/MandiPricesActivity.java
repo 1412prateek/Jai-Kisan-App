@@ -60,7 +60,12 @@ public class MandiPricesActivity extends BaseActivity {
     private String selectedSortField;
     private String selectedSortOrder;
 
-    private Map<String, String[]> cropVarietiesMap;
+    private com.google.android.material.textfield.TextInputLayout layoutState, layoutCity, layoutCrop, layoutVariety, layoutSortBy, layoutSortOrder;
+    private TextView tvNoteOptionalDate, tvTitleModalPrice, tvTitleMarketTrend, tvTitlePriceRange, tvTitle7DayTrend;
+    private TextView tvTitleWeatherImpact, tvTitleFarmerAdvisory, tvTitleDisclaimer, tvDisclaimerHi;
+    private MaterialButton btnSharePdf;
+    private MaterialToolbar toolbar;
+    private String[] currentSortFieldDisplay;
 
     private static final String[] MODELS = {
             "gemini-2.5-flash",
@@ -80,12 +85,28 @@ public class MandiPricesActivity extends BaseActivity {
 
         markwon = Markwon.create(this);
 
-        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Mandi Prices / मंडी भाव");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        layoutState = findViewById(R.id.layout_state);
+        layoutCity = findViewById(R.id.layout_city);
+        layoutCrop = findViewById(R.id.layout_crop);
+        layoutVariety = findViewById(R.id.layout_variety);
+        layoutSortBy = findViewById(R.id.layout_sort_by);
+        layoutSortOrder = findViewById(R.id.layout_sort_order);
+
+        tvNoteOptionalDate = findViewById(R.id.tv_note_optional_date);
+        tvTitleModalPrice = findViewById(R.id.tv_title_modal_price);
+        tvTitleMarketTrend = findViewById(R.id.tv_title_market_trend);
+        tvTitlePriceRange = findViewById(R.id.tv_title_price_range);
+        tvTitle7DayTrend = findViewById(R.id.tv_title_7day_trend);
+        tvTitleWeatherImpact = findViewById(R.id.tv_title_weather_impact);
+        tvTitleFarmerAdvisory = findViewById(R.id.tv_title_farmer_advisory);
+        tvTitleDisclaimer = findViewById(R.id.tv_title_disclaimer);
+        tvDisclaimerHi = findViewById(R.id.tv_disclaimer_hi);
 
         spinnerState = findViewById(R.id.spinnerState);
         spinnerCity = findViewById(R.id.spinnerCity);
@@ -119,29 +140,8 @@ public class MandiPricesActivity extends BaseActivity {
         tvUiTrendDescEn = findViewById(R.id.tvUiTrendDescEn);
         tvUiTrendDescHi = findViewById(R.id.tvUiTrendDescHi);
 
-        initCropVarieties();
-
-        // Setup States
-        ArrayAdapter<CharSequence> stateAdapter = ArrayAdapter.createFromResource(this, R.array.states_array,
-                android.R.layout.simple_dropdown_item_1line);
-        spinnerState.setAdapter(stateAdapter);
-
-        // Setup Crops
-        String[] crops = {
-                "Wheat / गेहूं", "Rice / चावल", "Onion / प्याज", "Potato / आलू",
-                "Tomato / टमाटर", "Maize / मक्का", "Paddy / धान", "Mustard / सरसों",
-                "Soyabean / सोयाबीन", "Cotton / कपास"
-        };
-        ArrayAdapter<String> cropAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, crops);
-        spinnerCrop.setAdapter(cropAdapter);
-
         // Sort Config
         String[] sortFields = { "Date", "Market", "Modal Price" };
-        String[] sortFieldDisplay = { "Date / तारीख", "Market / मंडी", "Price / कीमत" };
-        ArrayAdapter<String> sortFieldAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line,
-                sortFieldDisplay);
-        spinnerSortField.setAdapter(sortFieldAdapter);
-        spinnerSortField.setText(sortFieldDisplay[0], false);
         selectedSortField = sortFields[0];
 
         spinnerSortField.setOnItemClickListener((parent, view, position, id) -> {
@@ -149,11 +149,6 @@ public class MandiPricesActivity extends BaseActivity {
         });
 
         String[] sortOrders = { "ASC", "DESC" };
-        String[] sortOrderDisplay = { "Ascending / बढ़ता क्रम", "Descending / घटता क्रम" };
-        ArrayAdapter<String> sortOrderAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line,
-                sortOrderDisplay);
-        spinnerSortOrder.setAdapter(sortOrderAdapter);
-        spinnerSortOrder.setText(sortOrderDisplay[0], false);
         selectedSortOrder = sortOrders[0];
 
         spinnerSortOrder.setOnItemClickListener((parent, view, position, id) -> {
@@ -178,11 +173,8 @@ public class MandiPricesActivity extends BaseActivity {
 
         spinnerCrop.setOnItemClickListener((parent, view, position, id) -> {
             String selectedCrop = parent.getItemAtPosition(position).toString();
-            if (selectedCrop.contains("/")) {
-                selectedCrop = selectedCrop.substring(0, selectedCrop.indexOf("/")).trim();
-            }
-            String[] varieties = cropVarietiesMap.get(selectedCrop);
-            if (varieties != null) {
+            String[] varieties = LanguageManager.getLocalizedVarieties(MandiPricesActivity.this, selectedCrop);
+            if (varieties != null && varieties.length > 0) {
                 ArrayAdapter<String> varietyAdapter = new ArrayAdapter<>(MandiPricesActivity.this,
                         android.R.layout.simple_dropdown_item_1line, varieties);
                 spinnerVariety.setAdapter(varietyAdapter);
@@ -196,7 +188,7 @@ public class MandiPricesActivity extends BaseActivity {
         btnDateFrom.setOnClickListener(v -> showDatePicker(btnDateFrom));
         btnDateTo.setOnClickListener(v -> showDatePicker(btnDateTo));
 
-        btnReset.setOnClickListener(v -> resetFields(sortFieldDisplay));
+        btnReset.setOnClickListener(v -> resetFields());
 
         btnGetPrices.setOnClickListener(v -> {
             String state = spinnerState.getText().toString();
@@ -205,7 +197,7 @@ public class MandiPricesActivity extends BaseActivity {
             String variety = spinnerVariety.getText().toString();
 
             if (state.isEmpty() || city.isEmpty() || crop.isEmpty()) {
-                Toast.makeText(this, "Please select all required fields.\nकृपया सभी आवश्यक फ़ील्ड चुनें।",
+                Toast.makeText(this, LanguageManager.getDual(this, "Please select all required fields.", "please_fill_all"),
                         Toast.LENGTH_LONG).show();
                 return;
             }
@@ -213,11 +205,11 @@ public class MandiPricesActivity extends BaseActivity {
         });
 
         // Share button — shows M3 bottom sheet with Text / PDF options
-        MaterialButton btnSharePdf = findViewById(R.id.btnSharePdf);
+        btnSharePdf = findViewById(R.id.btnSharePdf);
         if (btnSharePdf != null) {
             btnSharePdf.setOnClickListener(v -> {
                 if (cardResult.getVisibility() != View.VISIBLE) {
-                    Toast.makeText(this, "Please fetch prices first.\nपहले कीमत प्राप्त करें।", Toast.LENGTH_SHORT)
+                    Toast.makeText(this, LanguageManager.getDual(this, "Please fetch prices first.", "get_prices"), Toast.LENGTH_SHORT)
                             .show();
                     return;
                 }
@@ -234,40 +226,106 @@ public class MandiPricesActivity extends BaseActivity {
                 });
             });
         }
+
+        localizeUI();
     }
 
-    private void resetFields(String[] sortFieldDisplay) {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        localizeUI();
+    }
+
+    private void localizeUI() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(LanguageManager.getDual(this, "Mandi Prices", "mandi_prices"));
+        }
+        if (layoutState != null) layoutState.setHint(LanguageManager.getDual(this, "State", "state") + " *");
+        if (layoutCity != null) layoutCity.setHint(LanguageManager.getDual(this, "District", "city") + " *");
+        if (layoutCrop != null) layoutCrop.setHint(LanguageManager.getDual(this, "Commodity", "crop"));
+        if (layoutVariety != null) layoutVariety.setHint(LanguageManager.getDual(this, "Variety (Optional)", "variety_optional"));
+        if (layoutSortBy != null) layoutSortBy.setHint(LanguageManager.getDual(this, "Sort By", "sort_by"));
+        if (layoutSortOrder != null) layoutSortOrder.setHint(LanguageManager.getDual(this, "Order", "order"));
+
+        if (btnDateFrom != null && btnDateFrom.getTag() == null) {
+            btnDateFrom.setText(LanguageManager.getDual(this, "From", "from"));
+        }
+        if (btnDateTo != null && btnDateTo.getTag() == null) {
+            btnDateTo.setText(LanguageManager.getDual(this, "To", "to"));
+        }
+        if (tvNoteOptionalDate != null) {
+            tvNoteOptionalDate.setText(LanguageManager.getDual(this, "Note: Date selection is optional.", "note_optional_date"));
+        }
+        if (btnReset != null) {
+            btnReset.setText(LanguageManager.getDual(this, "Reset", "reset"));
+        }
+        if (btnGetPrices != null) {
+            btnGetPrices.setText(LanguageManager.getDual(this, "Preview", "preview"));
+        }
+
+        if (tvTitleModalPrice != null) tvTitleModalPrice.setText(LanguageManager.getDual(this, "Modal Price", "modal_price"));
+        if (tvTitleMarketTrend != null) tvTitleMarketTrend.setText(LanguageManager.getDual(this, "Market Trend", "market_trend"));
+        if (tvTitlePriceRange != null) tvTitlePriceRange.setText(LanguageManager.getDual(this, "Estimated Price Range: ", "price_range_label"));
+        if (tvTitle7DayTrend != null) tvTitle7DayTrend.setText(LanguageManager.getDual(this, "7-Day Price Trend", "trend_7day_title"));
+        if (tvTitleWeatherImpact != null) tvTitleWeatherImpact.setText("⚠ " + LanguageManager.getDual(this, "Weather Impact", "weather_impact_title"));
+        if (tvTitleFarmerAdvisory != null) tvTitleFarmerAdvisory.setText("💡 " + LanguageManager.getDual(this, "Farmer Advisory", "farmer_advisory_title"));
+        if (btnSharePdf != null) btnSharePdf.setText(LanguageManager.getDual(this, "Share Report", "share_report"));
+        if (tvTitleDisclaimer != null) tvTitleDisclaimer.setText("⚠ " + LanguageManager.getDual(this, "Disclaimer", "disclaimer_title"));
+
+        if (tvDisclaimerHi != null) {
+            if (LanguageManager.isEnglishOnly(this)) {
+                tvDisclaimerHi.setVisibility(View.GONE);
+            } else {
+                tvDisclaimerHi.setVisibility(View.VISIBLE);
+                tvDisclaimerHi.setText(LanguageManager.getRegional(this, "disclaimer_body", "यह रिपोर्ट AI आधारित विश्लेषण और अनुमानित बाजार प्रवृत्तियों पर आधारित है। वास्तविक मंडी कीमतें स्थान और बाजार की स्थिति के अनुसार भिन्न हो सकती हैं।"));
+            }
+        }
+
+        // Setup States
+        String[] states = LanguageManager.getLocalizedStates(this);
+        spinnerState.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, states));
+
+        // Setup Crops
+        String[] crops = LanguageManager.getLocalizedCrops(this);
+        spinnerCrop.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, crops));
+
+        // Setup Sort Display
+        currentSortFieldDisplay = new String[]{
+                LanguageManager.getDual(this, "Date", "date"),
+                LanguageManager.getDual(this, "Market", "market"),
+                LanguageManager.getDual(this, "Price", "price")
+        };
+        spinnerSortField.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, currentSortFieldDisplay));
+        if (spinnerSortField.getText().toString().isEmpty()) {
+            spinnerSortField.setText(currentSortFieldDisplay[0], false);
+        }
+
+        String[] sortOrderDisplay = {
+                LanguageManager.getDual(this, "Ascending", "ascending"),
+                LanguageManager.getDual(this, "Descending", "descending")
+        };
+        spinnerSortOrder.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, sortOrderDisplay));
+        if (spinnerSortOrder.getText().toString().isEmpty()) {
+            spinnerSortOrder.setText(sortOrderDisplay[0], false);
+        }
+    }
+
+    private void resetFields() {
         spinnerState.setText("", false);
         spinnerCity.setAdapter(null);
         spinnerCity.setText("", false);
         spinnerCrop.setText("", false);
         spinnerVariety.setText("", false);
-        spinnerSortField.setText(sortFieldDisplay[0], false);
-        btnDateFrom.setText("From / से");
-        btnDateTo.setText("To / तक");
+        if (currentSortFieldDisplay != null && currentSortFieldDisplay.length > 0) {
+            spinnerSortField.setText(currentSortFieldDisplay[0], false);
+        }
+        btnDateFrom.setText(LanguageManager.getDual(this, "From", "from"));
+        btnDateTo.setText(LanguageManager.getDual(this, "To", "to"));
         btnDateFrom.setTag(null);
         btnDateTo.setTag(null);
-        tvPriceResults.setText("Market data will be shown here / बाज़ार का डेटा यहाँ दिखाया जाएगा।");
+        tvPriceResults.setText(LanguageManager.getDual(this, "Market data will be shown here.", "market_insight"));
         cardResult.setVisibility(View.VISIBLE);
         loadingIndicator.setVisibility(View.GONE);
-    }
-
-    private void initCropVarieties() {
-        cropVarietiesMap = new HashMap<>();
-        cropVarietiesMap.put("Wheat",
-                new String[] { "Lokwan / लोकवन", "Sharbati / शरबती", "Durum / डुरम", "Deshi / देसी", "Other / अन्य" });
-        cropVarietiesMap.put("Rice",
-                new String[] { "Basmati / बासमती", "Sona Masoori / सोना मसूरी", "Kolam / कोलम", "Other / अन्य" });
-        cropVarietiesMap.put("Onion", new String[] { "Red / लाल", "White / सफेद", "Pink / गुलाबी", "Other / अन्य" });
-        cropVarietiesMap.put("Potato", new String[] { "Jyoti / ज्योति", "Chandramukhi / चंद्रमुखी",
-                "Sugar Free / शुगर फ्री", "Other / अन्य" });
-        cropVarietiesMap.put("Tomato", new String[] { "Hybrid / हाइब्रिड", "Deshi / देसी", "Other / अन्य" });
-        cropVarietiesMap.put("Maize", new String[] { "Yellow / पीला", "White / सफेद", "Other / अन्य" });
-        cropVarietiesMap.put("Paddy", new String[] { "Common / सामान्य", "Basmati / बासमती", "Other / अन्य" });
-        cropVarietiesMap.put("Mustard", new String[] { "Black / काली", "Yellow / पीली", "Other / अन्य" });
-        cropVarietiesMap.put("Soyabean", new String[] { "Yellow / पीला", "Black / काला", "Other / अन्य" });
-        cropVarietiesMap.put("Cotton",
-                new String[] { "American / अमेरिकन", "Deshi / देसी", "Bt Cotton / बीटी कपास", "Other / अन्य" });
     }
 
     private void showDatePicker(MaterialButton button) {
@@ -292,8 +350,7 @@ public class MandiPricesActivity extends BaseActivity {
             loadingIndicator.setVisibility(View.VISIBLE);
             cardResult.setVisibility(View.GONE);
             btnGetPrices.setEnabled(false);
-            // Neutral text - no mention of govt or expert
-            tvPriceResults.setText("Generating Market Insights...\nबाज़ार की जानकारी प्राप्त की जा रही है...");
+            tvPriceResults.setText(LanguageManager.getDual(this, "Generating Market Insights...", "thinking"));
         });
 
         // Directly call AI API
@@ -303,7 +360,7 @@ public class MandiPricesActivity extends BaseActivity {
     private void fetchFromGeminiApi(String state, String city, String crop, String variety, int modelIndex, int keyRetryCount) {
         if (modelIndex >= MODELS.length) {
             runOnUiThread(() -> handleError(
-                    "All models are currently busy. Please try again in a minute.\nसभी मॉडल व्यस्त हैं। एक मिनट बाद पुनः प्रयास करें।"));
+                    LanguageManager.getDual(this, "All models are currently busy. Please try again in a minute.", "all_models_busy")));
             return;
         }
 
@@ -319,43 +376,65 @@ public class MandiPricesActivity extends BaseActivity {
         String selectedOrder = spinnerSortOrder.getText().toString();
         String sortInfo = "Sort by: " + selectedSort + " (" + selectedOrder + ")";
 
-        String prompt = "Generate a short bilingual mandi market insight and a 7-day price trend for farmers.\n\n" +
+        LanguageManager.LangItem langItem = LanguageManager.getSelectedLanguageItem(this);
+        boolean isEngOnly = LanguageManager.isEnglishOnly(this);
+        String targetLang = isEngOnly ? "English" : langItem.englishName + " (" + langItem.nativeName + ")";
 
-                "Crop: " + crop +
-                "\nVariety: " + (variety.isEmpty() ? "General" : variety) +
-                "\nLocation: " + city + ", " + state +
-                "\nDate range filter: " + dateInfo +
-                "\nSort filter: " + sortInfo + "\n\n" +
-
-                "Rules:\n" +
-                "- Keep response short.\n" +
-                "- Use bullet points.\n" +
-                "- English section first, Hindi section after.\n" +
-                "- Do NOT write words like English or Hindi.\n" +
-                "- Do NOT mix languages in same paragraph.\n" +
-                "- Make sure to mention the selected date range and sorting filters clearly in the results.\n\n" +
-
-                "Format exactly like this:\n\n" +
-
-                "## Market Insight\n" +
-                "- Price Range: ₹MIN–₹MAX per quintal\n" +
-                "- Modal Price: ₹NUMBER_ONLY (example: ₹1500). Write ONLY rupee symbol and the number. No text, no unit, no explanation.\n" +
-                "- Trend: rising / stable / falling\n" +
-                "- 7-Day Prices: 1150,1400,1590,1650,1800,1920,2110\n" +
-                "- 7-Day Description: short description including date/sort preferences\n" +
-                "- Weather Impact: short line\n" +
-                "- Farmer Advice: short practical tip\n\n" +
-
-                "## बाजार जानकारी\n" +
-                "- मूल्य सीमा: ₹न्यूनतम–₹अधिकतम प्रति क्विंटल\n" +
-                "- सामान्य मूल्य: ₹संख्या_मात्र (उदाहरण: ₹1500). केवल रुपए का चिन्ह और संख्या लिखें। कोई शब्द, इकाई या स्पष्टीकरण नहीं।\n" +
-                "- बाजार प्रवृत्ति: बढ़त / स्थिर / गिरावट\n" +
-                "- 7-Day Prices Hindi: 1150,1400,1590,1650,1800,1920,2110\n" +
-                "- 7-Day Description Hindi: तिथि और सॉर्ट प्राथमिकताओं सहित छोटा विवरण\n" +
-                "- मौसम प्रभाव: छोटा वाक्य\n" +
-                "- किसान सलाह: व्यावहारिक सुझाव\n\n" +
-
-                "Keep it concise, clear, and farmer friendly.";
+        String prompt;
+        if (isEngOnly) {
+            prompt = "Generate a concise mandi market insight and 7-day price trend for farmers in English.\n\n" +
+                    "Crop: " + crop + "\n" +
+                    "Variety: " + (variety.isEmpty() ? "General" : variety) + "\n" +
+                    "Location: " + city + ", " + state + "\n" +
+                    "Date range filter: " + dateInfo + "\n" +
+                    "Sort filter: " + sortInfo + "\n\n" +
+                    "Rules:\n" +
+                    "- Keep response short.\n" +
+                    "- Use bullet points.\n" +
+                    "- English only.\n\n" +
+                    "Format exactly like this:\n\n" +
+                    "## Market Insight\n" +
+                    "- Price Range: ₹MIN–₹MAX per quintal\n" +
+                    "- Modal Price: ₹NUMBER_ONLY (example: ₹1500). Write ONLY rupee symbol and the number.\n" +
+                    "- Trend: rising / stable / falling\n" +
+                    "- 7-Day Prices: 1150,1400,1590,1650,1800,1920,2110\n" +
+                    "- 7-Day Description: short description including date/sort preferences\n" +
+                    "- Weather Impact: short line\n" +
+                    "- Farmer Advice: short practical tip\n\n" +
+                    "Keep it concise, clear, and farmer friendly.";
+        } else {
+            prompt = "Generate a short bilingual mandi market insight and a 7-day price trend for farmers.\n\n" +
+                    "Crop: " + crop + "\n" +
+                    "Variety: " + (variety.isEmpty() ? "General" : variety) + "\n" +
+                    "Location: " + city + ", " + state + "\n" +
+                    "Date range filter: " + dateInfo + "\n" +
+                    "Sort filter: " + sortInfo + "\n\n" +
+                    "Rules:\n" +
+                    "- Keep response short.\n" +
+                    "- Use bullet points.\n" +
+                    "- Section 1 must be in English.\n" +
+                    "- Section 2 must be translated into " + targetLang + " (do NOT use Hindi unless selected language is Hindi).\n" +
+                    "- Do NOT mix languages in same section.\n" +
+                    "- Make sure to mention the selected date range and sorting filters clearly in the results.\n\n" +
+                    "Format exactly like this:\n\n" +
+                    "## Market Insight (English)\n" +
+                    "- Price Range: ₹MIN–₹MAX per quintal\n" +
+                    "- Modal Price: ₹NUMBER_ONLY (example: ₹1500). Write ONLY rupee symbol and the number. No text, no unit, no explanation.\n" +
+                    "- Trend: rising / stable / falling\n" +
+                    "- 7-Day Prices: 1150,1400,1590,1650,1800,1920,2110\n" +
+                    "- 7-Day Description: short description including date/sort preferences\n" +
+                    "- Weather Impact: short line\n" +
+                    "- Farmer Advice: short practical tip\n\n" +
+                    "## Market Insight (" + langItem.englishName + ")\n" +
+                    "- Price Range: ₹MIN–₹MAX per quintal translated in " + targetLang + "\n" +
+                    "- Modal Price: ₹NUMBER_ONLY (example: ₹1500). Write ONLY rupee symbol and the number. No text, no unit, no explanation.\n" +
+                    "- Trend: rising / stable / falling translated in " + targetLang + "\n" +
+                    "- 7-Day Prices: 1150,1400,1590,1650,1800,1920,2110\n" +
+                    "- 7-Day Description: short description in " + targetLang + " including date/sort preferences\n" +
+                    "- Weather Impact: short line in " + targetLang + "\n" +
+                    "- Farmer Advice: short practical tip in " + targetLang + "\n\n" +
+                    "Keep it concise, clear, and farmer friendly.";
+        }
 
         JsonObject textPart = new JsonObject();
         textPart.addProperty("text", prompt);
@@ -416,7 +495,7 @@ public class MandiPricesActivity extends BaseActivity {
                             fetchFromGeminiApi(state, city, crop, variety, modelIndex + 1, 0);
                             return;
                         } else {
-                            handleError("Service temporarily unavailable.\nसेवा अस्थायी रूप से अनुपलब्ध है।");
+                            handleError(LanguageManager.getDual(MandiPricesActivity.this, "Service temporarily unavailable.", "service_unavailable"));
                         }
                     } catch (Exception e) {
                         android.util.Log.e("MandiDebug", "Parse error on model " + MODELS[modelIndex] + ", body=" + responseBody, e);
@@ -427,7 +506,7 @@ public class MandiPricesActivity extends BaseActivity {
                             fetchFromGeminiApi(state, city, crop, variety, modelIndex + 1, 0);
                             return;
                         }
-                        handleError("Error processing data.\nडेटा संसाधित करने में त्रुटि।");
+                        handleError(LanguageManager.getDual(MandiPricesActivity.this, "Error processing data.", "service_unavailable"));
                     }
                     loadingIndicator.setVisibility(View.GONE);
                     cardResult.setVisibility(View.VISIBLE);
@@ -447,13 +526,13 @@ public class MandiPricesActivity extends BaseActivity {
         String trendDescEn = "", trendDescHi = "";
 
         String[] lines = resultText.split("\n");
-        boolean isHindiSection = false;
+        int sectionCount = 0;
 
         for (String line : lines) {
             String trimmed = line.trim();
             if (trimmed.isEmpty()) continue;
-            if (trimmed.contains("## बाजार जानकारी") || trimmed.contains("## बाज़ार जानकारी") || trimmed.contains("## बाजार") || trimmed.contains("## बाज़ार")) {
-                isHindiSection = true;
+            if (trimmed.startsWith("##") || trimmed.startsWith("#")) {
+                sectionCount++;
                 continue;
             }
 
@@ -463,16 +542,16 @@ public class MandiPricesActivity extends BaseActivity {
                 if (colonIdx != -1) {
                     String label = content.substring(0, colonIdx).trim().toLowerCase();
                     String value = content.substring(colonIdx + 1).trim();
-                    if (!isHindiSection) {
-                        if (label.contains("price range")) {
+                    if (sectionCount <= 1) {
+                        if (label.contains("price range") || label.contains("range")) {
                             priceRangeEn = value;
-                        } else if (label.contains("modal price")) {
+                        } else if (label.contains("modal price") || label.contains("modal")) {
                             modalPriceEn = value;
                         } else if (label.contains("trend")) {
                             trendEn = value;
-                        } else if (label.contains("7-day prices") || label.contains("prices")) {
+                        } else if (label.contains("prices")) {
                             trendPricesEn = value;
-                        } else if (label.contains("7-day description") || label.contains("description")) {
+                        } else if (label.contains("description")) {
                             trendDescEn = value;
                         } else if (label.contains("weather")) {
                             weatherEn = value;
@@ -480,19 +559,19 @@ public class MandiPricesActivity extends BaseActivity {
                             adviceEn = value;
                         }
                     } else {
-                        if (label.contains("मूल्य सीमा") || label.contains("सीमा")) {
+                        if (label.contains("price range") || label.contains("range") || label.contains("मूल्य") || label.contains("सीमा") || label.contains("দর") || label.contains("శ్రేణి") || label.contains("வரம்பு")) {
                             priceRangeHi = value;
-                        } else if (label.contains("सामान्य मूल्य") || label.contains("मूल्य")) {
+                        } else if (label.contains("modal price") || label.contains("modal") || label.contains("सामान्य") || label.contains("मूल्य") || label.contains("ధర") || label.contains("விலை") || label.contains("দর")) {
                             modalPriceHi = value;
-                        } else if (label.contains("प्रवृत्ति") || label.contains("रुख")) {
+                        } else if (label.contains("trend") || label.contains("प्रवृत्ति") || label.contains("रुख") || label.contains("ధోరణి") || label.contains("போக்கு") || label.contains("প্রবণতা")) {
                             trendHi = value;
-                        } else if (label.contains("7-day prices hindi") || label.contains("prices hindi")) {
+                        } else if (label.contains("prices")) {
                             trendPricesHi = value;
-                        } else if (label.contains("7-day description hindi") || label.contains("description hindi") || label.contains("विवरण")) {
+                        } else if (label.contains("description") || label.contains("विवरण") || label.contains("விவரம்") || label.contains("వివరణ") || label.contains("বিবরণ")) {
                             trendDescHi = value;
-                        } else if (label.contains("मौसम")) {
+                        } else if (label.contains("weather") || label.contains("मौसम") || label.contains("வானிலை") || label.contains("వాతావరణం") || label.contains("আবহাওয়া")) {
                             weatherHi = value;
-                        } else if (label.contains("सलाह") || label.contains("सुझाव")) {
+                        } else if (label.contains("advice") || label.contains("advisory") || label.contains("सलाह") || label.contains("ఆలోచన") || label.contains("ஆலோசனை") || label.contains("পরামর্শ")) {
                             adviceHi = value;
                         }
                     }
@@ -501,12 +580,10 @@ public class MandiPricesActivity extends BaseActivity {
         }
 
         // 1. Modal Price – extract ONLY the number (₹1500 or just 1500)
-        // Prompt guarantees only a number is returned, but defensively strip any text
         long modalPriceNumPerQuintal = 0;
         String modalPriceVal = "--";
         String modalPriceKgVal = "--";
 
-        // Try to extract any digits from the raw value (handles ₹1500, ₹ 1,500, 1500 etc.)
         java.util.regex.Pattern numOnlyPattern = java.util.regex.Pattern.compile("[₹\\s]*([\\d,]+)");
         java.util.regex.Matcher numMatcher = numOnlyPattern.matcher(modalPriceEn);
         if (numMatcher.find()) {
@@ -517,55 +594,61 @@ public class MandiPricesActivity extends BaseActivity {
         }
 
         if (modalPriceNumPerQuintal > 0) {
-            // Format per-quintal with ₹
             modalPriceVal = "₹" + String.format("%,d", modalPriceNumPerQuintal);
-            // Convert quintal → kg: 1 quintal = 100 kg
             double perKg = modalPriceNumPerQuintal / 100.0;
-            // Show with 2 decimal places if fractional, else integer
             if (perKg == Math.floor(perKg)) {
                 modalPriceKgVal = "₹" + String.format("%,d", (long) perKg);
             } else {
                 modalPriceKgVal = "₹" + String.format("%.2f", perKg);
             }
         } else if (!modalPriceEn.isEmpty()) {
-            // Fallback: just show whatever the AI returned stripped of non-price text
             modalPriceVal = modalPriceEn.replaceAll("(?i)(per\\s*(quintal|kg|q|kilogram)|inr|rs\\.?|rupees?|representative\\s*price|एक.*|a\\s+\\w.*)", "").trim();
             if (!modalPriceVal.startsWith("₹")) modalPriceVal = "₹" + modalPriceVal;
             modalPriceKgVal = "--";
         }
 
+        boolean isEngOnly = LanguageManager.isEnglishOnly(this);
+
+        String qSuffix = LanguageManager.formatDual(this, "/quintal", LanguageManager.getRegional(this, "quintal_suffix", "/क्विंटल"));
+        String kgSuffix = LanguageManager.formatDual(this, "/kg", LanguageManager.getRegional(this, "kg_suffix", "/किलो"));
+
         if (tvUiModalPrice != null) {
             tvUiModalPrice.setText(modalPriceVal);
         }
         if (tvUiModalPriceSuffix != null) {
-            tvUiModalPriceSuffix.setText("/क्विंटल");
+            tvUiModalPriceSuffix.setText(" " + qSuffix);
         }
         if (tvUiModalPriceKg != null) {
             tvUiModalPriceKg.setText(modalPriceKgVal);
         }
         if (tvUiModalPriceKgSuffix != null) {
-            tvUiModalPriceKgSuffix.setText("/किलो");
+            tvUiModalPriceKgSuffix.setText(" " + kgSuffix);
         }
 
         // Description Paragraphs
         String descEn = "";
         if (modalPriceEn.contains("(") && modalPriceEn.contains(")")) {
             descEn = modalPriceEn.substring(modalPriceEn.indexOf("(") + 1, modalPriceEn.indexOf(")")).trim();
-        } else {
+        } else if (!modalPriceEn.isEmpty()) {
             descEn = "Prices generally settling around " + modalPriceEn + ".";
         }
         String descHi = "";
         if (modalPriceHi.contains("(") && modalPriceHi.contains(")")) {
             descHi = modalPriceHi.substring(modalPriceHi.indexOf("(") + 1, modalPriceHi.indexOf(")")).trim();
-        } else {
-            descHi = "कीमतें आमतौर पर " + modalPriceHi + " के आसपास स्थिर हैं।";
+        } else if (!modalPriceHi.isEmpty()) {
+            descHi = LanguageManager.getRegional(this, "modal_price", "सामान्य मूल्य") + ": " + modalPriceHi;
         }
 
         if (tvUiDescriptionEn != null) {
             tvUiDescriptionEn.setText(descEn);
         }
         if (tvUiDescriptionHi != null) {
-            tvUiDescriptionHi.setText(descHi);
+            if (isEngOnly || descHi.isEmpty()) {
+                tvUiDescriptionHi.setVisibility(View.GONE);
+            } else {
+                tvUiDescriptionHi.setVisibility(View.VISIBLE);
+                tvUiDescriptionHi.setText(descHi);
+            }
         }
 
         // 2. Trend Pill Badge
@@ -575,11 +658,11 @@ public class MandiPricesActivity extends BaseActivity {
             int trendColor = 0xFF155724; // Dark green
             int trendBgTint = 0xFFD4EDDA; // Light green
 
-            if (cleanTrendEn.contains("rising") || cleanTrendEn.contains("up") || cleanTrendEn.contains("high") || cleanTrendEn.contains("बढ़त")) {
+            if (cleanTrendEn.contains("rising") || cleanTrendEn.contains("up") || cleanTrendEn.contains("high") || cleanTrendEn.contains("बढ़त") || cleanTrendEn.contains("పెరుగు")) {
                 arrowSymbol = "↑ ";
                 trendColor = 0xFF155724;
                 trendBgTint = 0xFFD4EDDA;
-            } else if (cleanTrendEn.contains("falling") || cleanTrendEn.contains("down") || cleanTrendEn.contains("low") || cleanTrendEn.contains("गिरावट")) {
+            } else if (cleanTrendEn.contains("falling") || cleanTrendEn.contains("down") || cleanTrendEn.contains("low") || cleanTrendEn.contains("गिरावट") || cleanTrendEn.contains("తగ్గు")) {
                 arrowSymbol = "↓ ";
                 trendColor = 0xFF721C24; // Dark red
                 trendBgTint = 0xFFF8D7DA; // Light red
@@ -589,7 +672,11 @@ public class MandiPricesActivity extends BaseActivity {
                 trendBgTint = 0xFFD4EDDA;
             }
 
-            tvUiTrend.setText(arrowSymbol + trendEn + " | " + trendHi);
+            String displayTrend = trendEn;
+            if (!isEngOnly && !trendHi.isEmpty()) {
+                displayTrend = trendEn + " | " + trendHi;
+            }
+            tvUiTrend.setText(arrowSymbol + displayTrend);
             tvUiTrend.setTextColor(trendColor);
             View parentLayout = (View) tvUiTrend.getParent();
             if (parentLayout != null) {
@@ -620,24 +707,20 @@ public class MandiPricesActivity extends BaseActivity {
             tvUiTrendDescEn.setText(trendDescEn);
         }
         if (tvUiTrendDescHi != null) {
-            tvUiTrendDescHi.setText(trendDescHi);
+            if (isEngOnly || trendDescHi.isEmpty()) {
+                tvUiTrendDescHi.setVisibility(View.GONE);
+            } else {
+                tvUiTrendDescHi.setVisibility(View.VISIBLE);
+                tvUiTrendDescHi.setText(trendDescHi);
+            }
         }
 
         // 4. Price Range
-        java.util.regex.Pattern valPattern = java.util.regex.Pattern.compile("(₹\\s*\\d+(?:,\\d+)*(?:\\s*(?:-|–)\\s*₹?\\s*\\d+(?:,\\d+)*)?)(.*)");;
+        java.util.regex.Pattern valPattern = java.util.regex.Pattern.compile("(₹\\s*\\d+(?:,\\d+)*(?:\\s*(?:-|–)\\s*₹?\\s*\\d+(?:,\\d+)*)?)(.*)");
         String priceRangeVal = "";
-        String priceRangeSuffix = "";
         java.util.regex.Matcher mRange = valPattern.matcher(priceRangeEn);
         if (mRange.find()) {
             priceRangeVal = mRange.group(1).trim();
-            String suffix = mRange.group(2).trim();
-            if (suffix.toLowerCase().contains("quintal") || suffix.toLowerCase().contains("क्विंटल")) {
-                priceRangeSuffix = "/quintal";
-            } else if (suffix.toLowerCase().contains("kg") || suffix.toLowerCase().contains("किग्रा")) {
-                priceRangeSuffix = "/kg";
-            } else {
-                priceRangeSuffix = suffix;
-            }
         } else {
             java.util.regex.Pattern fallbackRangePattern = java.util.regex.Pattern.compile("(₹?\\s*\\d+(?:,\\d+)*(?:\\s*(?:-|–)\\s*₹?\\s*\\d+(?:,\\d+)*)?)");
             java.util.regex.Matcher mRangeFallback = fallbackRangePattern.matcher(priceRangeEn);
@@ -645,12 +728,6 @@ public class MandiPricesActivity extends BaseActivity {
                 priceRangeVal = mRangeFallback.group(1).trim();
                 if (!priceRangeVal.startsWith("₹")) {
                     priceRangeVal = "₹" + priceRangeVal;
-                }
-                String lower = priceRangeEn.toLowerCase();
-                if (lower.contains("quintal") || lower.contains("क्विंटल")) {
-                    priceRangeSuffix = "/quintal";
-                } else if (lower.contains("kg") || lower.contains("किग्रा")) {
-                    priceRangeSuffix = "/kg";
                 }
             } else {
                 priceRangeVal = priceRangeEn;
@@ -661,7 +738,7 @@ public class MandiPricesActivity extends BaseActivity {
             tvUiPriceRange.setText(priceRangeVal);
         }
         if (tvUiPriceRangeSuffix != null) {
-            tvUiPriceRangeSuffix.setText(priceRangeSuffix);
+            tvUiPriceRangeSuffix.setText(" " + qSuffix);
         }
 
         // 5. Weather Impact Card
@@ -669,7 +746,12 @@ public class MandiPricesActivity extends BaseActivity {
             tvUiWeatherImpactEn.setText(weatherEn);
         }
         if (tvUiWeatherImpactHi != null) {
-            tvUiWeatherImpactHi.setText(weatherHi);
+            if (isEngOnly || weatherHi.isEmpty()) {
+                tvUiWeatherImpactHi.setVisibility(View.GONE);
+            } else {
+                tvUiWeatherImpactHi.setVisibility(View.VISIBLE);
+                tvUiWeatherImpactHi.setText(weatherHi);
+            }
         }
 
         // 6. Farmer Advisory Card
@@ -677,7 +759,12 @@ public class MandiPricesActivity extends BaseActivity {
             tvUiFarmerAdviceEn.setText(adviceEn);
         }
         if (tvUiFarmerAdviceHi != null) {
-            tvUiFarmerAdviceHi.setText(adviceHi);
+            if (isEngOnly || adviceHi.isEmpty()) {
+                tvUiFarmerAdviceHi.setVisibility(View.GONE);
+            } else {
+                tvUiFarmerAdviceHi.setVisibility(View.VISIBLE);
+                tvUiFarmerAdviceHi.setText(adviceHi);
+            }
         }
     }
 
@@ -696,22 +783,21 @@ public class MandiPricesActivity extends BaseActivity {
         String resultText = tvPriceResults.getText().toString();
 
         StringBuilder sb = new StringBuilder();
-        sb.append("*जय किसान - Mandi Price Report / मंडी भाव रिपोर्ट*\n");
+        sb.append("*").append(LanguageManager.getDual(this, "Jai Kisan - Mandi Price Report", "mandi_report")).append("*\n");
         sb.append("----------------------------------\n");
         if (!crop.isEmpty())
-            sb.append("Crop / फसल: ").append(crop).append("\n");
+            sb.append(LanguageManager.getDual(this, "Crop", "crop")).append(": ").append(crop).append("\n");
         if (!variety.isEmpty())
-            sb.append("Variety / किस्म: ").append(variety).append("\n");
+            sb.append(LanguageManager.getDual(this, "Variety", "variety")).append(": ").append(variety).append("\n");
         if (!city.isEmpty())
-            sb.append("Market / मंडी: ").append(city).append(", ").append(state).append("\n\n");
+            sb.append(LanguageManager.getDual(this, "Market", "market")).append(": ").append(city).append(", ").append(state).append("\n\n");
         sb.append(resultText).append("\n\n");
-        sb.append(
-                "इस प्रोग्राम का आधार एआई विश्लेषण है. कृपया अंतिम निर्णय लेने से पहले स्वयं सत्यापित करें।\nGenerated via Jai Kisan App");
+        sb.append(LanguageManager.getRegional(this, "generated_via", "Generated via Jai Kisan App"));
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
-        startActivity(Intent.createChooser(shareIntent, "Share via / साझा करें"));
+        startActivity(Intent.createChooser(shareIntent, LanguageManager.getDual(this, "Share via", "share_report")));
     }
 
     private void shareAsPdf() {
@@ -731,13 +817,13 @@ public class MandiPricesActivity extends BaseActivity {
         String trendDescEn = "", trendDescHi = "";
 
         String[] lines = resultText.split("\n");
-        boolean isHindiSection = false;
+        int sectionCount = 0;
 
         for (String line : lines) {
             String trimmed = line.trim();
             if (trimmed.isEmpty()) continue;
-            if (trimmed.contains("## बाजार जानकारी") || trimmed.contains("## बाज़ार जानकारी") || trimmed.contains("## बाजार") || trimmed.contains("## बाज़ार")) {
-                isHindiSection = true;
+            if (trimmed.startsWith("##") || trimmed.startsWith("#")) {
+                sectionCount++;
                 continue;
             }
 
@@ -747,16 +833,16 @@ public class MandiPricesActivity extends BaseActivity {
                 if (colonIdx != -1) {
                     String label = content.substring(0, colonIdx).trim().toLowerCase();
                     String value = content.substring(colonIdx + 1).trim();
-                    if (!isHindiSection) {
-                        if (label.contains("price range")) {
+                    if (sectionCount <= 1) {
+                        if (label.contains("price range") || label.contains("range")) {
                             priceRangeEn = value;
-                        } else if (label.contains("modal price")) {
+                        } else if (label.contains("modal price") || label.contains("modal")) {
                             modalPriceEn = value;
                         } else if (label.contains("trend")) {
                             trendEn = value;
-                        } else if (label.contains("7-day prices") || label.contains("prices")) {
+                        } else if (label.contains("prices")) {
                             trendPricesEn = value;
-                        } else if (label.contains("7-day description") || label.contains("description")) {
+                        } else if (label.contains("description")) {
                             trendDescEn = value;
                         } else if (label.contains("weather")) {
                             weatherEn = value;
@@ -764,19 +850,19 @@ public class MandiPricesActivity extends BaseActivity {
                             adviceEn = value;
                         }
                     } else {
-                        if (label.contains("मूल्य सीमा") || label.contains("सीमा")) {
+                        if (label.contains("price range") || label.contains("range") || label.contains("मूल्य") || label.contains("सीमा") || label.contains("দর") || label.contains("శ్రేణి") || label.contains("வரம்பு")) {
                             priceRangeHi = value;
-                        } else if (label.contains("सामान्य मूल्य") || label.contains("मूल्य")) {
+                        } else if (label.contains("modal price") || label.contains("modal") || label.contains("सामान्य") || label.contains("मूल्य") || label.contains("ధర") || label.contains("விலை") || label.contains("দর")) {
                             modalPriceHi = value;
-                        } else if (label.contains("प्रवृत्ति") || label.contains("रुख")) {
+                        } else if (label.contains("trend") || label.contains("प्रवृत्ति") || label.contains("रुख") || label.contains("ధోరణి") || label.contains("போக்கு") || label.contains("প্রবণতা")) {
                             trendHi = value;
-                        } else if (label.contains("7-day prices hindi") || label.contains("prices hindi")) {
+                        } else if (label.contains("prices")) {
                             trendPricesHi = value;
-                        } else if (label.contains("7-day description hindi") || label.contains("description hindi") || label.contains("विवरण")) {
+                        } else if (label.contains("description") || label.contains("विवरण") || label.contains("விவரம்") || label.contains("వివరణ") || label.contains("বিবরণ")) {
                             trendDescHi = value;
-                        } else if (label.contains("मौसम")) {
+                        } else if (label.contains("weather") || label.contains("मौसम") || label.contains("வானிலை") || label.contains("వాతావరణం") || label.contains("আবহাওয়া")) {
                             weatherHi = value;
-                        } else if (label.contains("सलाह") || label.contains("सुझाव")) {
+                        } else if (label.contains("advice") || label.contains("advisory") || label.contains("सलाह") || label.contains("ఆలోచన") || label.contains("ஆலோசனை") || label.contains("পরামর্শ")) {
                             adviceHi = value;
                         }
                     }
@@ -793,14 +879,8 @@ public class MandiPricesActivity extends BaseActivity {
         java.util.regex.Matcher mModalEn = numPattern.matcher(modalPriceEn);
         if (mModalEn.find()) {
             String val = mModalEn.group(1).trim();
-            String lower = modalPriceEn.toLowerCase();
-            if (lower.contains("kg") || lower.contains("किग्रा")) {
-                pdfModalEn = val + " /kg";
-                pdfModalHi = val + " /किग्रा";
-            } else {
-                pdfModalEn = val + " /quintal";
-                pdfModalHi = val + " /क्विंटल";
-            }
+            pdfModalEn = val + " /quintal";
+            pdfModalHi = val + " " + LanguageManager.getRegional(this, "quintal_suffix", "/क्विंटल");
         } else {
             pdfModalEn = modalPriceEn;
             pdfModalHi = modalPriceHi;
@@ -814,14 +894,8 @@ public class MandiPricesActivity extends BaseActivity {
             if (!val.startsWith("₹")) {
                 val = "₹" + val;
             }
-            String lower = priceRangeEn.toLowerCase();
-            if (lower.contains("kg") || lower.contains("किग्रा")) {
-                pdfRangeEn = val + " /kg";
-                pdfRangeHi = val + " /किग्रा";
-            } else {
-                pdfRangeEn = val + " /quintal";
-                pdfRangeHi = val + " /क्विंटल";
-            }
+            pdfRangeEn = val + " /quintal";
+            pdfRangeHi = val + " " + LanguageManager.getRegional(this, "quintal_suffix", "/क्विंटल");
         } else {
             pdfRangeEn = priceRangeEn;
             pdfRangeHi = priceRangeHi;

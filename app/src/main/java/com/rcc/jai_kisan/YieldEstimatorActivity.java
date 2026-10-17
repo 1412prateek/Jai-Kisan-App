@@ -29,25 +29,15 @@ public class YieldEstimatorActivity extends BaseActivity {
     private AutoCompleteTextView cropDropdown, stateDropdown, unitDropdown;
     private TextInputEditText areaInput;
     private View resultSection;
-    // Container view captured for PDF rendering
     private View resultPdfContainer;
     private TextView tvYieldPerAcre, tvTotalYield, tvYieldSummary;
+    private MaterialToolbar toolbar;
+    private TextView tvTitleYieldPro, tvTitleSelectCrop, tvTitleSelectState, tvTitleLandArea, tvTitleEstimatedYield, tvDisclaimer;
+    private com.google.android.material.textfield.TextInputLayout layoutDropdownCrop, layoutDropdownState, layoutDropdownUnit, layoutInputArea;
+    private com.google.android.material.button.MaterialButton btnEstimate, btnShare;
 
     // Mapping logic matching Fertilizer Calculator
     private final Map<String, Map<String, Double>> regionUnitMap = new HashMap<>();
-
-    private static final String[] CROPS = {
-            "Wheat / गेहूं", "Rice / चावल", "Maize / मक्का", "Cotton / कपास",
-            "Sugarcane / गन्ना", "Soybean / सोयाबीन", "Mustard / सरसों", "Potato / आलू",
-            "Onion / प्याज", "Chili / मिर्च"
-    };
-
-    // Avg Yields in Quintals per Acre
-    private static final double[] AVG_YIELDS = {18.5, 20.0, 22.0, 10.0, 320.0, 8.5, 7.2, 85.0, 70.0, 15.0};
-
-    private static final String[] STATES = {
-            "Andhra Pradesh / आंध्र प्रदेश", "Arunachal Pradesh / अरुणाचल प्रदेश", "Assam / असम", "Bihar / बिहार", "Chhattisgarh / छत्तीसगढ़", "Goa / गोवा", "Gujarat / गुजरात", "Haryana / हरियाणा", "Himachal Pradesh / हिमाचल प्रदेश", "Jharkhand / झारखंड", "Karnataka / कर्नाटक", "Kerala / केरल", "Madhya Pradesh / मध्य प्रदेश", "Maharashtra / महाराष्ट्र", "Manipur / मणिपुर", "Meghalaya / मेघालय", "Mizoram / मिजोरम", "Nagaland / नागालैंड", "Odisha / ओडिशा", "Punjab / पंजाब", "Rajasthan / राजस्थान", "Sikkim / सिक्किम", "Tamil Nadu / तमिलनाडु", "Telangana / तेलंगाना", "Tripura / त्रिपुरा", "Uttar Pradesh / उत्तर प्रदेश", "Uttarakhand / उत्तराखंड", "West Bengal / पश्चिम बंगाल", "Delhi / दिल्ली", "Jammu & Kashmir / जम्मू और कश्मीर", "Ladakh / लद्दाख", "Puducherry / पुडुचेरी", "Andaman & Nicobar / अंडमान और निकोबार"
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,12 +58,25 @@ public class YieldEstimatorActivity extends BaseActivity {
         tvTotalYield = findViewById(R.id.tv_total_yield);
         tvYieldSummary = findViewById(R.id.tv_yield_summary);
 
-        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
 
         ImageButton btnClose = findViewById(R.id.btn_close);
         if (btnClose != null) btnClose.setOnClickListener(v -> finish());
+
+        tvTitleYieldPro = findViewById(R.id.tv_title_yield_pro);
+        tvTitleSelectCrop = findViewById(R.id.tv_title_select_crop);
+        layoutDropdownCrop = findViewById(R.id.layout_dropdown_crop);
+        tvTitleSelectState = findViewById(R.id.tv_title_select_state);
+        layoutDropdownState = findViewById(R.id.layout_dropdown_state);
+        tvTitleLandArea = findViewById(R.id.tv_title_land_area);
+        layoutDropdownUnit = findViewById(R.id.layout_dropdown_unit);
+        layoutInputArea = findViewById(R.id.layout_input_area);
+        btnEstimate = findViewById(R.id.btn_estimate);
+        tvTitleEstimatedYield = findViewById(R.id.tv_title_estimated_yield);
+        btnShare = findViewById(R.id.btn_share);
+        tvDisclaimer = findViewById(R.id.tv_disclaimer);
 
         // Adapters
         String[] defaultStates = LanguageManager.getLocalizedStates(this);
@@ -114,50 +117,70 @@ public class YieldEstimatorActivity extends BaseActivity {
             loadUnitsForState(selectedState);
         });
 
-        findViewById(R.id.btn_estimate).setOnClickListener(v -> calculateYield());
-        findViewById(R.id.btn_share).setOnClickListener(v -> shareResult());
+        if (btnEstimate != null) btnEstimate.setOnClickListener(v -> calculateYield());
+        if (btnShare != null) btnShare.setOnClickListener(v -> shareResult());
 
-        // Keep fields empty for user selection. No auto-fill or auto-execute.
-        if (false) {
-            stateDropdown.setText("Uttar Pradesh / उत्तर प्रदेश", false);
-            loadUnitsForState("Uttar Pradesh / उत्तर प्रदेश");
-            areaInput.setText("1");
-            calculateYield();
+        localizeUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        localizeUI();
+    }
+
+    private void localizeUI() {
+        if (toolbar != null) {
+            toolbar.setTitle(LanguageManager.getDual(this, "Yield Estimator", "yield_estimator"));
+        }
+        if (tvTitleYieldPro != null) {
+            tvTitleYieldPro.setText(LanguageManager.getDual(this, "Yield Pro", "yield_estimator"));
+        }
+        if (tvTitleSelectCrop != null) {
+            tvTitleSelectCrop.setText("1. " + LanguageManager.getDual(this, "Select Crop", "select_crop"));
+        }
+        if (layoutDropdownCrop != null) {
+            layoutDropdownCrop.setHint(LanguageManager.getDual(this, "Crop Type", "crop"));
+        }
+        if (tvTitleSelectState != null) {
+            tvTitleSelectState.setText("2. " + LanguageManager.getDual(this, "Select State", "select_state"));
+        }
+        if (layoutDropdownState != null) {
+            layoutDropdownState.setHint(LanguageManager.getDual(this, "Select State", "select_state"));
+        }
+        if (tvTitleLandArea != null) {
+            tvTitleLandArea.setText("3. " + LanguageManager.getDual(this, "Land Area", "land_area"));
+        }
+        if (layoutDropdownUnit != null) {
+            layoutDropdownUnit.setHint(LanguageManager.getDual(this, "Unit", "land_area"));
+        }
+        if (layoutInputArea != null) {
+            layoutInputArea.setHint(LanguageManager.getDual(this, "Area", "land_area"));
+        }
+        if (btnEstimate != null) {
+            btnEstimate.setText(LanguageManager.getDual(this, "Estimate Yield", "estimate_yield"));
+        }
+        if (tvTitleEstimatedYield != null) {
+            tvTitleEstimatedYield.setText(LanguageManager.getDual(this, "Estimated Yield", "yield_report"));
+        }
+        if (btnShare != null) {
+            btnShare.setText(LanguageManager.getDual(this, "Share Advice", "share_report"));
+        }
+        if (tvDisclaimer != null) {
+            if (LanguageManager.isEnglishOnly(this)) {
+                tvDisclaimer.setText("* Disclaimer: These results are automated suggestions based on general data. Actual field conditions vary. Consult a local agriculture specialist before making final decisions.");
+            } else {
+                tvDisclaimer.setText("* Disclaimer: These results are automated suggestions based on general data. Actual field conditions vary. Consult a local agriculture specialist before making final decisions.\n\n"
+                        + LanguageManager.getRegional(this, "disclaimer_body", "अस्वीकरण: ये परिणाम सामान्य डेटा पर आधारित स्वचालित सुझाव हैं। वास्तविक स्थिति भिन्न हो सकती है।"));
+            }
         }
     }
 
     private void initializeRegionalUnits() {
-        // Shared Universal Units
-        Map<String, Double> universal = new HashMap<>();
-        universal.put("Acre / एकड़", 1.0);
-        universal.put("Hectare / हेक्टेयर", 2.47);
-        universal.put("Sq. Ft / वर्ग फुट", 0.0000229);
-
-        // Regional Definitions
-        Map<String, Double> north = new HashMap<>(universal);
-        north.put("Bigha / बीघा", 0.625);
-        north.put("Kanal / कनाल", 0.125);
-        north.put("Biswa / बिस्वा", 0.031);
-        north.put("Killa / किल्ला", 1.0);
-
-        Map<String, Double> south = new HashMap<>(universal);
-        south.put("Cent / सेंट", 0.01);
-        south.put("Guntha / गुंठा", 0.025);
-        south.put("Ankanam / अंकनम", 0.0016);
-
-        Map<String, Double> east = new HashMap<>(universal);
-        east.put("Katha / कट्ठा", 0.031);
-        east.put("Decimal / डेसीमल", 0.01);
-        east.put("Chatak / छटाक", 0.004);
-
-        Map<String, Double> west = new HashMap<>(universal);
-        west.put("Vigha / विघा", 0.4);
-        west.put("Guntha / गुंठा", 0.025);
-
-        regionUnitMap.put("NORTH", north);
-        regionUnitMap.put("SOUTH", south);
-        regionUnitMap.put("EAST", east);
-        regionUnitMap.put("WEST", west);
+        regionUnitMap.put("NORTH", LanguageManager.getRegionalUnits(this, "NORTH"));
+        regionUnitMap.put("SOUTH", LanguageManager.getRegionalUnits(this, "SOUTH"));
+        regionUnitMap.put("EAST", LanguageManager.getRegionalUnits(this, "EAST"));
+        regionUnitMap.put("WEST", LanguageManager.getRegionalUnits(this, "WEST"));
     }
 
     private void loadUnitsForState(String state) {
@@ -181,7 +204,7 @@ public class YieldEstimatorActivity extends BaseActivity {
         String areaStr = areaInput.getText() != null ? areaInput.getText().toString() : "";
 
         if (crop.isEmpty() || state.isEmpty() || unit.isEmpty() || areaStr.isEmpty()) {
-            Snackbar.make(rootView, "Please fill all fields / कृपया पूरी जानकारी दें", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(rootView, LanguageManager.getDual(this, "Please fill all fields", "select_crop"), Snackbar.LENGTH_SHORT).show();
             return;
         }
 
@@ -191,25 +214,24 @@ public class YieldEstimatorActivity extends BaseActivity {
         else if (state.contains("Bengal") || state.contains("Bihar") || state.contains("Assam") || state.contains("Odisha")) region = "EAST";
         else if (state.contains("Gujarat") || state.contains("Maharashtra") || state.contains("Goa")) region = "WEST";
 
-        double conversion = regionUnitMap.get(region).get(unit);
+        Map<String, Double> units = regionUnitMap.get(region);
+        Double conversion = units != null ? units.get(unit) : null;
+        if (conversion == null) conversion = 1.0;
         double acres = Double.parseDouble(areaStr) * conversion;
 
-        // Get index for crop yield
-        int idx = -1;
-        for (int i = 0; i < CROPS.length; i++) {
-            if (CROPS[i].equalsIgnoreCase(crop)) {
-                idx = i;
-                break;
-            }
-        }
-
-        double avgAcre;
-        if (idx != -1) {
-            avgAcre = AVG_YIELDS[idx];
-        } else {
-            // General baseline average yield for dynamic/custom crops (e.g. apple or pine)
-            avgAcre = 15.0;
-        }
+        // Baseline yield in Quintals per Acre
+        String cropLower = crop.toLowerCase();
+        double avgAcre = 15.0;
+        if (cropLower.contains("wheat")) avgAcre = 18.5;
+        else if (cropLower.contains("rice") || cropLower.contains("paddy")) avgAcre = 20.0;
+        else if (cropLower.contains("maize") || cropLower.contains("corn")) avgAcre = 22.0;
+        else if (cropLower.contains("cotton")) avgAcre = 10.0;
+        else if (cropLower.contains("sugarcane")) avgAcre = 320.0;
+        else if (cropLower.contains("soybean") || cropLower.contains("soya")) avgAcre = 8.5;
+        else if (cropLower.contains("mustard")) avgAcre = 7.2;
+        else if (cropLower.contains("potato")) avgAcre = 85.0;
+        else if (cropLower.contains("onion")) avgAcre = 70.0;
+        else if (cropLower.contains("chili") || cropLower.contains("chilli")) avgAcre = 15.0;
 
         // Adjust yield based on crop health and survival chance from intent
         int survivalChance = getIntent().getIntExtra("survival_chance", -1);
@@ -225,25 +247,33 @@ public class YieldEstimatorActivity extends BaseActivity {
         double adjustedAvgAcre = avgAcre * yieldFactor;
         double total = adjustedAvgAcre * acres;
 
-        // Bilingual result display
-        tvYieldPerAcre.setText(String.format(Locale.getDefault(),
-                "Avg Yield / औसत पैदावार: %.1f Quintals/Acre", adjustedAvgAcre));
+        // Dynamic result display
+        String avgYieldLabel = LanguageManager.getDual(this, "Avg Yield", "avg_yield");
+        String quintalsAcre = LanguageManager.getDual(this, "Quintals/Acre", "quintals_acre");
+        tvYieldPerAcre.setText(String.format(Locale.getDefault(), "%s: %.1f %s", avgYieldLabel, adjustedAvgAcre, quintalsAcre));
 
-        tvTotalYield.setText(String.format(Locale.getDefault(),
-                "Total Estimate / कुल अनुमान: %.1f Quintals (क्विंटल)", total));
+        String totalEstLabel = LanguageManager.getDual(this, "Total Estimate", "total_yield");
+        String quintalsUnit = LanguageManager.getDual(this, "Quintals", "quintals");
+        tvTotalYield.setText(String.format(Locale.getDefault(), "%s: %.1f %s", totalEstLabel, total, quintalsUnit));
 
-        String cropNameHi = crop.contains("/") ? crop.split("/")[1].trim() : crop;
-        String stateNameHi = state.contains("/") ? state.split("/")[1].trim() : state;
+        String cropDisplay = crop.contains("/") && LanguageManager.isEnglishOnly(this) ? crop.split("/")[0].trim() : crop;
+        String stateDisplay = state.contains("/") && LanguageManager.isEnglishOnly(this) ? state.split("/")[0].trim() : state;
 
         String summary = String.format(Locale.getDefault(),
                 "Estimation for %s on %.2f Acres area. Based on %s regional averages.",
-                cropNameHi, acres, stateNameHi);
+                cropDisplay, acres, stateDisplay);
 
         if (survivalChance != -1 || healthScore != -1) {
-            summary += String.format(Locale.getDefault(),
-                    "\n\n🤖 Real-time AI Insight:\nYield estimate is adjusted by a factor of %.2fx due to crop health (%d/100) and survival chance (%d%%).\n"
-                    + "(एआई पैदावार इनसाइट: फसल के स्वास्थ्य स्कोर (%d/100) और जीवित रहने की संभावना (%d%%) के कारण पैदावार के अनुमान को %.2f गुना समायोजित किया गया है।)",
-                    yieldFactor, healthScore, survivalChance, healthScore, survivalChance, yieldFactor);
+            if (LanguageManager.isEnglishOnly(this)) {
+                summary += String.format(Locale.getDefault(),
+                        "\n\n🤖 Real-time AI Insight:\nYield estimate is adjusted by a factor of %.2fx due to crop health (%d/100) and survival chance (%d%%).",
+                        yieldFactor, healthScore, survivalChance);
+            } else {
+                summary += String.format(Locale.getDefault(),
+                        "\n\n🤖 Real-time AI Insight:\nYield estimate is adjusted by a factor of %.2fx due to crop health (%d/100) and survival chance (%d%%).\n"
+                        + "(" + LanguageManager.getRegional(this, "ai_advisory", "एआई पैदावार इनसाइट") + ": %d/100, %d%% -> %.2fx)",
+                        yieldFactor, healthScore, survivalChance, healthScore, survivalChance, yieldFactor);
+            }
         }
 
         tvYieldSummary.setText(summary);
@@ -254,7 +284,7 @@ public class YieldEstimatorActivity extends BaseActivity {
 
     private void shareResult() {
         if (resultSection.getVisibility() != View.VISIBLE) {
-            Snackbar.make(rootView, "Please estimate first / \u092a\u0939\u0932\u0947 \u0905\u0928\u0941\u092e\u093e\u0928 \u0932\u0917\u093e\u090f\u0902", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(rootView, LanguageManager.getDual(this, "Please estimate first", "estimate_yield"), Snackbar.LENGTH_SHORT).show();
             return;
         }
 

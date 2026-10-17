@@ -46,6 +46,10 @@ public class WeatherActivity extends BaseActivity {
     AutoCompleteTextView spinnerState, citySpinner;
     MaterialCardView cardResult;
 
+    MaterialToolbar toolbar;
+    com.google.android.material.textfield.TextInputLayout layoutSpinnerState, layoutCitySpinner;
+    TextView tvOrDivider;
+
     String API_KEY = "1cce38c2c68cf1fb412a1c2cb29c40e7";
     private FusedLocationProviderClient fusedLocationClient;
     private ExecutorService executorService;
@@ -58,7 +62,7 @@ public class WeatherActivity extends BaseActivity {
         executorService = Executors.newSingleThreadExecutor();
 
         // --- Setup Toolbar ---
-        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -76,6 +80,9 @@ public class WeatherActivity extends BaseActivity {
         spinnerState = findViewById(R.id.spinnerState);
         citySpinner = findViewById(R.id.citySpinner);
         cardResult = findViewById(R.id.cardResult);
+        layoutSpinnerState = findViewById(R.id.layout_spinner_state);
+        layoutCitySpinner = findViewById(R.id.layout_city_spinner);
+        tvOrDivider = findViewById(R.id.tvOrDivider);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -83,8 +90,38 @@ public class WeatherActivity extends BaseActivity {
 
         btnDetectLocation.setOnClickListener(v -> detectLocation());
 
+        localizeUI();
+
         // Fetch weather for a default location on startup
         fetchWeather("Delhi");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        localizeUI();
+    }
+
+    private void localizeUI() {
+        if (toolbar != null) {
+            toolbar.setTitle(LanguageManager.getDual(this, "Weather Info", "weather_title"));
+        }
+        if (btnDetectLocation != null) {
+            btnDetectLocation.setText(LanguageManager.getDual(this, "Detect My Location", "detect_location"));
+        }
+        if (layoutSpinnerState != null) {
+            layoutSpinnerState.setHint(LanguageManager.getDual(this, "State", "state"));
+        }
+        if (layoutCitySpinner != null) {
+            layoutCitySpinner.setHint(LanguageManager.getDual(this, "City", "city"));
+        }
+        if (tvOrDivider != null) {
+            if (LanguageManager.isEnglishOnly(this)) {
+                tvOrDivider.setText("... OR ...");
+            } else {
+                tvOrDivider.setText("... OR ... / ... " + LanguageManager.getRegional(this, "or", "या") + " ...");
+            }
+        }
     }
 
     private void setupStateCitySpinners() {
@@ -176,23 +213,7 @@ public class WeatherActivity extends BaseActivity {
                 String country = json.getJSONObject("sys").getString("country");
                 String locationText = cityName + ", " + country;
 
-                Map<String, String> weatherTranslations = new HashMap<>();
-                weatherTranslations.put("clear sky", "साफ आसमान");
-                weatherTranslations.put("few clouds", "थोड़े बादल");
-                weatherTranslations.put("scattered clouds", "छितरे बादल");
-                weatherTranslations.put("broken clouds", "टूटे बादल");
-                weatherTranslations.put("overcast clouds", "बादलों से ढका");
-                weatherTranslations.put("shower rain", "तेज़ बारिश");
-                weatherTranslations.put("rain", "बारिश");
-                weatherTranslations.put("light rain", "हल्की बारिश");
-                weatherTranslations.put("moderate rain", "मध्यम बारिश");
-                weatherTranslations.put("thunderstorm", "आंधी-तूफान");
-                weatherTranslations.put("snow", "बर्फबारी");
-                weatherTranslations.put("mist", "धुंध");
-                weatherTranslations.put("haze", "धुंध");
-
-                String descHindi = weatherTranslations.getOrDefault(descEng.toLowerCase(), "");
-                String fullDescription = descEng.substring(0, 1).toUpperCase() + descEng.substring(1) + (descHindi.isEmpty() ? "" : " / " + descHindi);
+                String fullDescription = LanguageManager.getLocalizedWeatherDesc(WeatherActivity.this, descEng);
 
                 runOnUiThread(() -> {
                     cardResult.setVisibility(View.VISIBLE);

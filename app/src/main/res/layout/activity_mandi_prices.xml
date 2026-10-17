@@ -73,6 +73,7 @@
                     android:padding="16dp">
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layout_state"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -89,6 +90,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layout_city"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -105,6 +107,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layout_crop"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -121,6 +124,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layout_variety"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -193,6 +197,7 @@
                         android:orientation="horizontal"
                         android:weightSum="2">
                         <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/layout_sort_by"
                             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="0dp"
                             android:layout_weight="1"
@@ -208,6 +213,7 @@
                                 android:inputType="none" />
                         </com.google.android.material.textfield.TextInputLayout>
                         <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/layout_sort_order"
                             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="0dp"
                             android:layout_weight="1"
@@ -225,6 +231,7 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tv_note_optional_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
@@ -307,6 +314,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tv_title_modal_price"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Modal Price / सामान्य मूल्य"
@@ -375,6 +383,7 @@
                             android:gravity="end">
 
                             <TextView
+                                android:id="@+id/tv_title_market_trend"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Market Trend / बाज़ार रुख"
@@ -404,6 +413,7 @@
                         android:layout_marginBottom="12dp">
 
                         <TextView
+                            android:id="@+id/tv_title_price_range"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Estimated Price Range / मूल्य सीमा: "
@@ -431,6 +441,7 @@
 
                     <!-- 7-Day Trend Chart -->
                     <TextView
+                        android:id="@+id/tv_title_7day_trend"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="7-Day Price Trend / 7-दिनों का मूल्य रुझान"
@@ -471,6 +482,7 @@
                         android:layout_marginBottom="10dp">
 
                         <TextView
+                            android:id="@+id/tv_title_weather_impact"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="⚠ Weather Impact / मौसम का प्रभाव"
@@ -511,6 +523,7 @@
                         android:layout_marginBottom="16dp">
 
                         <TextView
+                            android:id="@+id/tv_title_farmer_advisory"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="💡 Farmer Advisory / किसान सलाह"
@@ -596,6 +609,7 @@
 
                     <!-- Title -->
                     <TextView
+                        android:id="@+id/tv_title_disclaimer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="⚠ Disclaimer / अस्वीकरण"
@@ -616,8 +630,9 @@
                         android:text="This report is generated using AI-based analysis and estimated market patterns. Actual mandi prices may vary depending on location and market conditions."
                         android:layout_marginBottom="6dp"/>
 
-                    <!-- Hindi -->
+                    <!-- Hindi / Regional -->
                     <TextView
+                        android:id="@+id/tv_disclaimer_hi"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="11sp"

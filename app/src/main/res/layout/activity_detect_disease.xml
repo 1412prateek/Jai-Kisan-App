@@ -63,6 +63,7 @@
                 app:cardBackgroundColor="@android:color/white">
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvDetectDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -257,6 +258,7 @@
                                 android:padding="12dp">
 
                                 <TextView
+                                    android:id="@+id/tvSurvivalChanceLabel"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Survival Chance / बचने की संभावना"
@@ -344,6 +346,7 @@
 
                         <!-- Summary Block -->
                         <TextView
+                            android:id="@+id/tvSummaryLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Summary / सारांश"
@@ -372,6 +375,7 @@
 
                         <!-- Do's Section -->
                         <TextView
+                            android:id="@+id/tvDosLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Recommended Actions / क्या करें (Do's)"
@@ -389,6 +393,7 @@
 
                         <!-- Don'ts Section -->
                         <TextView
+                            android:id="@+id/tvDontsLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Things to Avoid / क्या न करें (Don'ts)"
@@ -406,6 +411,7 @@
 
                         <!-- Fertilizers & Cures Section -->
                         <TextView
+                            android:id="@+id/tvCuresLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Cures &amp; Fertilizers / उपचार एवं उर्वरक"
@@ -423,6 +429,7 @@
 
                         <!-- Quick Calculator Links Section -->
                         <TextView
+                            android:id="@+id/tvApplyToolsLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Apply to Farming Tools / संबंधित उपकरण"

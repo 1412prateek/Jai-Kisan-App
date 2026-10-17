@@ -18,6 +18,20 @@ public class HowToUseActivity extends BaseActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+        localizeUI(toolbar);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        localizeUI(toolbar);
+    }
+
+    private void localizeUI(MaterialToolbar toolbar) {
+        if (toolbar != null) {
+            toolbar.setTitle(LanguageManager.getDual(this, "How to Use", "how_to_use"));
+        }
     }
 
     @Override

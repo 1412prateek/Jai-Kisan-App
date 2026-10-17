@@ -19,10 +19,14 @@ import java.util.Locale;
 public class CostCalculatorActivity extends BaseActivity {
 
     private TextInputEditText inputSeed, inputFertilizer, inputLabor, inputOther, inputYield, inputPrice;
+    private com.google.android.material.textfield.TextInputLayout layoutSeed, layoutFertilizer, layoutLabor, layoutOther, layoutYield, layoutPrice;
+    private TextView tvTitleProductionCosts, tvTitleExpectedHarvest;
+    private com.google.android.material.button.MaterialButton btnCalculateCost, btnShare;
     private TextView tvNetProfit, tvMargin, tvBreakEven, tvAdviceTitle, tvAdviceDesc;
     private TextView tvDisclaimer;
     private View resultSection, rootView;
     private View resultPdfContainer;
+    private MaterialToolbar toolbar;
 
     // Class variable to hold the dynamic AI advice
     private String aiAdvice = "";
@@ -40,6 +44,18 @@ public class CostCalculatorActivity extends BaseActivity {
         inputYield = findViewById(R.id.input_yield);
         inputPrice = findViewById(R.id.input_price);
 
+        layoutSeed = findViewById(R.id.layout_seed);
+        layoutFertilizer = findViewById(R.id.layout_fertilizer);
+        layoutLabor = findViewById(R.id.layout_labor);
+        layoutOther = findViewById(R.id.layout_other);
+        layoutYield = findViewById(R.id.layout_yield);
+        layoutPrice = findViewById(R.id.layout_price);
+
+        tvTitleProductionCosts = findViewById(R.id.tv_title_production_costs);
+        tvTitleExpectedHarvest = findViewById(R.id.tv_title_expected_harvest);
+        btnCalculateCost = findViewById(R.id.btn_calculate_cost);
+        btnShare = findViewById(R.id.btn_share);
+
         resultSection = findViewById(R.id.result_section);
         resultPdfContainer = resultSection;
         tvNetProfit = findViewById(R.id.tv_net_profit);
@@ -49,12 +65,16 @@ public class CostCalculatorActivity extends BaseActivity {
         tvAdviceDesc = findViewById(R.id.tv_advice_desc);
         tvDisclaimer = findViewById(R.id.tv_disclaimer);
 
-        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        findViewById(R.id.btn_calculate_cost).setOnClickListener(v -> calculateFinancials());
-        findViewById(R.id.btn_share).setOnClickListener(v -> shareReport());
+        if (btnCalculateCost != null) {
+            btnCalculateCost.setOnClickListener(v -> calculateFinancials());
+        }
+        if (btnShare != null) {
+            btnShare.setOnClickListener(v -> shareReport());
+        }
         // AdMob banner
         AdManager.loadBanner(this, (android.widget.FrameLayout) findViewById(R.id.adBannerContainer));
 
@@ -65,19 +85,71 @@ public class CostCalculatorActivity extends BaseActivity {
         int healthScore = getIntent().getIntExtra("health_score", -1);
 
         if (cropEn != null && !cropEn.trim().isEmpty()) {
-            toolbar.setSubtitle(cropEn + (cropHi != null && !cropHi.trim().isEmpty() ? " / " + cropHi.trim() : ""));
+            toolbar.setSubtitle(LanguageManager.formatDual(this, cropEn.trim(), cropHi != null ? cropHi.trim() : ""));
         }
 
         if (cropEn != null && !cropEn.trim().isEmpty() && survivalChance != -1) {
-            // Keep input fields empty for the user to fill. No pre-filling.
+            if (LanguageManager.isEnglishOnly(this)) {
+                aiAdvice = "\n\n🤖 Real-time AI Insight:\n• Crop health score is " + (healthScore != -1 ? healthScore : "N/A") + "/100. "
+                        + "Survival chance is " + survivalChance + "%.\n"
+                        + "• We recommend adjusting your inputs and harvest expectations according to the crop status.";
+            } else {
+                LanguageManager.LangItem lItem = LanguageManager.getSelectedLanguageItem(this);
+                aiAdvice = "\n\n🤖 Real-time AI Insight (" + lItem.englishName + "):\n• Crop health score: " + (healthScore != -1 ? healthScore : "N/A") + "/100, Survival chance: " + survivalChance + "%.\n"
+                        + "• " + LanguageManager.getRegional(this, "safe_harvest_tip", "फसल स्वास्थ्य के अनुसार अपनी लागत और पैदावार की उम्मीदों को समायोजित करें।");
+            }
+        }
 
-            // Construct beautifully bilingual AI Insight
-            aiAdvice = "\n\n\uD83E\uDDFE Real-time AI Insight:\nâ€¢ Crop health score is " + (healthScore != -1 ? healthScore : "N/A") + "/100. "
-                    + "Survival chance is " + survivalChance + "%.\n"
-                    + "â€¢ We recommend adjusting your inputs and harvest expectations according to the crop status.\n\n"
-                    + "\uD83E\uDDFE \u0935\u093e\u0938\u094d\u0924\u0935\u093f\u0915 \u0938\u092e\u092f \u090f\u0906\u0908 \u0907\u0928\u0938\u093e\u0907\u091f:\nâ€¢ \u092b\u0938\u0932 \u0938\u094d\u0935\u093e\u0938\u094d\u0925\u094d\u092f \u0938\u094d\u0915\u094b\u0930 " + (healthScore != -1 ? healthScore : "--") + "/100 \u0939\u0948\u0964 "
-                    + "\u091c\u0940\u0935\u093f\u0924 \u0930\u0939\u0928\u0947 \u0915\u0940 \u0938\u0902\u092d\u093e\u0935\u0928\u093e " + survivalChance + "% \u0939\u0948\u0964\n"
-                    + "\u2022 \u0939\u092e \u0905\u0928\u0941\u0936\u0902\u0938\u093e \u0915\u0930\u0924\u0947 \u0939\u0948\u0902 \u0915\u093f \u0906\u092a \u092b\u0938\u0932 \u0915\u0940 \u0938\u094d\u0925\u093f\u0924\u093f \u0915\u0947 \u0905\u0928\u0941\u0938\u093e\u0930 \u0905\u092a\u0928\u0940 \u0932\u093e\u0917\u0924 \u0914\u0930 \u092a\u0948\u0926\u093e\u0935\u093e\u0930 \u0915\u0940 \u0909\u092e\u094d\u092e\u0940\u0926\u094b\u0902 \u0915\u094b \u0938\u092e\u093e\u092f\u094b\u091c\u093f\u0924 \u0915\u0930\u0947\u0902\u0964";
+        localizeUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        localizeUI();
+    }
+
+    private void localizeUI() {
+        if (toolbar != null) {
+            toolbar.setTitle(LanguageManager.getDual(this, "Financial Pro", "cost_calculator"));
+        }
+        if (tvTitleProductionCosts != null) {
+            tvTitleProductionCosts.setText("1. " + LanguageManager.getDual(this, "Production Costs", "production_costs"));
+        }
+        if (layoutSeed != null) {
+            layoutSeed.setHint(LanguageManager.getDual(this, "Seed", "seed") + " (₹)");
+        }
+        if (layoutFertilizer != null) {
+            layoutFertilizer.setHint(LanguageManager.getDual(this, "Fertilizer & Pesticide", "fertilizer") + " (₹)");
+        }
+        if (layoutLabor != null) {
+            layoutLabor.setHint(LanguageManager.getDual(this, "Labor & Machinery", "labor") + " (₹)");
+        }
+        if (layoutOther != null) {
+            layoutOther.setHint(LanguageManager.getDual(this, "Transport & Others", "other") + " (₹)");
+        }
+        if (tvTitleExpectedHarvest != null) {
+            tvTitleExpectedHarvest.setText("2. " + LanguageManager.getDual(this, "Expected Harvest", "expected_harvest"));
+        }
+        if (layoutYield != null) {
+            layoutYield.setHint(LanguageManager.getDual(this, "Total Yield", "total_yield") + " (Quintals)");
+        }
+        if (layoutPrice != null) {
+            layoutPrice.setHint(LanguageManager.getDual(this, "Selling Price", "price") + " (₹ per Q)");
+        }
+        if (btnCalculateCost != null) {
+            btnCalculateCost.setText(LanguageManager.getDual(this, "Financial Analysis", "calculate_financials"));
+        }
+        if (btnShare != null) {
+            btnShare.setText(LanguageManager.getDual(this, "Share Report", "share_report"));
+        }
+        if (tvDisclaimer != null) {
+            if (LanguageManager.isEnglishOnly(this)) {
+                tvDisclaimer.setText("* Disclaimer: These results are automated suggestions based on general data. Actual field conditions vary. Consult a local agriculture specialist before making final decisions.");
+            } else {
+                tvDisclaimer.setText("* Disclaimer: These results are automated suggestions based on general data. Actual field conditions vary. Consult a local agriculture specialist before making final decisions.\n\n"
+                        + LanguageManager.getRegional(this, "disclaimer_body", "अस्वीकरण: ये परिणाम सामान्य डेटा पर आधारित स्वचालित सुझाव हैं। वास्तविक स्थिति भिन्न हो सकती है।"));
+            }
         }
     }
 
@@ -88,7 +160,7 @@ public class CostCalculatorActivity extends BaseActivity {
             double price = getVal(inputPrice);
 
             if (totalCost == 0 || yield == 0) {
-                Snackbar.make(rootView, "Enter all details / \u092a\u0942\u0930\u0940 \u091c\u093e\u0928\u0915\u093e\u0930\u0940 \u0926\u0947\u0902", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(rootView, LanguageManager.getDual(this, "Enter all details", "please_fill_all"), Snackbar.LENGTH_SHORT).show();
                 return;
             }
 
@@ -100,7 +172,7 @@ public class CostCalculatorActivity extends BaseActivity {
             displayAdvancedResults(profit, margin, breakEvenPrice);
 
         } catch (Exception e) {
-            Snackbar.make(rootView, "Invalid Input / \u0917\u0932\u0924 \u092a\u094d\u0930\u0935\u093f\u0937\u094d\u091f\u093f", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(rootView, LanguageManager.getDual(this, "Invalid Input", "invalid_input"), Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -110,25 +182,33 @@ public class CostCalculatorActivity extends BaseActivity {
     }
 
     private void displayAdvancedResults(double profit, double margin, double breakEven) {
-        tvNetProfit.setText(String.format(Locale.getDefault(), "%s:\n\u20B9%.0f",
-                profit >= 0 ? "Net Profit / \u0936\u0941\u0926\u094d\u0927 \u0932\u093e\u092d" : "Loss / \u0939\u093e\u0928\u093f", Math.abs(profit)));
+        String profitLabel = profit >= 0 
+                ? LanguageManager.getDual(this, "Net Profit", "net_profit") 
+                : LanguageManager.getDual(this, "Loss", "loss");
+        tvNetProfit.setText(String.format(Locale.getDefault(), "%s:\n₹%.0f", profitLabel, Math.abs(profit)));
         tvNetProfit.setTextColor(profit >= 0 ? 0xFF2E7D32 : 0xFFC62828);
 
-        tvMargin.setText(String.format(Locale.getDefault(), "Profit Margin / \u0932\u093e\u092d \u092e\u093e\u0930\u094d\u091c\u093f\u0928: %.1f%%", margin));
-        tvBreakEven.setText(String.format(Locale.getDefault(), "Break-Even Price / \u0938\u0941\u0930\u0915\u094d\u0937\u093f\u0924 \u092d\u093e\u0935: \u20B9%.0f / Quintal", breakEven));
+        String marginLabel = LanguageManager.getDual(this, "Profit Margin", "profit_margin");
+        tvMargin.setText(String.format(Locale.getDefault(), "%s: %.1f%%", marginLabel, margin));
+
+        String breakEvenLabel = LanguageManager.getDual(this, "Break-Even Price", "break_even");
+        tvBreakEven.setText(String.format(Locale.getDefault(), "%s: ₹%.0f / Quintal", breakEvenLabel, breakEven));
 
         if (margin < 5) {
-            tvAdviceTitle.setText("\u26A0\uFE0F Warning / \u091a\u0947\u0924\u093e\u0935\u0928\u0940");
+            tvAdviceTitle.setText("⚠️ " + LanguageManager.getDual(this, "Warning", "warning_risk"));
             tvAdviceTitle.setTextColor(0xFFC62828);
-            tvAdviceDesc.setText("Profit margin is very low. High risk detected.\n\u092e\u093e\u0930\u094d\u091c\u093f\u0928 \u092c\u0939\u0941\u0924 \u0915\u092e \u0939\u0948\u0964 \u091c\u094b\u0916\u093f\u092e \u0905\u0927\u093f\u0915 \u0939\u0948\u0964" + aiAdvice);
+            String tip = LanguageManager.formatDual(this, "Profit margin is very low. High risk detected.", LanguageManager.getRegional(this, "low_margin_tip", "मार्जिन बहुत कम है। जोखिम अधिक है।"));
+            tvAdviceDesc.setText(tip + aiAdvice);
         } else if (margin <= 15) {
-            tvAdviceTitle.setText("\uD83D\uDFE1 Medium Risk / \u092e\u0927\u094d\u092f\u092e \u091c\u094b\u0916\u093f\u092e");
+            tvAdviceTitle.setText("🟡 " + LanguageManager.getDual(this, "Medium Risk", "medium_risk"));
             tvAdviceTitle.setTextColor(0xFFF9A825);
-            tvAdviceDesc.setText("Safe harvest but monitor costs closely.\n\u0938\u0941\u0930\u0915\u094d\u0937\u093f\u0924 \u092a\u0948\u0926\u093e\u0935\u093e\u0930 \u0939\u0948 \u0932\u0947\u0915\u093f\u0928 \u0916\u0930\u094d\u091a\u094b\u0902 \u092a\u0930 \u0927\u094d\u092f\u093e\u0928 \u0926\u0947\u0902\u0964" + aiAdvice);
+            String tip = LanguageManager.formatDual(this, "Safe harvest but monitor costs closely.", LanguageManager.getRegional(this, "safe_harvest_tip", "सुरक्षित पैदावार है लेकिन खर्चों पर ध्यान दें।"));
+            tvAdviceDesc.setText(tip + aiAdvice);
         } else {
-            tvAdviceTitle.setText("\u2705 Good Crop Choice / \u0938\u0939\u0940 \u092b\u0938\u0932 \u091a\u0941\u0928\u093e\u0935");
+            tvAdviceTitle.setText("✅ " + LanguageManager.getDual(this, "Good Crop Choice", "good_crop_choice"));
             tvAdviceTitle.setTextColor(0xFF2E7D32);
-            tvAdviceDesc.setText("Excellent profit potential based on your inputs.\n\u0906\u092a\u0915\u0947 \u0907\u0928\u092a\u0941\u091f \u0915\u0947 \u0905\u0927\u093e\u0930 \u092a\u0930 \u0909\u0924\u094d\u0915\u0943\u0937\u094d\u091f \u0932\u093e\u092d \u0915\u0940 \u0938\u0902\u092d\u093e\u0935\u0928\u093e\u0964" + aiAdvice);
+            String tip = LanguageManager.formatDual(this, "Excellent profit potential based on your inputs.", LanguageManager.getRegional(this, "excellent_margin_tip", "आपके इनपुट के आधार पर उत्कृष्ट लाभ की संभावना।"));
+            tvAdviceDesc.setText(tip + aiAdvice);
         }
 
         if (tvDisclaimer != null) {

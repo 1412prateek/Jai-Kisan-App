@@ -105,8 +105,15 @@ public class VoiceAssistantActivity extends BaseActivity {
 
         textToSpeech = new TextToSpeech(getApplicationContext(), status -> {
             if (status != TextToSpeech.ERROR) {
-                textToSpeech.setLanguage(new Locale("hi", "IN"));
-                speakText("\u0928\u092e\u0938\u094d\u0924\u0947! \u092e\u0948\u0902 \u0915\u093f\u0938\u093e\u0928 \u092e\u093f\u0924\u094d\u0930 \u0939\u0942\u0901\u0964 \u092a\u0942\u091b\u093f\u092f\u0947 \u0915\u094d\u092f\u093e \u092e\u0926\u0926 \u0915\u0930\u0942\u0901?", new Locale("hi", "IN"));
+                LanguageManager.LangItem lItem = LanguageManager.getSelectedLanguageItem(this);
+                if (!LanguageManager.isEnglishOnly(this)) {
+                    Locale regLocale = new Locale(lItem.code, "IN");
+                    textToSpeech.setLanguage(regLocale);
+                    speakText(LanguageManager.getRegional(this, "voice_greeting", "नमस्ते! मैं आपकी कृषि सहायता के लिए यहाँ हूँ।"), regLocale);
+                } else {
+                    textToSpeech.setLanguage(Locale.US);
+                    speakText("Hello! I am here to assist you with agriculture.", Locale.US);
+                }
             }
         });
 
@@ -118,12 +125,13 @@ public class VoiceAssistantActivity extends BaseActivity {
                 isSpeakingHindi = false;
             } else {
                 String rawText = tvResultHindi.getText().toString();
-                if (!rawText.isEmpty() && !rawText.equals("Thinking... / \u0938\u094b\u091a \u0930\u0939\u093e \u0939\u0942\u0901...")) {
+                if (!rawText.isEmpty() && !rawText.contains("Thinking...")) {
                     String cleanText = cleanMarkdownForSpeech(rawText);
                     if (textToSpeech.isSpeaking()) textToSpeech.stop();
                     isSpeakingHindi = true;
                     isSpeakingEnglish = false;
-                    speakText(cleanText, new Locale("hi", "IN"));
+                    LanguageManager.LangItem lItem = LanguageManager.getSelectedLanguageItem(this);
+                    speakText(cleanText, new Locale(lItem.code, "IN"));
                 }
             }
         });
@@ -145,6 +153,35 @@ public class VoiceAssistantActivity extends BaseActivity {
         });
 
         initializeChat();
+        localizeUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        localizeUI();
+    }
+
+    private void localizeUI() {
+        if (toolbar != null) {
+            toolbar.setTitle(LanguageManager.getDual(this, "Voice Assistant", "voice_assistant"));
+        }
+        if (tvStatus != null) {
+            tvStatus.setText(LanguageManager.getDual(this, "Tap to Ask", "tap_to_ask"));
+        }
+        boolean isEngOnly = LanguageManager.isEnglishOnly(this);
+        if (isEngOnly) {
+            if (tvResultHindi != null) tvResultHindi.setVisibility(View.GONE);
+            if (btnSpeakHindi != null) btnSpeakHindi.setVisibility(View.GONE);
+        } else {
+            if (tvResultHindi != null) {
+                tvResultHindi.setVisibility(View.VISIBLE);
+                if (chatHistory.isEmpty()) {
+                    tvResultHindi.setText(LanguageManager.getRegional(this, "voice_greeting", "नमस्ते! मैं आपकी कृषि सहायता के लिए यहाँ हूँ।"));
+                }
+            }
+            if (btnSpeakHindi != null) btnSpeakHindi.setVisibility(View.VISIBLE);
+        }
     }
 
     private String cleanMarkdownForSpeech(String markdown) {
@@ -165,8 +202,13 @@ public class VoiceAssistantActivity extends BaseActivity {
     private void speak() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "hi-IN");
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Ask your question / \u0905\u092a\u0928\u093e \u0938\u0935\u093e\u0932 \u092a\u0942\u091b\u0947\u0902");
+        if (LanguageManager.isEnglishOnly(this)) {
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-IN");
+        } else {
+            LanguageManager.LangItem lItem = LanguageManager.getSelectedLanguageItem(this);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, lItem.code + "-IN");
+        }
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, LanguageManager.getDual(this, "Ask your question", "tap_to_ask"));
 
         try {
             startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
@@ -195,32 +237,50 @@ public class VoiceAssistantActivity extends BaseActivity {
     }
 
     private void askGemini(String query) {
+        LanguageManager.LangItem langItem = LanguageManager.getSelectedLanguageItem(this);
+        boolean isEngOnly = LanguageManager.isEnglishOnly(this);
+        String targetLangName = langItem.englishName + " (" + langItem.nativeName + ")";
+
         runOnUiThread(() -> {
-            tvResultHindi.setText("Thinking... / \u0938\u094b\u091a \u0930\u0939\u093e \u0939\u0942\u0901...");
+            tvResultHindi.setText(LanguageManager.getDual(this, "Thinking...", "thinking"));
             tvResultEnglish.setText("Thinking...");
             progressBar.setVisibility(View.VISIBLE);
         });
 
         String finalQuery;
         if (chatHistory.isEmpty()) {
-            // ✅ FIXED PROMPT: Forces ||| Separator & Bilingual Output
-            String systemPrompt = "Role: 'Kisan Mitra' (Agriculture Expert).\n\n" +
-                    "**CRITICAL RULE:** You MUST provide the answer in **BOTH Hindi AND English** separated by '|||'.\n" +
-                    "If you fail to provide the separator '|||', the system will crash.\n\n" +
-                    "**RESPONSE STRUCTURE:**\n" +
-                    "1. **HINDI PART:**\n" +
-                    "   - 3 Bullet Points (Direct Advice)\n" +
-                    "   - Short Paragraph\n" +
-                    "   - 1-Line Conclusion\n" +
-                    "2. **SEPARATOR:**\n" +
-                    "   |||\n" +
-                    "3. **ENGLISH PART:**\n" +
-                    "   - Exact translation of the Hindi part.\n\n" +
-                    "**RESTRICTIONS:**\n" +
-                    "- Refuse non-agriculture questions.\n" +
-                    "- No fillers ('Okay', 'Here is').\n" +
-                    "- Use **Bold** titles.\n\n" +
-                    "User Question: ";
+            String systemPrompt;
+            if (isEngOnly) {
+                systemPrompt = "Role: 'Kisan Mitra' (Agriculture Expert).\n\n" +
+                        "**CRITICAL RULE:** Answer in clear, practical English for Indian farmers.\n" +
+                        "Provide:\n" +
+                        "- 3 Bullet Points (Direct Advice)\n" +
+                        "- Short Paragraph\n" +
+                        "- 1-Line Conclusion\n\n" +
+                        "**RESTRICTIONS:**\n" +
+                        "- Refuse non-agriculture questions.\n" +
+                        "- No fillers ('Okay', 'Here is').\n" +
+                        "- Use **Bold** titles.\n\n" +
+                        "User Question: ";
+            } else {
+                systemPrompt = "Role: 'Kisan Mitra' (Agriculture Expert).\n\n" +
+                        "**CRITICAL RULE:** You MUST provide the answer in **BOTH " + targetLangName + " AND English** separated by '|||'.\n" +
+                        "If you fail to provide the separator '|||', the system will crash.\n\n" +
+                        "**RESPONSE STRUCTURE:**\n" +
+                        "1. **" + targetLangName.toUpperCase() + " PART:**\n" +
+                        "   - 3 Bullet Points in " + targetLangName + " (Direct Advice)\n" +
+                        "   - Short Paragraph in " + targetLangName + "\n" +
+                        "   - 1-Line Conclusion in " + targetLangName + "\n" +
+                        "2. **SEPARATOR:**\n" +
+                        "   |||\n" +
+                        "3. **ENGLISH PART:**\n" +
+                        "   - Exact translation in English.\n\n" +
+                        "**RESTRICTIONS:**\n" +
+                        "- Refuse non-agriculture questions.\n" +
+                        "- No fillers ('Okay', 'Here is').\n" +
+                        "- Use **Bold** titles.\n\n" +
+                        "User Question: ";
+            }
             finalQuery = systemPrompt + query;
         } else {
             finalQuery = query;
@@ -321,20 +381,26 @@ public class VoiceAssistantActivity extends BaseActivity {
 
                             chatHistory.add(content);
 
-                            // ✅ SPLIT LOGIC
-                            String[] parts = answer.split("\\|\\|\\|");
-
-                            if (parts.length >= 2) {
-                                String hindiText = parts[0].trim();
-                                String englishText = parts[1].trim();
-
-                                markwon.setMarkdown(tvResultHindi, hindiText);
-                                markwon.setMarkdown(tvResultEnglish, englishText);
-
+                            boolean isEngOnly = LanguageManager.isEnglishOnly(VoiceAssistantActivity.this);
+                            if (isEngOnly) {
+                                tvResultEnglish.setVisibility(View.VISIBLE);
+                                markwon.setMarkdown(tvResultEnglish, answer);
+                                tvResultHindi.setVisibility(View.GONE);
+                                btnSpeakHindi.setVisibility(View.GONE);
                             } else {
-                                // Fallback: If AI fails to split, show full text in Hindi box and warn in English box
-                                markwon.setMarkdown(tvResultHindi, answer);
-                                tvResultEnglish.setText("Translation unavailable (AI skipped separator).");
+                                tvResultHindi.setVisibility(View.VISIBLE);
+                                btnSpeakHindi.setVisibility(View.VISIBLE);
+                                String[] parts = answer.split("\\|\\|\\|");
+                                if (parts.length >= 2) {
+                                    String regionalText = parts[0].trim();
+                                    String englishText = parts[1].trim();
+
+                                    markwon.setMarkdown(tvResultHindi, regionalText);
+                                    markwon.setMarkdown(tvResultEnglish, englishText);
+                                } else {
+                                    markwon.setMarkdown(tvResultHindi, answer);
+                                    tvResultEnglish.setText("Translation unavailable.");
+                                }
                             }
                             progressBar.setVisibility(View.GONE);
 
@@ -374,9 +440,10 @@ public class VoiceAssistantActivity extends BaseActivity {
     }
 
     private void shareResult() {
-        String hindiVal = tvResultHindi.getText().toString().trim();
-        if (hindiVal.isEmpty() || hindiVal.contains("Thinking...") || hindiVal.contains("\u0938\u094b\u091a")) {
-            Toast.makeText(this, "Please ask a question first / \u092a\u0939\u0932\u0947 \u092a\u094d\u0930\u0936\u094d\u0928 \u092a\u0942\u091b\u0947\u0902", Toast.LENGTH_SHORT).show();
+        String regionalVal = tvResultHindi.getText().toString().trim();
+        String englishVal = tvResultEnglish.getText().toString().trim();
+        if ((regionalVal.isEmpty() && englishVal.isEmpty()) || regionalVal.contains("Thinking...") || englishVal.contains("Thinking...")) {
+            Toast.makeText(this, LanguageManager.getDual(this, "Please ask a question first", "tap_to_ask"), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -394,25 +461,28 @@ public class VoiceAssistantActivity extends BaseActivity {
     }
 
     private void shareAsText() {
-        String hindiVal = tvResultHindi.getText().toString();
+        String regionalVal = tvResultHindi.getText().toString();
         String englishVal = tvResultEnglish.getText().toString();
+        LanguageManager.LangItem lItem = LanguageManager.getSelectedLanguageItem(this);
 
         StringBuilder sb = new StringBuilder();
-        sb.append("*Jai Kisan - Voice Assistant Report / \u0935\u0949\u092f\u0938 \u0905\u0938\u093f\u0938\u094d\u091f\u0947\u0902\u091f \u0930\u093f\u092a\u094b\u0930\u094d\u091f*\n");
+        sb.append("*").append(LanguageManager.getDual(this, "Jai Kisan - Voice Assistant Report", "voice_report")).append("*\n");
         sb.append("----------------------------------\n\n");
 
-        sb.append("*Hindi Response / \u0939\u093f\u0902\u0926\u0940 \u091c\u0935\u093e\u092c:*\n");
-        sb.append(hindiVal).append("\n\n");
+        if (!LanguageManager.isEnglishOnly(this)) {
+            sb.append("*").append(lItem.englishName).append(" Response:*\n");
+            sb.append(regionalVal).append("\n\n");
+        }
 
-        sb.append("*English Response / \u0905\u0902\u0917\u094d\u0930\u0947\u091c\u0940 \u091c\u0935\u093e\u092c:*\n");
+        sb.append("*English Response:*\n");
         sb.append(englishVal).append("\n\n");
 
-        sb.append("Generated via Jai Kisan App");
+        sb.append(LanguageManager.getRegional(this, "generated_via", "Generated via Jai Kisan App"));
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
-        startActivity(Intent.createChooser(shareIntent, "Share via / \u0938\u093e\u091d\u093e \u0915\u0930\u0947\u0902"));
+        startActivity(Intent.createChooser(shareIntent, LanguageManager.getDual(this, "Share via", "share_report")));
     }
 
     private void shareAsPdf() {

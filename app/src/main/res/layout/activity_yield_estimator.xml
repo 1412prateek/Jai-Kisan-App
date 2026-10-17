@@ -67,6 +67,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
+                            android:id="@+id/tv_title_yield_pro"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Yield Pro / उपज अनुमानक"
@@ -85,9 +86,15 @@
 
                     <Space android:layout_height="24dp" android:layout_width="match_parent" />
 
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="1. Select Crop / फसल चुनें" android:textStyle="bold" android:textColor="#1565C0" />
+                    <TextView
+                        android:id="@+id/tv_title_select_crop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1. Select Crop / फसल चुनें"
+                        android:textStyle="bold"
+                        android:textColor="#1565C0" />
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layout_dropdown_crop"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp">
                         <AutoCompleteTextView android:id="@+id/dropdown_crop" android:layout_width="match_parent"
@@ -96,9 +103,15 @@
 
                     <Space android:layout_height="16dp" android:layout_width="match_parent" />
 
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="2. Select State / राज्य चुनें" android:textStyle="bold" android:textColor="#1565C0" />
+                    <TextView
+                        android:id="@+id/tv_title_select_state"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2. Select State / राज्य चुनें"
+                        android:textStyle="bold"
+                        android:textColor="#1565C0" />
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layout_dropdown_state"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp">
                         <AutoCompleteTextView android:id="@+id/dropdown_state" android:layout_width="match_parent"
@@ -107,17 +120,24 @@
 
                     <Space android:layout_height="16dp" android:layout_width="match_parent" />
 
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="3. Land Area / जमीन का विवरण" android:textStyle="bold" android:textColor="#1565C0" />
+                    <TextView
+                        android:id="@+id/tv_title_land_area"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3. Land Area / जमीन का विवरण"
+                        android:textStyle="bold"
+                        android:textColor="#1565C0" />
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:layout_marginTop="8dp">
                         <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/layout_dropdown_unit"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1.2" android:layout_marginEnd="8dp">
                             <AutoCompleteTextView android:id="@+id/dropdown_unit" android:layout_width="match_parent"
                                 android:layout_height="wrap_content" android:hint="Unit" android:inputType="none" />
                         </com.google.android.material.textfield.TextInputLayout>
                         <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/layout_input_area"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:hint="Area">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/input_area"
@@ -141,7 +161,9 @@
 
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="vertical" android:padding="16dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            <TextView
+                                android:id="@+id/tv_title_estimated_yield"
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
                                 android:text="Estimated Yield / अनुमानित उपज" android:textStyle="bold" android:textColor="#1565C0" android:layout_marginBottom="12dp" />
                             <TextView android:id="@+id/tv_yield_per_acre" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="--" android:textColor="#212121" android:layout_marginBottom="4dp"/>
                             <TextView android:id="@+id/tv_total_yield" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="--" android:textColor="#212121" android:layout_marginBottom="12dp"/>

@@ -24,6 +24,11 @@ public class FertilizerCalculatorActivity extends BaseActivity {
     private View rootView;
     private AutoCompleteTextView cropDropdown, stateDropdown, unitDropdown;
     private TextInputEditText areaInput;
+    private com.google.android.material.textfield.TextInputLayout layoutDropdownCrop, layoutDropdownState, layoutDropdownUnit, layoutInputArea;
+    private TextView tvTitleFertilizerPro, tvTitleSelectCrop, tvTitleSelectState, tvTitleLandArea;
+    private TextView tvTitleRecommendedFertilizer, tvTitleShoppingList, tvTitleLiquidOption, tvDisclaimer;
+    private com.google.android.material.button.MaterialButton btnCalculate, btnShare;
+    private MaterialToolbar toolbar;
     private View resultSection;
     private TextView tvUreaBags, tvDapBags, tvMopBags;
     private TextView tvNRow, tvPRow, tvKRow, tvNanoUrea;
@@ -49,6 +54,23 @@ public class FertilizerCalculatorActivity extends BaseActivity {
         stateDropdown = findViewById(R.id.dropdown_state);
         unitDropdown = findViewById(R.id.dropdown_unit);
         areaInput = findViewById(R.id.input_area);
+        layoutDropdownCrop = findViewById(R.id.layout_dropdown_crop);
+        layoutDropdownState = findViewById(R.id.layout_dropdown_state);
+        layoutDropdownUnit = findViewById(R.id.layout_dropdown_unit);
+        layoutInputArea = findViewById(R.id.layout_input_area);
+
+        tvTitleFertilizerPro = findViewById(R.id.tv_title_fertilizer_pro);
+        tvTitleSelectCrop = findViewById(R.id.tv_title_select_crop);
+        tvTitleSelectState = findViewById(R.id.tv_title_select_state);
+        tvTitleLandArea = findViewById(R.id.tv_title_land_area);
+        tvTitleRecommendedFertilizer = findViewById(R.id.tv_title_recommended_fertilizer);
+        tvTitleShoppingList = findViewById(R.id.tv_title_shopping_list);
+        tvTitleLiquidOption = findViewById(R.id.tv_title_liquid_option);
+        tvDisclaimer = findViewById(R.id.tv_disclaimer);
+
+        btnCalculate = findViewById(R.id.btn_calculate);
+        btnShare = findViewById(R.id.btn_share);
+
         resultSection = findViewById(R.id.result_section);
 
         tvUreaBags = findViewById(R.id.tv_urea_bags);
@@ -60,7 +82,7 @@ public class FertilizerCalculatorActivity extends BaseActivity {
         tvKRow = findViewById(R.id.tv_k_row);
         tvNanoUrea = findViewById(R.id.tv_nano_urea);
 
-        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
 
@@ -103,41 +125,92 @@ public class FertilizerCalculatorActivity extends BaseActivity {
 
         stateDropdown.setOnItemClickListener((parent, view, position, id) -> loadUnitsForState(allStates[position]));
 
-        findViewById(R.id.btn_calculate).setOnClickListener(v -> calculateProFertilizer());
-        findViewById(R.id.btn_share).setOnClickListener(v -> shareResult());
+        if (btnCalculate != null) {
+            btnCalculate.setOnClickListener(v -> calculateProFertilizer());
+        }
+        if (btnShare != null) {
+            btnShare.setOnClickListener(v -> shareResult());
+        }
         // AdMob banner
         AdManager.loadBanner(this, (android.widget.FrameLayout) findViewById(R.id.adBannerContainer));
+
+        localizeUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        localizeUI();
+    }
+
+    private void localizeUI() {
+        if (toolbar != null) {
+            toolbar.setTitle(LanguageManager.getDual(this, "Fertilizer Calculator", "fertilizer_calculator"));
+        }
+        if (tvTitleFertilizerPro != null) {
+            tvTitleFertilizerPro.setText(LanguageManager.getDual(this, "Fertilizer Pro", "fertilizer_calculator"));
+        }
+        if (tvTitleSelectCrop != null) {
+            tvTitleSelectCrop.setText("1. " + LanguageManager.getDual(this, "Select Crop", "select_crop"));
+        }
+        if (cropDropdown != null) {
+            cropDropdown.setHint(LanguageManager.getDual(this, "Crop Type", "crop"));
+        }
+        if (tvTitleSelectState != null) {
+            tvTitleSelectState.setText("2. " + LanguageManager.getDual(this, "Select State", "select_state"));
+        }
+        if (stateDropdown != null) {
+            stateDropdown.setHint(LanguageManager.getDual(this, "Select State", "state"));
+        }
+        if (tvTitleLandArea != null) {
+            tvTitleLandArea.setText("3. " + LanguageManager.getDual(this, "Land Area", "land_area"));
+        }
+        if (unitDropdown != null) {
+            unitDropdown.setHint(LanguageManager.getDual(this, "Unit", "land_area"));
+        }
+        if (layoutInputArea != null) {
+            layoutInputArea.setHint(LanguageManager.getDual(this, "Area", "land_area"));
+        }
+        if (btnCalculate != null) {
+            btnCalculate.setText(LanguageManager.getDual(this, "Calculate Requirements", "calculate_financials"));
+        }
+        if (tvTitleRecommendedFertilizer != null) {
+            tvTitleRecommendedFertilizer.setText(LanguageManager.getDual(this, "Recommended Fertilizer", "recommended_fertilizer"));
+        }
+        if (tvTitleShoppingList != null) {
+            tvTitleShoppingList.setText(LanguageManager.getDual(this, "Shopping List (Bags):", "shopping_list"));
+        }
+        if (tvTitleLiquidOption != null) {
+            tvTitleLiquidOption.setText(LanguageManager.getDual(this, "Liquid Option (Nano Urea):", "liquid_option"));
+        }
+        if (btnShare != null) {
+            btnShare.setText(LanguageManager.getDual(this, "Share Result", "share_report"));
+        }
+        if (tvDisclaimer != null) {
+            if (LanguageManager.isEnglishOnly(this)) {
+                tvDisclaimer.setText("* Disclaimer: These results are automated suggestions based on general data. Actual field conditions vary. Consult a local agriculture specialist before making final decisions.");
+            } else {
+                tvDisclaimer.setText("* Disclaimer: These results are automated suggestions based on general data. Actual field conditions vary. Consult a local agriculture specialist before making final decisions.\n\n"
+                        + LanguageManager.getRegional(this, "disclaimer_body", "अस्वीकरण: ये परिणाम सामान्य डेटा पर आधारित स्वचालित सुझाव हैं। वास्तविक स्थिति भिन्न हो सकती है।"));
+            }
+        }
     }
 
     private void initializeRegionalUnits() {
-        Map<String, Double> universal = new HashMap<>();
-        universal.put(LanguageManager.formatDual(this, "Acre", "एकड़"), 1.0);
-        universal.put(LanguageManager.formatDual(this, "Hectare", "हेक्टेयर"), 2.47);
-
-        Map<String, Double> north = new HashMap<>(universal);
-        north.put(LanguageManager.formatDual(this, "Bigha", "बीघा"), 0.625);
-        north.put(LanguageManager.formatDual(this, "Kanal", "कनाल"), 0.125);
-
-        Map<String, Double> south = new HashMap<>(universal);
-        south.put(LanguageManager.formatDual(this, "Cent", "सेंट"), 0.01);
-        south.put(LanguageManager.formatDual(this, "Guntha", "गुंठा"), 0.025);
-
-        Map<String, Double> east = new HashMap<>(universal);
-        east.put(LanguageManager.formatDual(this, "Katha", "कट्ठा"), 0.031);
-        east.put(LanguageManager.formatDual(this, "Decimal", "डेसीमल"), 0.01);
-
-        regionUnitMap.put("NORTH", north);
-        regionUnitMap.put("SOUTH", south);
-        regionUnitMap.put("EAST", east);
-        regionUnitMap.put("WEST", south);
+        regionUnitMap.put("NORTH", LanguageManager.getRegionalUnits(this, "NORTH"));
+        regionUnitMap.put("SOUTH", LanguageManager.getRegionalUnits(this, "SOUTH"));
+        regionUnitMap.put("EAST", LanguageManager.getRegionalUnits(this, "EAST"));
+        regionUnitMap.put("WEST", LanguageManager.getRegionalUnits(this, "WEST"));
     }
 
     private void loadUnitsForState(String state) {
         String region = "NORTH";
-        if (state.contains("Tamil") || state.contains("Karnataka") || state.contains("Kerala") || state.contains("Andhra"))
+        if (state.contains("Tamil") || state.contains("Karnataka") || state.contains("Kerala") || state.contains("Andhra") || state.contains("Telangana"))
             region = "SOUTH";
-        else if (state.contains("Bengal") || state.contains("Bihar") || state.contains("Assam"))
+        else if (state.contains("Bengal") || state.contains("Bihar") || state.contains("Assam") || state.contains("Odisha"))
             region = "EAST";
+        else if (state.contains("Maharashtra") || state.contains("Gujarat") || state.contains("Goa"))
+            region = "WEST";
 
         Map<String, Double> units = regionUnitMap.get(region);
         if (units != null) {

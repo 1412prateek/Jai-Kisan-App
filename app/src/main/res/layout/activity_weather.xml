@@ -76,6 +76,7 @@
                         app:backgroundTint="@color/theme_reseda_green"/>
 
                     <TextView
+                        android:id="@+id/tvOrDivider"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="... OR ... / ... या ..."
@@ -85,6 +86,7 @@
                         android:textAppearance="@style/TextAppearance.Material3.BodyMedium"/>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layout_spinner_state"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -100,6 +102,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layout_city_spinner"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

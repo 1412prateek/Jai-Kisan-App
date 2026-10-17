@@ -163,7 +163,6 @@ public class DetectDiseaseActivity extends BaseActivity {
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Photo Expert / फोटो विशेषज्ञ");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
@@ -210,9 +209,9 @@ public class DetectDiseaseActivity extends BaseActivity {
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             } catch (ActivityNotFoundException e) {
-                Toast.makeText(this, "No camera app found / कोई कैमरा ऐप नहीं मिला", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, LanguageManager.getDual(this, "No camera app found", "crop"), Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
-                Toast.makeText(this, "Could not open camera / कैमरा नहीं खोला जा सका", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, LanguageManager.getDual(this, "Could not open camera", "crop"), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -221,22 +220,22 @@ public class DetectDiseaseActivity extends BaseActivity {
                 Intent pickIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 pickIntent.setType("image/*");
                 pickIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                startActivityForResult(Intent.createChooser(pickIntent, "Select Crop Image / फसल की छवि चुनें"), REQUEST_IMAGE_PICK);
+                startActivityForResult(Intent.createChooser(pickIntent, LanguageManager.getDual(this, "Select Crop Image", "crop")), REQUEST_IMAGE_PICK);
             } catch (ActivityNotFoundException e) {
                 try {
                     Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(pickPhoto, REQUEST_IMAGE_PICK);
                 } catch (Exception ex) {
-                    Toast.makeText(this, "No photo picker available / कोई फोटो पिकर ऐप उपलब्ध नहीं है", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, LanguageManager.getDual(this, "No photo picker available", "crop"), Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
-                Toast.makeText(this, "Could not open gallery / गैलरी नहीं खोली जा सकी", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, LanguageManager.getDual(this, "Could not open gallery", "crop"), Toast.LENGTH_SHORT).show();
             }
         });
 
         btnDetectDisease.setOnClickListener(v -> {
             if (selectedBitmap == null) {
-                Toast.makeText(this, "Please select or capture an image first.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, LanguageManager.getDual(this, "Please select or capture an image first", "no_image_selected"), Toast.LENGTH_SHORT).show();
             } else {
                 loadingIndicator.setVisibility(View.VISIBLE);
                 btnDetectDisease.setEnabled(false);
@@ -246,6 +245,83 @@ public class DetectDiseaseActivity extends BaseActivity {
         });
 
         btnShareReport.setOnClickListener(v -> shareReport());
+
+        localizeUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        localizeUI();
+    }
+
+    private void localizeUI() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(LanguageManager.getDual(this, "Photo Expert", "photo_expert"));
+        }
+        TextView tvDetectDescription = findViewById(R.id.tvDetectDescription);
+        if (tvDetectDescription != null) {
+            tvDetectDescription.setText(LanguageManager.getDual(this, "Analyze any crop, leaf, or fruit. Capture or upload a photo for an expert report.", "detect_desc"));
+        }
+        if (placeholderText != null) {
+            placeholderText.setText(LanguageManager.getDual(this, "No Image Selected", "no_image_selected"));
+        }
+        MaterialButton btnCapture = findViewById(R.id.btnCaptureImage);
+        if (btnCapture != null) {
+            btnCapture.setText(LanguageManager.getDual(this, "Capture", "capture"));
+        }
+        MaterialButton btnUpload = findViewById(R.id.btnUploadImage);
+        if (btnUpload != null) {
+            btnUpload.setText(LanguageManager.getDual(this, "Upload", "upload"));
+        }
+        if (btnDetectDisease != null) {
+            btnDetectDisease.setText(LanguageManager.getDual(this, "Analyze Photo", "analyze_photo"));
+        }
+        TextView tvSurvivalChanceLabel = findViewById(R.id.tvSurvivalChanceLabel);
+        if (tvSurvivalChanceLabel != null) {
+            tvSurvivalChanceLabel.setText(LanguageManager.getDual(this, "Survival Chance", "survival_chance"));
+        }
+        TextView tvSummaryLabel = findViewById(R.id.tvSummaryLabel);
+        if (tvSummaryLabel != null) {
+            tvSummaryLabel.setText(LanguageManager.getDual(this, "Summary", "summary"));
+        }
+        TextView tvDosLabel = findViewById(R.id.tvDosLabel);
+        if (tvDosLabel != null) {
+            tvDosLabel.setText(LanguageManager.getDual(this, "Recommended Actions (Do's)", "recommended_actions"));
+        }
+        TextView tvDontsLabel = findViewById(R.id.tvDontsLabel);
+        if (tvDontsLabel != null) {
+            tvDontsLabel.setText(LanguageManager.getDual(this, "Things to Avoid (Don'ts)", "things_to_avoid"));
+        }
+        TextView tvCuresLabel = findViewById(R.id.tvCuresLabel);
+        if (tvCuresLabel != null) {
+            tvCuresLabel.setText(LanguageManager.getDual(this, "Cures & Fertilizers", "cures_fertilizers"));
+        }
+        TextView tvApplyToolsLabel = findViewById(R.id.tvApplyToolsLabel);
+        if (tvApplyToolsLabel != null) {
+            tvApplyToolsLabel.setText(LanguageManager.getDual(this, "Apply to Farming Tools", "apply_to_tools"));
+        }
+        if (btnFertilizersCalc != null) {
+            btnFertilizersCalc.setText(LanguageManager.getDual(this, "Fertilizer Calc", "fertilizer_calc"));
+        }
+        if (btnCostsCalc != null) {
+            btnCostsCalc.setText(LanguageManager.getDual(this, "Cost Calculator", "cost_calc"));
+        }
+        if (btnIrrigationPlanner != null) {
+            btnIrrigationPlanner.setText(LanguageManager.getDual(this, "Irrigation Planner", "irrigation_plan"));
+        }
+        if (btnYieldEstimator != null) {
+            btnYieldEstimator.setText(LanguageManager.getDual(this, "Yield Estimator", "yield_estimator"));
+        }
+        if (btnFindCenters != null) {
+            btnFindCenters.setText(LanguageManager.getDual(this, "Find Centers", "find_centers"));
+        }
+        if (btnShareReport != null) {
+            btnShareReport.setText(LanguageManager.getDual(this, "Share Report", "share_report"));
+        }
+        if (lastDiseaseResult != null) {
+            displayResult(currentResultText);
+        }
     }
 
     private void shareReport() {
@@ -272,55 +348,61 @@ public class DetectDiseaseActivity extends BaseActivity {
         DiseaseResult res = lastDiseaseResult;
 
         StringBuilder sb = new StringBuilder();
-        sb.append("*Jai Kisan - Crop Health Report / \u092b\u0938\u0932 \u0938\u094d\u0935\u093e\u0938\u094d\u0925\u094d\u092f \u0930\u093f\u092a\u094b\u0930\u094d\u091f*\n");
+        sb.append("*").append(LanguageManager.getDual(this, "Jai Kisan - Crop Health Report", "diagnosis_report")).append("*\n");
         sb.append("----------------------------------\n");
-        sb.append("Crop / \u092b\u0938\u0932: ").append(res.cropNameEn).append(" / ").append(res.cropNameHi).append("\n");
-        sb.append("Status / \u0938\u094d\u0925\u093f\u0924\u093f: ").append(res.healthStatusEn).append(" / ").append(res.healthStatusHi).append("\n");
-        sb.append("Health Score / \u0938\u094d\u0935\u093e\u0938\u094d\u0925\u094d\u092f \u0938\u094d\u0915\u094b\u0930: ").append(res.healthScore).append("/100\n");
-        sb.append("Survival Chance / \u092c\u091a\u0928\u0947 \u0915\u0940 \u0938\u0902\u092d\u093e\u0935\u0928\u093e: ").append(res.survivalChance).append("%\n");
+        sb.append(LanguageManager.getDual(this, "Crop", "crop")).append(": ").append(LanguageManager.formatDual(this, res.cropNameEn, res.cropNameHi)).append("\n");
+        sb.append(LanguageManager.getDual(this, "Status", "health_status")).append(": ").append(LanguageManager.formatDual(this, res.healthStatusEn, res.healthStatusHi)).append("\n");
+        sb.append(LanguageManager.getDual(this, "Health Score", "crop")).append(": ").append(res.healthScore).append("/100\n");
+        sb.append(LanguageManager.getDual(this, "Survival Chance", "survival_chance")).append(": ").append(res.survivalChance).append("%\n");
         if (res.scientificName != null && !res.scientificName.equals("N/A") && !res.scientificName.isEmpty()) {
-            sb.append("Pathogen / \u093e\u0930\u094b\u0917\u091c\u0928\u0915: ").append(res.scientificName).append("\n");
+            sb.append("Pathogen: ").append(res.scientificName).append("\n");
         }
-        sb.append("Condition / \u0930\u094b\u0917: ").append(res.diseaseNameEn).append(" / ").append(res.diseaseNameHi).append("\n\n");
+        sb.append(LanguageManager.getDual(this, "Condition", "detected")).append(": ").append(LanguageManager.formatDual(this, res.diseaseNameEn, res.diseaseNameHi)).append("\n\n");
 
-        sb.append("*Introduction / \u092a\u0930\u093f\u091a\u092f:*\n");
+        sb.append("*").append(LanguageManager.getDual(this, "Introduction", "ai_advisory")).append(":*\n");
         sb.append(res.introductionEn).append("\n");
-        sb.append(res.introductionHi).append("\n\n");
+        if (!LanguageManager.isEnglishOnly(this) && res.introductionHi != null && !res.introductionHi.trim().isEmpty()) {
+            sb.append(res.introductionHi).append("\n");
+        }
+        sb.append("\n");
 
         if (!res.dosEn.isEmpty()) {
-            sb.append("*Do's / \u0915\u094d\u092f\u093e \u0915\u0930\u0947\u0902:*\n");
+            sb.append("*").append(LanguageManager.getDual(this, "Do's", "recommended_actions")).append(":*\n");
             for (int i = 0; i < Math.min(res.dosEn.size(), res.dosHi.size()); i++) {
-                sb.append("\u2022 ").append(res.dosEn.get(i)).append(" / ").append(res.dosHi.get(i)).append("\n");
+                sb.append("• ").append(LanguageManager.formatDual(this, res.dosEn.get(i), res.dosHi.get(i))).append("\n");
             }
             sb.append("\n");
         }
 
         if (!res.dontsEn.isEmpty()) {
-            sb.append("*Don'ts / \u0915\u094d\u092f\u093e \u0928 \u0915\u0930\u0947\u0902:*\n");
+            sb.append("*").append(LanguageManager.getDual(this, "Don'ts", "things_to_avoid")).append(":*\n");
             for (int i = 0; i < Math.min(res.dontsEn.size(), res.dontsHi.size()); i++) {
-                sb.append("\u2022 ").append(res.dontsEn.get(i)).append(" / ").append(res.dontsHi.get(i)).append("\n");
+                sb.append("• ").append(LanguageManager.formatDual(this, res.dontsEn.get(i), res.dontsHi.get(i))).append("\n");
             }
             sb.append("\n");
         }
 
         if (!res.fertilizersEn.isEmpty()) {
-            sb.append("*Cures & Treatment / \u0909\u092a\u091a\u093e\u0930 \u0914\u0930 \u0909\u092a\u093e\u092f:*\n");
+            sb.append("*").append(LanguageManager.getDual(this, "Cures & Treatment", "cures_fertilizers")).append(":*\n");
             for (int i = 0; i < Math.min(res.fertilizersEn.size(), res.fertilizersHi.size()); i++) {
-                sb.append("\u2022 ").append(res.fertilizersEn.get(i)).append(" / ").append(res.fertilizersHi.get(i)).append("\n");
+                sb.append("• ").append(LanguageManager.formatDual(this, res.fertilizersEn.get(i), res.fertilizersHi.get(i))).append("\n");
             }
             sb.append("\n");
         }
 
-        sb.append("*Summary / \u0938\u093e\u0930\u093e\u0902\u0936:*\n");
+        sb.append("*").append(LanguageManager.getDual(this, "Summary", "summary")).append(":*\n");
         sb.append(res.summaryEn).append("\n");
-        sb.append(res.summaryHi).append("\n\n");
+        if (!LanguageManager.isEnglishOnly(this) && res.summaryHi != null && !res.summaryHi.trim().isEmpty()) {
+            sb.append(res.summaryHi).append("\n");
+        }
+        sb.append("\n");
 
-        sb.append("Generated via Jai Kisan App");
+        sb.append(LanguageManager.getRegional(this, "generated_via", "Generated via Jai Kisan App"));
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
-        startActivity(Intent.createChooser(shareIntent, "Share via / \u0938\u093e\u091d\u093e \u0915\u0930\u0947\u0902"));
+        startActivity(Intent.createChooser(shareIntent, LanguageManager.getDual(this, "Share via", "share_report")));
     }
 
     private void shareAsPdf() {
@@ -330,19 +412,19 @@ public class DetectDiseaseActivity extends BaseActivity {
         StringBuilder dosList = new StringBuilder();
         int dosCount = Math.min(res.dosEn.size(), res.dosHi.size());
         for (int i = 0; i < dosCount; i++) {
-            dosList.append("<li>").append(res.dosEn.get(i)).append(" / ").append(res.dosHi.get(i)).append("</li>");
+            dosList.append("<li>").append(LanguageManager.formatDual(this, res.dosEn.get(i), res.dosHi.get(i))).append("</li>");
         }
 
         StringBuilder dontsList = new StringBuilder();
         int dontsCount = Math.min(res.dontsEn.size(), res.dontsHi.size());
         for (int i = 0; i < dontsCount; i++) {
-            dontsList.append("<li>").append(res.dontsEn.get(i)).append(" / ").append(res.dontsHi.get(i)).append("</li>");
+            dontsList.append("<li>").append(LanguageManager.formatDual(this, res.dontsEn.get(i), res.dontsHi.get(i))).append("</li>");
         }
 
         StringBuilder curesList = new StringBuilder();
         int curesCount = Math.min(res.fertilizersEn.size(), res.fertilizersHi.size());
         for (int i = 0; i < curesCount; i++) {
-            curesList.append("<li>").append(res.fertilizersEn.get(i)).append(" / ").append(res.fertilizersHi.get(i)).append("</li>");
+            curesList.append("<li>").append(LanguageManager.formatDual(this, res.fertilizersEn.get(i), res.fertilizersHi.get(i))).append("</li>");
         }
 
         String appTitle = LanguageManager.getDual(this, "Jai Kisan", "jai_kisan");
@@ -596,31 +678,36 @@ public class DetectDiseaseActivity extends BaseActivity {
         readyBitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
         String base64Image = Base64.encodeToString(baos.toByteArray(), Base64.NO_WRAP);
 
-        String prompt = "You are an expert agricultural scientist advising Indian farmers. Analyze the provided crop image.\n" +
-                "\n" +
-                "CRITICAL INSTRUCTION: Your ENTIRE response must be a single valid JSON object. Do NOT add any text, markdown code fences, explanation, or preamble before or after the JSON. Output raw JSON only.\n" +
-                "\n" +
+        LanguageManager.LangItem langItem = LanguageManager.getSelectedLanguageItem(this);
+        boolean isEngOnly = LanguageManager.isEnglishOnly(this);
+        String targetLang = isEngOnly ? "English" : langItem.englishName + " (" + langItem.nativeName + ")";
+
+        String prompt = "You are an expert agricultural scientist advising Indian farmers. Analyze the provided crop image.\n\n" +
+                "CRITICAL INSTRUCTION: Your ENTIRE response must be a single valid JSON object. Do NOT add any text, markdown code fences, explanation, or preamble before or after the JSON. Output raw JSON only.\n\n" +
+                "LANGUAGE RULE: The farmer's selected language is " + targetLang + ".\n" +
+                (isEngOnly ? "Generate ALL fields in English only. For the *Hi fields, repeat the English text.\n\n" :
+                 "All *En fields must be in English. All *Hi fields MUST be translated accurately into " + targetLang + " (do NOT use Hindi unless the selected language is Hindi).\n\n") +
                 "The JSON must match this exact structure:\n" +
                 "{\n" +
-                "  \"cropNameEn\": \"English crop name\",\n" +
-                "  \"cropNameHi\": \"हिंदी में फसल का नाम\",\n" +
+                "  \"cropNameEn\": \"Crop name in English\",\n" +
+                "  \"cropNameHi\": \"Crop name in " + targetLang + "\",\n" +
                 "  \"healthStatusEn\": \"One of: Healthy / Mildly Infected / Moderately Infected / Severely Infected / Critical\",\n" +
-                "  \"healthStatusHi\": \"One of: स्वस्थ / हल्का संक्रमण / मध्यम संक्रमित / गंभीर रूप से संक्रमित / अत्यंत गंभीर\",\n" +
+                "  \"healthStatusHi\": \"Health status in " + targetLang + "\",\n" +
                 "  \"healthScore\": <integer 0-100, where 100 = perfectly healthy, 0 = dying>,\n" +
                 "  \"diseaseNameEn\": \"Primary disease/condition name in English, or 'Healthy' if none\",\n" +
-                "  \"diseaseNameHi\": \"प्राथमिक रोग का नाम हिंदी में, या 'स्वस्थ' यदि कोई नहीं\",\n" +
+                "  \"diseaseNameHi\": \"Primary disease name in " + targetLang + "\",\n" +
                 "  \"scientificName\": \"Scientific/Latin name of pathogen or 'N/A'\",\n" +
                 "  \"introductionEn\": \"2-3 sentence introduction about what you observe in the image in English.\",\n" +
-                "  \"introductionHi\": \"छवि में दिखी स्थिति का 2-3 वाक्यों में परिचय हिंदी में।\",\n" +
+                "  \"introductionHi\": \"2-3 sentence introduction in " + targetLang + ".\",\n" +
                 "  \"dosEn\": [\n" +
                 "    \"First recommended action in English.\",\n" +
                 "    \"Second recommended action in English.\",\n" +
                 "    \"Third recommended action in English.\"\n" +
                 "  ],\n" +
                 "  \"dosHi\": [\n" +
-                "    \"पहली अनुशंसित कार्रवाई हिंदी में।\",\n" +
-                "    \"दूसरी अनुशंसित कार्रवाई हिंदी में।\",\n" +
-                "    \"तीसरी अनुशंसित कार्रवाई हिंदी में।\"\n" +
+                "    \"First recommended action in " + targetLang + ".\",\n" +
+                "    \"Second recommended action in " + targetLang + ".\",\n" +
+                "    \"Third recommended action in " + targetLang + ".\"\n" +
                 "  ],\n" +
                 "  \"dontsEn\": [\n" +
                 "    \"First thing to avoid in English.\",\n" +
@@ -628,26 +715,26 @@ public class DetectDiseaseActivity extends BaseActivity {
                 "    \"Third thing to avoid in English.\"\n" +
                 "  ],\n" +
                 "  \"dontsHi\": [\n" +
-                "    \"पहली गलती जो न करें, हिंदी में।\",\n" +
-                "    \"दूसरी गलती जो न करें, हिंदी में।\",\n" +
-                "    \"तीसरी गलती जो न करें, हिंदी में।\"\n" +
+                "    \"First thing to avoid in " + targetLang + ".\",\n" +
+                "    \"Second thing to avoid in " + targetLang + ".\",\n" +
+                "    \"Third thing to avoid in " + targetLang + ".\"\n" +
                 "  ],\n" +
                 "  \"fertilizersEn\": [\n" +
-                "    \"Fertilizer/medicine recommendation 1 in English with dosage.\",\n" +
-                "    \"Fertilizer/medicine recommendation 2 in English with dosage.\",\n" +
-                "    \"Fertilizer/medicine recommendation 3 in English with dosage.\"\n" +
+                "    \"Fertilizer recommendation 1 in English with dosage.\",\n" +
+                "    \"Fertilizer recommendation 2 in English with dosage.\",\n" +
+                "    \"Fertilizer recommendation 3 in English with dosage.\"\n" +
                 "  ],\n" +
                 "  \"fertilizersHi\": [\n" +
-                "    \"उर्वरक/दवा सिफारिश 1 हिंदी में मात्रा सहित।\",\n" +
-                "    \"उर्वरक/दवा सिफारिश 2 हिंदी में मात्रा सहित।\",\n" +
-                "    \"उर्वरक/दवा सिफारिश 3 हिंदी में मात्रा सहित।\"\n" +
+                "    \"Fertilizer recommendation 1 in " + targetLang + " with dosage.\",\n" +
+                "    \"Fertilizer recommendation 2 in " + targetLang + " with dosage.\",\n" +
+                "    \"Fertilizer recommendation 3 in " + targetLang + " with dosage.\"\n" +
                 "  ],\n" +
                 "  \"survivalChance\": <integer 0-100>,\n" +
                 "  \"summaryEn\": \"A comprehensive 3-4 sentence summary in English of the situation and recommended immediate actions.\",\n" +
-                "  \"summaryHi\": \"स्थिति और तत्काल अनुशंसित कार्यों का 3-4 वाक्यों में व्यापक सारांश हिंदी में।\",\n" +
+                "  \"summaryHi\": \"Comprehensive summary in " + targetLang + ".\",\n" +
                 "  \"govtSchemeUrl\": \"https://agricoop.gov.in/\",\n" +
-                "  \"govtSchemeLabelEn\": \"Most relevant government scheme name for this crop/disease\",\n" +
-                "  \"govtSchemeLabelHi\": \"इस फसल/रोग के लिए सबसे प्रासंगिक सरकारी योजना का नाम\"\n" +
+                "  \"govtSchemeLabelEn\": \"Most relevant government scheme name for this crop/disease in English\",\n" +
+                "  \"govtSchemeLabelHi\": \"Relevant government scheme name in " + targetLang + "\"\n" +
                 "}";
 
         JsonArray parts = new JsonArray();
@@ -742,7 +829,10 @@ public class DetectDiseaseActivity extends BaseActivity {
         lastDiseaseResult = result;
 
         double durationSec = (System.currentTimeMillis() - apiStartTime) / 1000.0;
-        tvResponseTime.setText(String.format(java.util.Locale.getDefault(), "Response in %.1fs / प्रतिक्रिया समय: %.1f सेकंड", durationSec, durationSec));
+        String timeEn = String.format(java.util.Locale.ENGLISH, "Response in %.1fs", durationSec);
+        String timePattern = LanguageManager.getRegional(this, "response_time", "प्रतिक्रिया समय: %.1f सेकंड");
+        String timeHi = String.format(java.util.Locale.getDefault(), timePattern, durationSec);
+        tvResponseTime.setText(LanguageManager.formatDual(this, timeEn, timeHi));
 
         // Restore normal visibility status for all result layouts
         tvCropName.setVisibility(View.VISIBLE);
@@ -755,16 +845,16 @@ public class DetectDiseaseActivity extends BaseActivity {
         layoutFertilizersContainer.setVisibility(View.VISIBLE);
         layoutCalculatorButtons.setVisibility(View.VISIBLE);
         tvSummaryEn.setVisibility(View.VISIBLE);
-        tvSummaryHi.setVisibility(View.VISIBLE);
+        tvSummaryHi.setVisibility(LanguageManager.isEnglishOnly(this) ? View.GONE : View.VISIBLE);
         tvSurvivalChancePercent.setVisibility(View.VISIBLE);
         survivalProgressIndicator.setVisibility(View.VISIBLE);
         btnGovtScheme.setVisibility(View.VISIBLE);
         layoutFindCentersShareRow.setVisibility(View.VISIBLE);
 
         // Bind Main Fields
-        tvCropName.setText(result.cropNameEn + " / " + result.cropNameHi);
+        tvCropName.setText(LanguageManager.formatDual(this, result.cropNameEn, result.cropNameHi));
         tvCropName.setTextColor(Color.BLACK);
-        tvHealthStatus.setText(result.healthStatusEn + " / " + result.healthStatusHi);
+        tvHealthStatus.setText(LanguageManager.formatDual(this, result.healthStatusEn, result.healthStatusHi));
         tvHealthStatus.setTextColor(Color.parseColor("#596475"));
         healthScoreView.setScore(result.healthScore);
 
@@ -776,14 +866,14 @@ public class DetectDiseaseActivity extends BaseActivity {
             cardDiseaseBadge.setCardBackgroundColor(0xFFE8F5E9); // Greenish background
             ivDiseaseIcon.setImageResource(R.drawable.ic_sprout);
             ivDiseaseIcon.setImageTintList(ColorStateList.valueOf(0xFF2E7D32));
-            tvDiseaseTitle.setText("Healthy / स्वस्थ");
+            tvDiseaseTitle.setText(LanguageManager.getDual(this, "Healthy", "healthy"));
             tvDiseaseTitle.setTextColor(0xFF2E7D32);
             tvScientificName.setVisibility(View.GONE);
         } else {
             cardDiseaseBadge.setCardBackgroundColor(0xFFFCE8E6); // Reddish background
             ivDiseaseIcon.setImageResource(R.drawable.ic_pest);
             ivDiseaseIcon.setImageTintList(ColorStateList.valueOf(0xFFC62828));
-            tvDiseaseTitle.setText("Detected: " + result.diseaseNameEn + " / " + result.diseaseNameHi);
+            tvDiseaseTitle.setText(LanguageManager.getDual(this, "Detected: ", "detected") + " " + LanguageManager.formatDual(this, result.diseaseNameEn, result.diseaseNameHi));
             tvDiseaseTitle.setTextColor(0xFFC62828);
 
             if (result.scientificName != null && !result.scientificName.equals("N/A") && !result.scientificName.isEmpty()) {
@@ -810,7 +900,7 @@ public class DetectDiseaseActivity extends BaseActivity {
             ArrayList<String> bilingualSuggestions = new ArrayList<>();
             int count = Math.min(result.fertilizersEn.size(), result.fertilizersHi.size());
             for (int i = 0; i < count; i++) {
-                bilingualSuggestions.add(result.fertilizersEn.get(i) + " / " + result.fertilizersHi.get(i));
+                bilingualSuggestions.add(LanguageManager.formatDual(this, result.fertilizersEn.get(i), result.fertilizersHi.get(i)));
             }
             if (bilingualSuggestions.isEmpty()) {
                 bilingualSuggestions.addAll(result.fertilizersEn);
@@ -848,7 +938,12 @@ public class DetectDiseaseActivity extends BaseActivity {
 
         // Summary Texts
         tvSummaryEn.setText(result.summaryEn);
-        tvSummaryHi.setText(result.summaryHi);
+        if (LanguageManager.isEnglishOnly(this) || result.summaryHi == null || result.summaryHi.trim().isEmpty()) {
+            tvSummaryHi.setVisibility(View.GONE);
+        } else {
+            tvSummaryHi.setText(result.summaryHi);
+            tvSummaryHi.setVisibility(View.VISIBLE);
+        }
 
         // Survival Chance Indicators
         tvSurvivalChancePercent.setText(result.survivalChance + "%");
@@ -866,7 +961,8 @@ public class DetectDiseaseActivity extends BaseActivity {
         survivalProgressIndicator.setIndicatorColor(survivalColor);
 
         // Government Scheme button mapping
-        btnGovtScheme.setText(result.govtSchemeLabelEn + " / " + result.govtSchemeLabelHi + "\nClick for more info / अधिक जानकारी के लिए क्लिक करें");
+        String schemeText = LanguageManager.formatDual(this, result.govtSchemeLabelEn, result.govtSchemeLabelHi);
+        btnGovtScheme.setText(schemeText + "\n" + LanguageManager.getDual(this, "Click for more info", "click_for_info"));
         btnGovtScheme.setOnClickListener(v -> {
             try {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(result.govtSchemeUrl));
@@ -894,6 +990,7 @@ public class DetectDiseaseActivity extends BaseActivity {
 
     private void populateList(LinearLayout container, List<String> itemsEn, List<String> itemsHi, int iconResId, int iconTint) {
         container.removeAllViews();
+        boolean isEngOnly = LanguageManager.isEnglishOnly(this);
         int count = Math.min(itemsEn.size(), itemsHi.size());
         for (int i = 0; i < count; i++) {
             View itemView = getLayoutInflater().inflate(R.layout.item_bullet_point, container, false);
@@ -904,7 +1001,12 @@ public class DetectDiseaseActivity extends BaseActivity {
             ivIcon.setImageResource(iconResId);
             ivIcon.setImageTintList(ColorStateList.valueOf(iconTint));
             tvEn.setText(itemsEn.get(i));
-            tvHi.setText(itemsHi.get(i));
+            if (isEngOnly || itemsHi.get(i) == null || itemsHi.get(i).trim().isEmpty()) {
+                tvHi.setVisibility(View.GONE);
+            } else {
+                tvHi.setText(itemsHi.get(i));
+                tvHi.setVisibility(View.VISIBLE);
+            }
 
             container.addView(itemView);
         }

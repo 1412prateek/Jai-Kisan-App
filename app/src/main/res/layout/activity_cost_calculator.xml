@@ -60,40 +60,40 @@
                     android:orientation="vertical"
                     android:padding="24dp">
 
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    <TextView android:id="@+id/tv_title_production_costs" android:layout_width="wrap_content" android:layout_height="wrap_content"
                         android:text="1. Production Costs / उत्पादन लागत" android:textStyle="bold" android:textColor="#E64A19" />
 
-                    <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    <com.google.android.material.textfield.TextInputLayout android:id="@+id/layout_seed" style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:hint="Seed / बीज (₹)">
                         <com.google.android.material.textfield.TextInputEditText android:id="@+id/input_seed" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    <com.google.android.material.textfield.TextInputLayout android:id="@+id/layout_fertilizer" style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:hint="Fertilizer &amp; Pesticide / खाद और दवा (₹)">
                         <com.google.android.material.textfield.TextInputEditText android:id="@+id/input_fertilizer" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    <com.google.android.material.textfield.TextInputLayout android:id="@+id/layout_labor" style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:hint="Labor &amp; Machinery / मजदूर और मशीन (₹)">
                         <com.google.android.material.textfield.TextInputEditText android:id="@+id/input_labor" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    <com.google.android.material.textfield.TextInputLayout android:id="@+id/layout_other" style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:hint="Transport &amp; Others / परिवहन और अन्य (₹)">
                         <com.google.android.material.textfield.TextInputEditText android:id="@+id/input_other" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <Space android:layout_height="24dp" android:layout_width="match_parent" />
 
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    <TextView android:id="@+id/tv_title_expected_harvest" android:layout_width="wrap_content" android:layout_height="wrap_content"
                         android:text="2. Expected Harvest / अनुमानित पैदावार" android:textStyle="bold" android:textColor="#2E7D32" />
 
-                    <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    <com.google.android.material.textfield.TextInputLayout android:id="@+id/layout_yield" style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:hint="Total Yield / कुल पैदावार (Quintals)">
                         <com.google.android.material.textfield.TextInputEditText android:id="@+id/input_yield" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    <com.google.android.material.textfield.TextInputLayout android:id="@+id/layout_price" style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:hint="Selling Price / भाव (₹ per Q)">
                         <com.google.android.material.textfield.TextInputEditText android:id="@+id/input_price" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
                     </com.google.android.material.textfield.TextInputLayout>

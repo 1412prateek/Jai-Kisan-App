@@ -61,6 +61,25 @@ public class AboutDeveloperActivity extends BaseActivity {
 
         // 5. Memory Button
         findViewById(R.id.btnMemory).setOnClickListener(v -> showTributeDialog());
+
+        localizeUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        localizeUI();
+    }
+
+    private void localizeUI() {
+        TextView tvAppMotto = findViewById(R.id.tvAppMotto);
+        if (tvAppMotto != null) {
+            if (LanguageManager.isEnglishOnly(this)) {
+                tvAppMotto.setText("My Soil, My Farmers");
+            } else {
+                tvAppMotto.setText(LanguageManager.getRegional(this, "app_motto", "मेरी मिट्टी मेरे किसान"));
+            }
+        }
     }
 
     private void showTributeDialog() {
