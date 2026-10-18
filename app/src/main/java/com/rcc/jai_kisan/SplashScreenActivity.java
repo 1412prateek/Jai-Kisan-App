@@ -3,12 +3,12 @@ package com.rcc.jai_kisan;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.ProgressBar;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SplashScreenActivity extends BaseActivity {
 
-    private ProgressBar progressBar;
+    private LinearProgressIndicator progressBar;
     private int progressStatus = 0;
     private Handler handler = new Handler();
 
