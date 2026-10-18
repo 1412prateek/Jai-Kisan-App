@@ -263,7 +263,13 @@ public class MandiPricesActivity extends BaseActivity {
             btnGetPrices.setText(LanguageManager.getDual(this, "Preview", "preview"));
         }
 
-        if (tvTitleModalPrice != null) tvTitleModalPrice.setText(LanguageManager.getDual(this, "Modal Price", "modal_price"));
+        if (tvTitleModalPrice != null) {
+            if (LanguageManager.isEnglishOnly(this)) {
+                tvTitleModalPrice.setText("Modal Price");
+            } else {
+                tvTitleModalPrice.setText("Modal Price • " + LanguageManager.getRegional(this, "modal_price", "सामान्य मूल्य"));
+            }
+        }
         if (tvTitleMarketTrend != null) tvTitleMarketTrend.setText(LanguageManager.getDual(this, "Market Trend", "market_trend"));
         if (tvTitlePriceRange != null) tvTitlePriceRange.setText(LanguageManager.getDual(this, "Estimated Price Range", "price_range"));
         if (tvTitle7DayTrend != null) tvTitle7DayTrend.setText(LanguageManager.getDual(this, "7-Day Price Trend", "trend_7day_title"));
@@ -667,9 +673,9 @@ public class MandiPricesActivity extends BaseActivity {
 
             String displayTrend;
             if (isEngOnly || trendHiClean.isEmpty() || trendHiClean.equalsIgnoreCase(trendEnClean)) {
-                displayTrend = arrowSymbol + trendEnClean;
+                displayTrend = arrowSymbol + "Market Trend: " + trendEnClean;
             } else {
-                displayTrend = arrowSymbol + trendEnClean + "\n" + trendHiClean;
+                displayTrend = arrowSymbol + "Market Trend: " + trendEnClean + " • " + trendHiClean;
             }
             tvUiTrend.setText(displayTrend);
             tvUiTrend.setTextColor(trendColor);

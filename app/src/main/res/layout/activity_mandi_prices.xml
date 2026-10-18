@@ -298,114 +298,102 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <!-- Modal Price & Trend Row -->
+                    <!-- Option 2: Clean Vertical Stack for Modal Price & Trend -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:baselineAligned="false"
-                        android:layout_marginBottom="12dp">
+                        android:orientation="vertical"
+                        android:layout_marginBottom="14dp">
 
-                        <LinearLayout
-                            android:layout_width="0dp"
+                        <!-- Title: Modal Price • Regional -->
+                        <TextView
+                            android:id="@+id/tv_title_modal_price"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:text="Modal Price • सामान्य मूल्य"
+                            android:textColor="#1B5E20"
+                            android:textStyle="bold"
+                            android:textSize="12sp" />
+
+                        <!-- Main Modal Price Row (Full Width) -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="bottom"
+                            android:layout_marginTop="3dp">
 
                             <TextView
-                                android:id="@+id/tv_title_modal_price"
+                                android:id="@+id/tvUiModalPrice"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Modal Price / सामान्य मूल्य"
-                                android:textColor="#1B5E20"
+                                android:text="--"
+                                android:textSize="26sp"
                                 android:textStyle="bold"
-                                android:textSize="12sp" />
+                                android:textColor="#212121" />
 
-                            <LinearLayout
+                            <TextView
+                                android:id="@+id/tvUiModalPriceSuffix"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="bottom"
-                                android:layout_marginTop="2dp">
-
-                                <TextView
-                                    android:id="@+id/tvUiModalPrice"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="--"
-                                    android:textSize="20sp"
-                                    android:textStyle="bold"
-                                    android:textColor="#212121" />
-
-                                <TextView
-                                    android:id="@+id/tvUiModalPriceSuffix"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text=" / Q"
-                                    android:textSize="12sp"
-                                    android:textColor="#757575"
-                                    android:layout_marginStart="4dp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="bottom"
-                                android:layout_marginTop="2dp">
-
-                                <TextView
-                                    android:id="@+id/tvUiModalPriceKg"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="--"
-                                    android:textSize="13sp"
-                                    android:textColor="#558B2F"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/tvUiModalPriceKgSuffix"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text=" / kg"
-                                    android:textSize="11sp"
-                                    android:textColor="#757575"
-                                    android:layout_marginStart="2dp" />
-                            </LinearLayout>
+                                android:text=" / quintal"
+                                android:textSize="13sp"
+                                android:textColor="#616161"
+                                android:layout_marginStart="6dp" />
                         </LinearLayout>
 
+                        <!-- Secondary Per-Kg Price Row -->
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:orientation="vertical"
-                            android:gravity="end">
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginTop="2dp">
+
+                            <TextView
+                                android:id="@+id/tvUiModalPriceKg"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="--"
+                                android:textSize="13sp"
+                                android:textColor="#388E3C"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvUiModalPriceKgSuffix"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=" / kg"
+                                android:textSize="12sp"
+                                android:textColor="#757575"
+                                android:layout_marginStart="3dp" />
+                        </LinearLayout>
+
+                        <!-- Market Trend Chip Row -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginTop="8dp">
 
                             <TextView
                                 android:id="@+id/tv_title_market_trend"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Market Trend / बाज़ार रुख"
-                                android:textColor="#1B5E20"
-                                android:textStyle="bold"
-                                android:textSize="12sp"
-                                android:gravity="end"
-                                android:layout_gravity="end" />
+                                android:visibility="gone" />
 
                             <TextView
                                 android:id="@+id/tvUiTrend"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="end"
-                                android:gravity="center"
                                 android:background="@drawable/bg_trend_chip"
-                                android:paddingHorizontal="10dp"
-                                android:paddingVertical="4dp"
+                                android:paddingHorizontal="12dp"
+                                android:paddingVertical="5dp"
                                 android:text="--"
-                                android:textSize="13sp"
+                                android:textSize="12sp"
                                 android:textStyle="bold"
-                                android:textColor="#1B5E20"
-                                android:layout_marginTop="4dp" />
+                                android:textColor="#1B5E20" />
                         </LinearLayout>
                     </LinearLayout>
 
