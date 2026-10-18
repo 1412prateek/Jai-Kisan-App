@@ -265,7 +265,7 @@ public class MandiPricesActivity extends BaseActivity {
 
         if (tvTitleModalPrice != null) tvTitleModalPrice.setText(LanguageManager.getDual(this, "Modal Price", "modal_price"));
         if (tvTitleMarketTrend != null) tvTitleMarketTrend.setText(LanguageManager.getDual(this, "Market Trend", "market_trend"));
-        if (tvTitlePriceRange != null) tvTitlePriceRange.setText(LanguageManager.getDual(this, "Estimated Price Range: ", "price_range_label"));
+        if (tvTitlePriceRange != null) tvTitlePriceRange.setText(LanguageManager.getDual(this, "Estimated Price Range", "price_range"));
         if (tvTitle7DayTrend != null) tvTitle7DayTrend.setText(LanguageManager.getDual(this, "7-Day Price Trend", "trend_7day_title"));
         if (tvTitleWeatherImpact != null) tvTitleWeatherImpact.setText("⚠ " + LanguageManager.getDual(this, "Weather Impact", "weather_impact_title"));
         if (tvTitleFarmerAdvisory != null) tvTitleFarmerAdvisory.setText("💡 " + LanguageManager.getDual(this, "Farmer Advisory", "farmer_advisory_title"));
@@ -609,8 +609,13 @@ public class MandiPricesActivity extends BaseActivity {
 
         boolean isEngOnly = LanguageManager.isEnglishOnly(this);
 
-        String qSuffix = LanguageManager.formatDual(this, "/quintal", LanguageManager.getRegional(this, "quintal_suffix", "/क्विंटल"));
-        String kgSuffix = LanguageManager.formatDual(this, "/kg", LanguageManager.getRegional(this, "kg_suffix", "/किलो"));
+        String qReg = LanguageManager.getRegional(this, "quintal_suffix", "क्विंटल");
+        String kgReg = LanguageManager.getRegional(this, "kg_suffix", "किग्रा");
+        if (qReg.startsWith("/")) qReg = qReg.substring(1).trim();
+        if (kgReg.startsWith("/")) kgReg = kgReg.substring(1).trim();
+
+        String qSuffix = isEngOnly ? "/quintal" : "/quintal (" + qReg + ")";
+        String kgSuffix = isEngOnly ? "/kg" : "/kg (" + kgReg + ")";
 
         if (tvUiModalPrice != null) {
             tvUiModalPrice.setText(modalPriceVal);
@@ -625,44 +630,26 @@ public class MandiPricesActivity extends BaseActivity {
             tvUiModalPriceKgSuffix.setText(" " + kgSuffix);
         }
 
-        // Description Paragraphs
-        String descEn = "";
-        if (modalPriceEn.contains("(") && modalPriceEn.contains(")")) {
-            descEn = modalPriceEn.substring(modalPriceEn.indexOf("(") + 1, modalPriceEn.indexOf(")")).trim();
-        } else if (!modalPriceEn.isEmpty()) {
-            descEn = "Prices generally settling around " + modalPriceEn + ".";
-        }
-        String descHi = "";
-        if (modalPriceHi.contains("(") && modalPriceHi.contains(")")) {
-            descHi = modalPriceHi.substring(modalPriceHi.indexOf("(") + 1, modalPriceHi.indexOf(")")).trim();
-        } else if (!modalPriceHi.isEmpty()) {
-            descHi = LanguageManager.getRegional(this, "modal_price", "सामान्य मूल्य") + ": " + modalPriceHi;
-        }
-
+        // Hide unstyled fallback description views to keep result card clean & organized
         if (tvUiDescriptionEn != null) {
-            tvUiDescriptionEn.setText(descEn);
+            tvUiDescriptionEn.setVisibility(View.GONE);
         }
         if (tvUiDescriptionHi != null) {
-            if (isEngOnly || descHi.isEmpty()) {
-                tvUiDescriptionHi.setVisibility(View.GONE);
-            } else {
-                tvUiDescriptionHi.setVisibility(View.VISIBLE);
-                tvUiDescriptionHi.setText(descHi);
-            }
+            tvUiDescriptionHi.setVisibility(View.GONE);
         }
 
         // 2. Trend Pill Badge
         if (tvUiTrend != null) {
-            String cleanTrendEn = trendEn.toLowerCase();
+            String combinedTrend = (trendEn + " " + trendHi).toLowerCase();
             String arrowSymbol = "→ ";
             int trendColor = 0xFF155724; // Dark green
             int trendBgTint = 0xFFD4EDDA; // Light green
 
-            if (cleanTrendEn.contains("rising") || cleanTrendEn.contains("up") || cleanTrendEn.contains("high") || cleanTrendEn.contains("बढ़त") || cleanTrendEn.contains("పెరుగు")) {
+            if (combinedTrend.contains("rising") || combinedTrend.contains("up") || combinedTrend.contains("high") || combinedTrend.contains("बढ़त") || combinedTrend.contains("పెరు") || combinedTrend.contains("വർദ്ധി")) {
                 arrowSymbol = "↑ ";
                 trendColor = 0xFF155724;
                 trendBgTint = 0xFFD4EDDA;
-            } else if (cleanTrendEn.contains("falling") || cleanTrendEn.contains("down") || cleanTrendEn.contains("low") || cleanTrendEn.contains("गिरावट") || cleanTrendEn.contains("తగ్గు")) {
+            } else if (combinedTrend.contains("falling") || combinedTrend.contains("down") || combinedTrend.contains("low") || combinedTrend.contains("गिरावट") || combinedTrend.contains("తగ్గు") || combinedTrend.contains("കുറ")) {
                 arrowSymbol = "↓ ";
                 trendColor = 0xFF721C24; // Dark red
                 trendBgTint = 0xFFF8D7DA; // Light red
@@ -672,16 +659,21 @@ public class MandiPricesActivity extends BaseActivity {
                 trendBgTint = 0xFFD4EDDA;
             }
 
-            String displayTrend = trendEn;
-            if (!isEngOnly && !trendHi.isEmpty()) {
-                displayTrend = trendEn + " | " + trendHi;
+            String trendEnClean = trendEn.trim();
+            if (!trendEnClean.isEmpty()) {
+                trendEnClean = Character.toUpperCase(trendEnClean.charAt(0)) + (trendEnClean.length() > 1 ? trendEnClean.substring(1) : "");
             }
-            tvUiTrend.setText(arrowSymbol + displayTrend);
+            String trendHiClean = trendHi.trim();
+
+            String displayTrend;
+            if (isEngOnly || trendHiClean.isEmpty() || trendHiClean.equalsIgnoreCase(trendEnClean)) {
+                displayTrend = arrowSymbol + trendEnClean;
+            } else {
+                displayTrend = arrowSymbol + trendEnClean + "\n" + trendHiClean;
+            }
+            tvUiTrend.setText(displayTrend);
             tvUiTrend.setTextColor(trendColor);
-            View parentLayout = (View) tvUiTrend.getParent();
-            if (parentLayout != null) {
-                parentLayout.setBackgroundTintList(android.content.res.ColorStateList.valueOf(trendBgTint));
-            }
+            tvUiTrend.setBackgroundTintList(android.content.res.ColorStateList.valueOf(trendBgTint));
         }
 
         // 3. 7-Day Trend Chart
@@ -738,7 +730,7 @@ public class MandiPricesActivity extends BaseActivity {
             tvUiPriceRange.setText(priceRangeVal);
         }
         if (tvUiPriceRangeSuffix != null) {
-            tvUiPriceRangeSuffix.setText(" " + qSuffix);
+            tvUiPriceRangeSuffix.setText(isEngOnly ? " / Q" : " / Q (" + qReg + ")");
         }
 
         // 5. Weather Impact Card

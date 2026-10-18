@@ -375,9 +375,9 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_marginStart="12dp"
                             android:orientation="vertical"
                             android:gravity="end">
 
@@ -388,16 +388,23 @@
                                 android:text="Market Trend / बाज़ार रुख"
                                 android:textColor="#1B5E20"
                                 android:textStyle="bold"
-                                android:textSize="12sp" />
+                                android:textSize="12sp"
+                                android:gravity="end"
+                                android:layout_gravity="end" />
 
                             <TextView
                                 android:id="@+id/tvUiTrend"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:gravity="center"
+                                android:background="@drawable/bg_trend_chip"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="4dp"
                                 android:text="--"
-                                android:textSize="16sp"
+                                android:textSize="13sp"
                                 android:textStyle="bold"
-                                android:textColor="#E65100"
+                                android:textColor="#1B5E20"
                                 android:layout_marginTop="4dp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -407,35 +414,45 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:background="#F5F5F5"
-                        android:padding="8dp"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_price_range_rounded"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="8dp"
                         android:layout_marginBottom="12dp">
 
                         <TextView
                             android:id="@+id/tv_title_price_range"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:text="Estimated Price Range / मूल्य सीमा: "
                             android:textSize="11sp"
                             android:textColor="#757575" />
 
-                        <TextView
-                            android:id="@+id/tvUiPriceRange"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="--"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:textColor="#212121" />
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
 
-                        <TextView
-                            android:id="@+id/tvUiPriceRangeSuffix"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text=" / Q"
-                            android:textSize="11sp"
-                            android:textColor="#757575"
-                            android:layout_marginStart="2dp" />
+                            <TextView
+                                android:id="@+id/tvUiPriceRange"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:textColor="#212121" />
+
+                            <TextView
+                                android:id="@+id/tvUiPriceRangeSuffix"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=" / Q"
+                                android:textSize="11sp"
+                                android:textColor="#757575"
+                                android:layout_marginStart="2dp" />
+                        </LinearLayout>
                     </LinearLayout>
 
                     <!-- 7-Day Trend Chart -->
@@ -476,9 +493,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:background="#FFF3E0"
-                        android:padding="10dp"
-                        android:layout_marginBottom="10dp">
+                        android:background="@drawable/bg_advisory_weather"
+                        android:padding="12dp"
+                        android:layout_marginBottom="12dp">
 
                         <TextView
                             android:id="@+id/tv_title_weather_impact"
@@ -486,23 +503,25 @@
                             android:layout_height="wrap_content"
                             android:text="⚠ Weather Impact / मौसम का प्रभाव"
                             android:textStyle="bold"
-                            android:textSize="11sp"
+                            android:textSize="12sp"
                             android:textColor="#E65100" />
 
                         <TextView
                             android:id="@+id/tvUiWeatherImpactEn"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="6dp"
                             android:textSize="12sp"
+                            android:lineSpacingExtra="2dp"
                             android:textColor="#5D4037" />
 
                         <TextView
                             android:id="@+id/tvUiWeatherImpactHi"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
+                            android:layout_marginTop="4dp"
                             android:textSize="12sp"
+                            android:lineSpacingExtra="2dp"
                             android:textColor="#6D4C41" />
 
                         <TextView
@@ -517,8 +536,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:background="#E8F5E9"
-                        android:padding="10dp"
+                        android:background="@drawable/bg_advisory_farmer"
+                        android:padding="12dp"
                         android:layout_marginBottom="16dp">
 
                         <TextView
@@ -527,23 +546,25 @@
                             android:layout_height="wrap_content"
                             android:text="💡 Farmer Advisory / किसान सलाह"
                             android:textStyle="bold"
-                            android:textSize="11sp"
+                            android:textSize="12sp"
                             android:textColor="#2E7D32" />
 
                         <TextView
                             android:id="@+id/tvUiFarmerAdviceEn"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="6dp"
                             android:textSize="12sp"
+                            android:lineSpacingExtra="2dp"
                             android:textColor="#1B5E20" />
 
                         <TextView
                             android:id="@+id/tvUiFarmerAdviceHi"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
+                            android:layout_marginTop="4dp"
                             android:textSize="12sp"
+                            android:lineSpacingExtra="2dp"
                             android:textColor="#2E7D32" />
 
                         <TextView

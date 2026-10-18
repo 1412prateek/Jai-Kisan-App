@@ -1680,7 +1680,30 @@ public class LanguageManager {
         }
 
         Map<String, String> langMap = DICTIONARY.get(lang.toLowerCase());
-        String regional = (langMap != null) ? langMap.get(key) : null;
+        if (langMap == null) return english;
+
+        String regional = langMap.get(key);
+        if (regional == null || regional.trim().isEmpty()) {
+            if ("market_trend".equals(key)) regional = langMap.get("market_insight");
+            else if ("price_range_label".equals(key)) regional = langMap.get("price_range");
+            else if ("trend_7day_title".equals(key)) regional = langMap.get("price_trend");
+            else if ("weather_impact_title".equals(key)) regional = langMap.get("weather_impact");
+            else if ("farmer_advisory_title".equals(key)) regional = langMap.get("farmer_advice");
+            else if ("quintal_suffix".equals(key)) regional = langMap.get("quintals");
+            else if ("kg_suffix".equals(key)) {
+                switch (lang.toLowerCase()) {
+                    case "bn": regional = "কেজি"; break;
+                    case "te": regional = "కిలో"; break;
+                    case "mr": regional = "किग्रा"; break;
+                    case "ta": regional = "கிலோ"; break;
+                    case "gu": regional = "કિગ્રા"; break;
+                    case "kn": regional = "ಕೆಜಿ"; break;
+                    case "ml": regional = "കിലോ"; break;
+                    case "pa": regional = "ਕਿਲੋ"; break;
+                    default: regional = "किग्रा"; break;
+                }
+            }
+        }
 
         if (regional == null || regional.trim().isEmpty()) {
             return english;
@@ -1781,8 +1804,31 @@ public class LanguageManager {
         }
 
         Map<String, String> langMap = DICTIONARY.get(lang.toLowerCase());
-        String regional = (langMap != null) ? langMap.get(key) : null;
-        return (regional != null) ? regional : defaultEnglish;
+        if (langMap == null) return defaultEnglish;
+
+        String regional = langMap.get(key);
+        if (regional == null || regional.trim().isEmpty()) {
+            if ("market_trend".equals(key)) regional = langMap.get("market_insight");
+            else if ("price_range_label".equals(key)) regional = langMap.get("price_range");
+            else if ("trend_7day_title".equals(key)) regional = langMap.get("price_trend");
+            else if ("weather_impact_title".equals(key)) regional = langMap.get("weather_impact");
+            else if ("farmer_advisory_title".equals(key)) regional = langMap.get("farmer_advice");
+            else if ("quintal_suffix".equals(key)) regional = langMap.get("quintals");
+            else if ("kg_suffix".equals(key)) {
+                switch (lang.toLowerCase()) {
+                    case "bn": regional = "কেজি"; break;
+                    case "te": regional = "కిలో"; break;
+                    case "mr": regional = "किग्रा"; break;
+                    case "ta": regional = "கிலோ"; break;
+                    case "gu": regional = "કિગ્રા"; break;
+                    case "kn": regional = "ಕೆಜಿ"; break;
+                    case "ml": regional = "കിലോ"; break;
+                    case "pa": regional = "ਕਿਲੋ"; break;
+                    default: regional = "किग्रा"; break;
+                }
+            }
+        }
+        return (regional != null && !regional.trim().isEmpty()) ? regional : defaultEnglish;
     }
 
     public static class NamedItem {
