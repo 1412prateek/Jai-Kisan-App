@@ -127,6 +127,11 @@ public class DetectDiseaseActivity extends BaseActivity {
                         }
 
                         @Override
+                        public void onAdBlockedByDns() {
+                            runOnUiThread(() -> showAdBlockerDnsDialog());
+                        }
+
+                        @Override
                         public void onAdFailed() {
                             runOnUiThread(() -> {
                                 Toast.makeText(DetectDiseaseActivity.this, "Ad could not be loaded. Please try again in a moment.", Toast.LENGTH_SHORT).show();
@@ -135,6 +140,37 @@ public class DetectDiseaseActivity extends BaseActivity {
                     });
                 })
                 .setNegativeButton(cancelBtn, null)
+                .show();
+    }
+
+    private void showAdBlockerDnsDialog() {
+        String title = LanguageManager.getDual(this, "Ad-Blocker / Private DNS Detected", "adblock_dns_title");
+        String enDesc = "Private DNS (such as dns.adguard.com) is active on your device, preventing ads from loading.\n\nTo unlock 3 free Photo Expert analyses & support Jai Kisan, please temporarily disable Private DNS in phone settings for 1 minute.";
+        String message;
+        if (LanguageManager.isEnglishOnly(this)) {
+            message = enDesc;
+        } else {
+            String regDesc = LanguageManager.getRegional(this, "adblock_dns_desc", enDesc);
+            message = LanguageManager.formatLines(this, enDesc, regDesc);
+        }
+        String settingsBtn = LanguageManager.getDual(this, "Open Settings", "open_settings");
+        String closeBtn = LanguageManager.getDual(this, "Close", "cancel");
+
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(settingsBtn, (dialog, which) -> {
+                    try {
+                        // Open Android Network & Internet / Private DNS settings directly
+                        Intent intent = new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        try {
+                            startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
+                        } catch (Exception ignored) {}
+                    }
+                })
+                .setNegativeButton(closeBtn, null)
                 .show();
     }
 

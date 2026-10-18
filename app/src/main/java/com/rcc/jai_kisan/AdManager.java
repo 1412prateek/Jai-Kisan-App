@@ -247,6 +247,51 @@ public class AdManager {
     public interface RewardedAdCallback {
         void onUserEarnedReward(int addedCredits);
         void onAdFailed();
+        default void onAdBlockedByDns() {
+            onAdFailed();
+        }
+    }
+
+    /**
+     * Checks in a background thread whether Google ad servers are being sinkholed/blocked
+     * by private DNS (like dns.adguard.com) while general internet works.
+     */
+    public static void checkIsAdBlockedByDnsAsync(Context context, DnsCheckCallback callback) {
+        new Thread(() -> {
+            boolean isBlocked = false;
+            try {
+                // Try resolving Google's ad syndication server
+                java.net.InetAddress adAddress = java.net.InetAddress.getByName("pagead2.googlesyndication.com");
+                String ip = adAddress.getHostAddress();
+                // AdGuard/PiHole returns 0.0.0.0 or loopback
+                if (ip == null || "0.0.0.0".equals(ip) || "127.0.0.1".equals(ip)) {
+                    isBlocked = true;
+                }
+            } catch (Exception e) {
+                // Resolution failed (NXDOMAIN / blocked by DNS)
+                // Verify if general internet works (e.g. google.com)
+                try {
+                    java.net.InetAddress general = java.net.InetAddress.getByName("google.com");
+                    if (general != null && !general.getHostAddress().isEmpty()) {
+                        isBlocked = true; // Google works, but ad server failed -> definitely blocked by DNS!
+                    }
+                } catch (Exception ex) {
+                    // Entire internet is down
+                    isBlocked = false;
+                }
+            }
+
+            final boolean blocked = isBlocked;
+            new android.os.Handler(android.os.Looper.getMainLooper()).post(() -> {
+                if (callback != null) {
+                    callback.onResult(blocked);
+                }
+            });
+        }).start();
+    }
+
+    public interface DnsCheckCallback {
+        void onResult(boolean isBlockedByDns);
     }
 
     public void showRewardedAd(Activity activity, RewardedAdCallback callback) {
@@ -274,7 +319,7 @@ public class AdManager {
                 public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
                     mRewardedAd = null;
                     loadRewardedAd(activity.getApplicationContext());
-                    if (callback != null) callback.onAdFailed();
+                    handleFailureWithDnsCheck(activity, callback);
                 }
             });
 
@@ -283,9 +328,19 @@ public class AdManager {
                 Log.i(TAG, "User earned reward: " + rewardItem.getAmount() + " " + rewardItem.getType());
             });
         } else {
-            Log.w(TAG, "Rewarded Ad not ready, reloading...");
+            Log.w(TAG, "Rewarded Ad not ready, checking DNS and reloading...");
             loadRewardedAd(activity.getApplicationContext());
-            if (callback != null) callback.onAdFailed();
+            handleFailureWithDnsCheck(activity, callback);
         }
+    }
+
+    private void handleFailureWithDnsCheck(Activity activity, RewardedAdCallback callback) {
+        checkIsAdBlockedByDnsAsync(activity, isBlockedByDns -> {
+            if (isBlockedByDns) {
+                if (callback != null) callback.onAdBlockedByDns();
+            } else {
+                if (callback != null) callback.onAdFailed();
+            }
+        });
     }
 }

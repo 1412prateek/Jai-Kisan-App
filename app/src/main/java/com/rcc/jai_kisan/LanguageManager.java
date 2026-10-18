@@ -1971,6 +1971,42 @@ public class LanguageManager {
                 case "pa": regional = "ਜੈ ਕਿਸਾਨ ਇੱਕ ਮੁਫਤ ਭਾਈਚਾਰਕ ਸੇਵਾ ਹੈ। ਸਾਰੇ ਕਿਸਾਨਾਂ ਲਈ ਇਸ ਸਾਧਨ ਨੂੰ ਪੂਰੀ ਤਰ੍ਹਾਂ ਮੁਫਤ ਰੱਖਣ ਲਈ, ਸਿਰਫ AI ਸਰਵਰ ਅਤੇ API ਖਰਚਿਆਂ ਨੂੰ ਪੂਰਾ ਕਰਨ ਲਈ ਹੀ ਅਸੀਂ ਬਹੁਤ ਘੱਟ ਇਸ਼ਤਿਹਾਰ ਦਿਖਾਉਂਦੇ ਹਾਂ।"; break;
                 default: regional = "जय किसान एक निःशुल्क सामुदायिक सेवा है। सभी किसानों के लिए इस ऐप को पूरी तरह से मुफ़्त रखने हेतु, हम केवल AI सर्वर और API लागत निकालने के लिए सीमित विज्ञापन दिखाते हैं।"; break;
             }
+        } else if ("adblock_dns_title".equals(key)) {
+            switch (lang.toLowerCase()) {
+                case "bn": regional = "অ্যাড-ব্লকার / প্রাইভেট ডিএনএস সনাক্ত হয়েছে"; break;
+                case "te": regional = "యాడ్-బ్లాకర్ / ప్రైవేట్ DNS గుర్తించబడింది"; break;
+                case "mr": regional = "ॲड-ब्लॉकर / खाजगी DNS आढळले"; break;
+                case "ta": regional = "விளம்பரத் தடுப்பான் / தனியார் DNS கண்டறியப்பட்டது"; break;
+                case "gu": regional = "જાહેરાત બ્લૉકર / ખાનગી DNS જણાયું"; break;
+                case "kn": regional = "ಜಾಹೀರಾತು ಬ್ಲಾಕರ್ / ಖಾಸಗಿ DNS ಪತ್ತೆಯಾಗಿದೆ"; break;
+                case "ml": regional = "ആഡ് ബ്ലോക്കർ / പ്രൈവറ്റ് DNS കണ്ടെത്തി"; break;
+                case "pa": regional = "ਐਡ ਬਲਾਕਰ / ਪ੍ਰਾਈਵੇਟ DNS ਮਿਲਿਆ"; break;
+                default: regional = "विज्ञापन अवरोधक / प्राइवेट DNS का पता चला"; break;
+            }
+        } else if ("adblock_dns_desc".equals(key)) {
+            switch (lang.toLowerCase()) {
+                case "bn": regional = "আপনার ফোনে প্রাইভেট DNS (যেমন dns.adguard.com) সক্রিয় রয়েছে। ৩টি বিনামূল্যের ছবি বিশ্লেষণ আনলক করতে অনুগ্রহ করে আপনার ফোন সেটিংসে গিয়ে ১ মিনিটের জন্য প্রাইভেট DNS বন্ধ করুন।"; break;
+                case "te": regional = "మీ ఫోన్‌లో ప్రైవేట్ DNS (ఉదా. dns.adguard.com) ప్రారంభంలో ఉంది. 3 ఉచిత ఫోటో విశ్లేషణలను అన్‌లాక్ చేయడానికి దయచేసి మీ సెట్టింగ్స్‌లో 1 నిమిషం పాటు ప్రైవేట్ DNSని ఆఫ్ చేయండి."; break;
+                case "mr": regional = "तुमच्या फोनमध्ये खाजगी DNS (उदा. dns.adguard.com) चालू आहे. ३ मोफत फोटो विश्लेषण अनलॉक करण्यासाठी कृपया तुमच्या सेटिंग्जमध्ये जाऊन १ मिनिटासाठी खाजगी DNS बंद करा."; break;
+                case "ta": regional = "உங்கள் போனில் தனியார் DNS (எ.கா. dns.adguard.com) இயக்கத்தில் உள்ளது. 3 இலவச புகைப்பட பகுப்பாய்வுகளைத் திறக்க உங்கள் அமைப்புகளில் 1 நிமிடத்திற்கு தனியார் DNS ஐ அணைக்கவும்."; break;
+                case "gu": regional = "તમારા ફોનમાં ખાનગી DNS (દા.ત. dns.adguard.com) ચાલુ છે. ૩ મફત ફોટો વિશ્લેષણ અનલૉક કરવા માટે કૃપા કરીને તમારી સેટિંગ્સમાં જઈ ૧ મિનિટ માટે ખાનગી DNS બંધ કરો."; break;
+                case "kn": regional = "ನಿಮ್ಮ ಫೋನ್‌ನಲ್ಲಿ ಖಾಸಗಿ DNS (ಉದಾ. dns.adguard.com) ಆನ್ ಆಗಿದೆ. ೩ ಉಚಿತ ಫೋಟೋ ವಿಶ್ಲೇಷಣೆಗಳನ್ನು ಅನ್‌ಲಾಕ್ ಮಾಡಲು ದಯವಿಟ್ಟು ಸೆಟ್ಟಿಂಗ್ಸ್‌ನಲ್ಲಿ ೧ ನಿಮಿಷ ಖಾಸಗಿ DNS ಆಫ್ ಮಾಡಿ."; break;
+                case "ml": regional = "നിങ്ങളുടെ ഫോണിൽ പ്രൈവറ്റ് DNS (ഉദാഹരണത്തിന് dns.adguard.com) സജീവമാണ്. 3 സൌജന്യ ഫോട്ടോ വിശകലനം അൺലോക്ക് ചെയ്യാൻ ദയവായി ഫോൺ ക്രമീകരണത്തിൽ 1 മിനിറ്റ് പ്രൈവറ്റ് DNS ഓഫ് ചെയ്യുക."; break;
+                case "pa": regional = "ਤੁਹਾਡੇ ਫ਼ੋਨ ਵਿੱਚ ਪ੍ਰਾਈਵੇਟ DNS (ਜਿਵੇਂ ਕਿ dns.adguard.com) ਚਾਲੂ ਹੈ। ੩ ਮੁਫਤ ਫੋਟੋ ਵਿਸ਼ਲੇਸ਼ਣ ਅਨਲੌਕ ਕਰਨ ਲਈ ਕਿਰਪਾ ਕਰਕੇ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਜਾ ਕੇ ੧ ਮਿੰਟ ਲਈ ਪ੍ਰਾਈਵੇਟ DNS ਬੰਦ ਕਰੋ।"; break;
+                default: regional = "आपके फ़ोन में प्राइवेट DNS (जैसे dns.adguard.com) सक्रिय है। ३ निःशुल्क विश्लेषण अनलॉक करने के लिए कृपया अपनी फ़ोन सेटिंग्स में जाकर १ मिनट के लिए प्राइवेट DNS बंद करें।"; break;
+            }
+        } else if ("open_settings".equals(key)) {
+            switch (lang.toLowerCase()) {
+                case "bn": regional = "সেটিংস খুলুন"; break;
+                case "te": regional = "సెట్టింగ్స్ తెరవండి"; break;
+                case "mr": regional = "सेटिंग्ज उघडा"; break;
+                case "ta": regional = "அமைப்புகளைத் திறக்கவும்"; break;
+                case "gu": regional = "સેટિંગ્સ ખોલો"; break;
+                case "kn": regional = "ಸೆಟ್ಟಿಂಗ್ಸ್ ತೆರೆಯಿರಿ"; break;
+                case "ml": regional = "ക്രമീകരണങ്ങൾ തുറക്കുക"; break;
+                case "pa": regional = "ਸੈਟਿੰਗਾਂ ਖੋਲ੍ਹੋ"; break;
+                default: regional = "सेटिंग्स खोलें"; break;
+            }
         }
         return regional;
     }
