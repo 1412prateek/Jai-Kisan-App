@@ -284,6 +284,9 @@ public class LanguageManager {
         hi.put("quintals_acre", "क्विंटल/एकड़");
         hi.put("irrigation_interval", "सिंचाई का अंतराल");
         hi.put("days", "दिन");
+        hi.put("unit", "इकाई");
+        hi.put("area", "क्षेत्रफल");
+        hi.put("calculate_requirements", "आवश्यकता की गणना करें");
         DICTIONARY.put("hi", hi);
 
         Map<String, String> bn = new HashMap<>();
@@ -450,6 +453,9 @@ public class LanguageManager {
         bn.put("quintals_acre", "কুইন্টাল/একর");
         bn.put("irrigation_interval", "সেচের ব্যবধান");
         bn.put("days", "দিন");
+        bn.put("unit", "একক");
+        bn.put("area", "পরিমাপ");
+        bn.put("calculate_requirements", "প্রয়োজনীয়তা গণনা করুন");
         DICTIONARY.put("bn", bn);
 
         Map<String, String> te = new HashMap<>();
@@ -616,6 +622,9 @@ public class LanguageManager {
         te.put("quintals_acre", "క్వింటాళ్ళు/ఎకరం");
         te.put("irrigation_interval", "నీటిపారుదల విరామం");
         te.put("days", "రోజులు");
+        te.put("unit", "యూనిట్");
+        te.put("area", "వైశాల్యం");
+        te.put("calculate_requirements", "ఎరువుల అవసరాలు లెక్కించండి");
         DICTIONARY.put("te", te);
 
         Map<String, String> mr = new HashMap<>();
@@ -782,6 +791,9 @@ public class LanguageManager {
         mr.put("quintals_acre", "क्विंटल/एकर");
         mr.put("irrigation_interval", "पाणी देण्याचा कालावधी");
         mr.put("days", "दिवस");
+        mr.put("unit", "एकक");
+        mr.put("area", "क्षेत्रफळ");
+        mr.put("calculate_requirements", "गरज मोजा");
         DICTIONARY.put("mr", mr);
 
         Map<String, String> ta = new HashMap<>();
@@ -948,6 +960,9 @@ public class LanguageManager {
         ta.put("quintals_acre", "குவிண்டால்/ஏக்கர்");
         ta.put("irrigation_interval", "பாசன இடைவெளி");
         ta.put("days", "நாட்கள்");
+        ta.put("unit", "அலகு");
+        ta.put("area", "பரப்பளவு");
+        ta.put("calculate_requirements", "உரத் தேவையை கணக்கிடுங்கள்");
         DICTIONARY.put("ta", ta);
 
         Map<String, String> gu = new HashMap<>();
@@ -1114,6 +1129,9 @@ public class LanguageManager {
         gu.put("quintals_acre", "ક્વિન્ટલ/એકર");
         gu.put("irrigation_interval", "પિયતનો સમયગાળો");
         gu.put("days", "દિવસ");
+        gu.put("unit", "એકમ");
+        gu.put("area", "વિસ્તાર");
+        gu.put("calculate_requirements", "જરૂરિયાત ગણો");
         DICTIONARY.put("gu", gu);
 
         Map<String, String> kn = new HashMap<>();
@@ -1280,6 +1298,9 @@ public class LanguageManager {
         kn.put("quintals_acre", "ಕ್ವಿಂಟಾಲ್/ಎಕರೆ");
         kn.put("irrigation_interval", "ನೀರಾವರಿ ಅಂತರ");
         kn.put("days", "ದಿನಗಳು");
+        kn.put("unit", "ಘಟಕ");
+        kn.put("area", "ವಿಸ್ತೀರ್ಣ");
+        kn.put("calculate_requirements", "ಅಗತ್ಯವನ್ನು ಲೆಕ್ಕಹಾಕಿ");
         DICTIONARY.put("kn", kn);
 
         Map<String, String> ml = new HashMap<>();
@@ -1446,6 +1467,9 @@ public class LanguageManager {
         ml.put("quintals_acre", "ക്വിന്റൽ/ഏക്കർ");
         ml.put("irrigation_interval", "നനയ്ക്കൽ ഇടവേള");
         ml.put("days", "ദിവസങ്ങൾ");
+        ml.put("unit", "യൂണിറ്റ്");
+        ml.put("area", "വിസ്തീർണ്ണം");
+        ml.put("calculate_requirements", "ആവശ്യം കണക്കാക്കുക");
         DICTIONARY.put("ml", ml);
 
         Map<String, String> pa = new HashMap<>();
@@ -1612,6 +1636,9 @@ public class LanguageManager {
         pa.put("quintals_acre", "ਕੁਇੰਟਲ/ਏਕੜ");
         pa.put("irrigation_interval", "ਸਿੰਚਾਈ ਦਾ ਵਕਫ਼ਾ");
         pa.put("days", "ਦਿਨ");
+        pa.put("unit", "ਇਕਾਈ");
+        pa.put("area", "ਰਕਬਾ");
+        pa.put("calculate_requirements", "ਲੋੜ ਦੀ ਗਣਨਾ ਕਰੋ");
         DICTIONARY.put("pa", pa);
 
     }

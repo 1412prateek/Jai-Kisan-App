@@ -124,6 +124,7 @@ public class FertilizerCalculatorActivity extends BaseActivity {
         stateDropdown.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, allStates));
 
         stateDropdown.setOnItemClickListener((parent, view, position, id) -> loadUnitsForState(allStates[position]));
+        loadUnitsForState("NORTH");
 
         if (btnCalculate != null) {
             btnCalculate.setOnClickListener(v -> calculateProFertilizer());
@@ -166,13 +167,16 @@ public class FertilizerCalculatorActivity extends BaseActivity {
             tvTitleLandArea.setText("3. " + LanguageManager.getDual(this, "Land Area", "land_area"));
         }
         if (unitDropdown != null) {
-            unitDropdown.setHint(LanguageManager.getDual(this, "Unit", "land_area"));
+            unitDropdown.setHint(null);
+        }
+        if (layoutDropdownUnit != null) {
+            layoutDropdownUnit.setHint(LanguageManager.getDual(this, "Unit", "unit"));
         }
         if (layoutInputArea != null) {
-            layoutInputArea.setHint(LanguageManager.getDual(this, "Area", "land_area"));
+            layoutInputArea.setHint(LanguageManager.getDual(this, "Area", "area"));
         }
         if (btnCalculate != null) {
-            btnCalculate.setText(LanguageManager.getDual(this, "Calculate Requirements", "calculate_financials"));
+            btnCalculate.setText(LanguageManager.getButtonLines(this, "Calculate Requirements", "calculate_requirements"));
         }
         if (tvTitleRecommendedFertilizer != null) {
             tvTitleRecommendedFertilizer.setText(LanguageManager.getDual(this, "Recommended Fertilizer", "recommended_fertilizer"));
@@ -184,7 +188,7 @@ public class FertilizerCalculatorActivity extends BaseActivity {
             tvTitleLiquidOption.setText(LanguageManager.getDual(this, "Liquid Option (Nano Urea):", "liquid_option"));
         }
         if (btnShare != null) {
-            btnShare.setText(LanguageManager.getDual(this, "Share Result", "share_report"));
+            btnShare.setText(LanguageManager.getButtonLines(this, "Share Result", "share_report"));
         }
         if (tvDisclaimer != null) {
             if (LanguageManager.isEnglishOnly(this)) {

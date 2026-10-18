@@ -138,10 +138,10 @@ public class CostCalculatorActivity extends BaseActivity {
             layoutPrice.setHint(LanguageManager.getDual(this, "Selling Price", "price") + " (₹ per Q)");
         }
         if (btnCalculateCost != null) {
-            btnCalculateCost.setText(LanguageManager.getDual(this, "Financial Analysis", "calculate_financials"));
+            btnCalculateCost.setText(LanguageManager.getButtonLines(this, "Financial Analysis", "calculate_financials"));
         }
         if (btnShare != null) {
-            btnShare.setText(LanguageManager.getDual(this, "Share Report", "share_report"));
+            btnShare.setText(LanguageManager.getButtonLines(this, "Share Report", "share_report"));
         }
         if (tvDisclaimer != null) {
             if (LanguageManager.isEnglishOnly(this)) {

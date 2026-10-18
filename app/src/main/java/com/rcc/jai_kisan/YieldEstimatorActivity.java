@@ -116,6 +116,7 @@ public class YieldEstimatorActivity extends BaseActivity {
             String selectedState = defaultStates[position];
             loadUnitsForState(selectedState);
         });
+        loadUnitsForState("NORTH");
 
         if (btnEstimate != null) btnEstimate.setOnClickListener(v -> calculateYield());
         if (btnShare != null) btnShare.setOnClickListener(v -> shareResult());
@@ -151,20 +152,23 @@ public class YieldEstimatorActivity extends BaseActivity {
         if (tvTitleLandArea != null) {
             tvTitleLandArea.setText("3. " + LanguageManager.getDual(this, "Land Area", "land_area"));
         }
+        if (unitDropdown != null) {
+            unitDropdown.setHint(null);
+        }
         if (layoutDropdownUnit != null) {
-            layoutDropdownUnit.setHint(LanguageManager.getDual(this, "Unit", "land_area"));
+            layoutDropdownUnit.setHint(LanguageManager.getDual(this, "Unit", "unit"));
         }
         if (layoutInputArea != null) {
-            layoutInputArea.setHint(LanguageManager.getDual(this, "Area", "land_area"));
+            layoutInputArea.setHint(LanguageManager.getDual(this, "Area", "area"));
         }
         if (btnEstimate != null) {
-            btnEstimate.setText(LanguageManager.getDual(this, "Estimate Yield", "estimate_yield"));
+            btnEstimate.setText(LanguageManager.getButtonLines(this, "Estimate Yield", "estimate_yield"));
         }
         if (tvTitleEstimatedYield != null) {
             tvTitleEstimatedYield.setText(LanguageManager.getDual(this, "Estimated Yield", "yield_report"));
         }
         if (btnShare != null) {
-            btnShare.setText(LanguageManager.getDual(this, "Share Advice", "share_report"));
+            btnShare.setText(LanguageManager.getButtonLines(this, "Share Advice", "share_report"));
         }
         if (tvDisclaimer != null) {
             if (LanguageManager.isEnglishOnly(this)) {

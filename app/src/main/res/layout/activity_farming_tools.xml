@@ -32,6 +32,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                app:titleTextAppearance="@style/TextAppearance.JaiKisan.ToolbarTitle"
                 app:title="Farming Tools / खेती उपकरण"
                 app:titleTextColor="#1A1A1A"
                 app:navigationIcon="@drawable/ic_arrow_back_24"

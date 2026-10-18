@@ -141,13 +141,13 @@ public class IrrigationPlannerActivity extends BaseActivity {
             layoutDropdownMethod.setHint(LanguageManager.getDual(this, "Method", "irrigation_method"));
         }
         if (btnCalculateIrrigation != null) {
-            btnCalculateIrrigation.setText(LanguageManager.getDual(this, "Plan Irrigation", "generate_plan"));
+            btnCalculateIrrigation.setText(LanguageManager.getButtonLines(this, "Plan Irrigation", "generate_plan"));
         }
         if (tvTitleIrrigationAdvice != null) {
             tvTitleIrrigationAdvice.setText(LanguageManager.getDual(this, "Irrigation Advice", "irrigation_report"));
         }
         if (btnShare != null) {
-            btnShare.setText(LanguageManager.getDual(this, "Share Schedule", "share_report"));
+            btnShare.setText(LanguageManager.getButtonLines(this, "Share Schedule", "share_report"));
         }
         if (tvDisclaimer != null) {
             if (LanguageManager.isEnglishOnly(this)) {

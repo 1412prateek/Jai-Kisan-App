@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#E5E5D8">
+    android:background="#E5E5D8"
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -17,16 +18,21 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp"
             app:cardCornerRadius="32dp"
-            app:cardElevation="4dp"
+            app:cardElevation="6dp"
+            app:cardMaxElevation="6dp"
+            app:cardUseCompatPadding="false"
+            app:strokeWidth="0dp"
             app:cardBackgroundColor="#E07854">
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                app:titleTextAppearance="@style/TextAppearance.JaiKisan.ToolbarTitle"
                 app:title="Financial Pro / बजट और लाभ"
                 app:titleTextColor="#1A1A1A"
                 app:navigationIcon="@drawable/ic_arrow_back_24"
@@ -100,8 +106,17 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_calculate_cost"
-                        android:layout_width="match_parent" android:layout_height="52dp" android:layout_marginTop="24dp"
-                        android:text="Financial Analysis / विश्लेषण करें" app:backgroundTint="#E64A19" app:cornerRadius="50dp" />
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="54dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:layout_marginTop="24dp"
+                        android:gravity="center"
+                        android:text="Financial Analysis / विश्लेषण करें"
+                        android:textStyle="bold"
+                        app:backgroundTint="#E64A19"
+                        app:cornerRadius="50dp" />
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/result_section"
@@ -129,9 +144,18 @@
                                 android:textSize="14sp" android:textColor="#212121" android:layout_marginBottom="16dp" android:visibility="gone" />
 
                             <com.google.android.material.button.MaterialButton
-                                android:id="@+id/btn_share" style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                                android:layout_width="match_parent" android:layout_height="44dp"
-                                android:text="Share Report / साझा करें" android:textColor="#E64A19" app:strokeColor="#E64A19" app:cornerRadius="50dp" />
+                                android:id="@+id/btn_share"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:minHeight="48dp"
+                                android:paddingTop="8dp"
+                                android:paddingBottom="8dp"
+                                android:gravity="center"
+                                android:text="Share Report / साझा करें"
+                                android:textColor="#E64A19"
+                                app:strokeColor="#E64A19"
+                                app:cornerRadius="50dp" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
