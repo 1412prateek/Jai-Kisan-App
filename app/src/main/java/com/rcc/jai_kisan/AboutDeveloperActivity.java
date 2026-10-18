@@ -62,6 +62,8 @@ public class AboutDeveloperActivity extends BaseActivity {
         // 5. Memory Button
         findViewById(R.id.btnMemory).setOnClickListener(v -> showTributeDialog());
 
+        AdManager.loadAdaptiveBanner(this, findViewById(R.id.adBannerContainer));
+
         localizeUI();
     }
 

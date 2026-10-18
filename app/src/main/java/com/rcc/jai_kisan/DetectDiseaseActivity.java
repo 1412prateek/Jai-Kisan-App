@@ -307,6 +307,8 @@ public class DetectDiseaseActivity extends BaseActivity {
 
         btnShareReport.setOnClickListener(v -> shareReport());
 
+        AdManager.loadAdaptiveBanner(this, findViewById(R.id.adBannerContainer));
+
         localizeUI();
         updateCreditsDisplay();
     }

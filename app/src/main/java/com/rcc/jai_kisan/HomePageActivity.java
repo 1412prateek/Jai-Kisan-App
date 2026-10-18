@@ -84,6 +84,8 @@ public class HomePageActivity extends BaseActivity {
         MaterialCardView cardAbout = findViewById(R.id.cardAboutDeveloper);
         cardAbout.setOnClickListener(v -> startActivity(new Intent(HomePageActivity.this, AboutDeveloperActivity.class)));
 
+        AdManager.loadAdaptiveBanner(this, findViewById(R.id.adBannerContainer));
+
         updateLocalizedTexts();
     }
 

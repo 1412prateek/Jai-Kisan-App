@@ -153,6 +153,7 @@ public class VoiceAssistantActivity extends BaseActivity {
         });
 
         initializeChat();
+        AdManager.loadAdaptiveBanner(this, findViewById(R.id.adBannerContainer));
         localizeUI();
     }
 

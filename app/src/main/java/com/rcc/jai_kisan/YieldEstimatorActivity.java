@@ -126,6 +126,9 @@ public class YieldEstimatorActivity extends BaseActivity {
         if (btnEstimate != null) btnEstimate.setOnClickListener(v -> calculateYield());
         if (btnShare != null) btnShare.setOnClickListener(v -> shareResult());
 
+        // AdMob banner
+        AdManager.loadBanner(this, (android.widget.FrameLayout) findViewById(R.id.adBannerContainer));
+
         localizeUI();
     }
 

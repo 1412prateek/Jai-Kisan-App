@@ -38,6 +38,8 @@ public class SettingsActivity extends BaseActivity {
         refreshUiTexts();
 
         cardLanguageSetting.setOnClickListener(v -> showLanguageSelectionDialog());
+
+        AdManager.loadAdaptiveBanner(this, findViewById(R.id.adBannerContainer));
     }
 
     private void refreshUiTexts() {

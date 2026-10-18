@@ -92,6 +92,8 @@ public class WeatherActivity extends BaseActivity {
 
         localizeUI();
 
+        AdManager.loadAdaptiveBanner(this, findViewById(R.id.adBannerContainer));
+
         // Fetch weather for a default location on startup
         fetchWeather("Delhi");
     }
