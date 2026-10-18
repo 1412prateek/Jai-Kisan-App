@@ -266,6 +266,61 @@
                 app:tint="#6D5D3B" />
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Transparency & Community Mission Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardTransparency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#C5D3C8"
+            app:cardBackgroundColor="#F1F8F3">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_about_dev"
+                        app:tint="#2E7D32"
+                        android:layout_marginEnd="8dp" />
+
+                    <TextView
+                        android:id="@+id/tvTransparencyTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Transparency &amp; Support / पारदर्शिता और सहायता"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#2E7D32" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvTransparencyDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:lineSpacingExtra="3dp"
+                    android:textSize="12sp"
+                    android:textColor="#333333"
+                    android:text="Jai Kisan is a free community service. We display minimal ads solely to cover AI server and API costs, keeping this tool completely free for all farmers." />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
         <!-- Dedicated In Loving Memory Memorial Card -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardTribute"
@@ -326,61 +381,6 @@
                     android:paddingHorizontal="24dp" />
 
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Transparency & Community Mission Card -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardTransparency"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="2dp"
-            app:strokeWidth="1dp"
-            app:strokeColor="#C5D3C8"
-            app:cardBackgroundColor="#F1F8F3">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <ImageView
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:src="@drawable/ic_about_dev"
-                        app:tint="#2E7D32"
-                        android:layout_marginEnd="8dp" />
-
-                    <TextView
-                        android:id="@+id/tvTransparencyTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Transparency &amp; Support / पारदर्शिता और सहायता"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="#2E7D32" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tvTransparencyDesc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:lineSpacingExtra="3dp"
-                    android:textSize="12sp"
-                    android:textColor="#333333"
-                    android:text="Jai Kisan is a free community service. We display minimal ads solely to cover AI server and API costs, keeping this tool completely free for all farmers." />
-
-            </LinearLayout>
-
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.button.MaterialButton

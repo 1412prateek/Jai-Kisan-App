@@ -65,11 +65,12 @@ public class AboutDeveloperActivity extends BaseActivity {
         // 6. Circular Scroll Down Indicator
         android.widget.ScrollView aboutScrollView = findViewById(R.id.aboutScrollView);
         View btnScrollDown = findViewById(R.id.btnScrollDown);
+        View cardTransparency = findViewById(R.id.cardTransparency);
         View cardTribute = findViewById(R.id.cardTribute);
 
         if (btnScrollDown != null && aboutScrollView != null) {
             btnScrollDown.setOnClickListener(v -> {
-                int targetY = cardTribute != null ? cardTribute.getTop() - 20 : 600;
+                int targetY = cardTransparency != null ? cardTransparency.getTop() - 20 : (cardTribute != null ? cardTribute.getTop() - 20 : 600);
                 aboutScrollView.smoothScrollTo(0, targetY);
                 btnScrollDown.animate().alpha(0f).scaleX(0.7f).scaleY(0.7f).setDuration(250).withEndAction(() -> {
                     btnScrollDown.setVisibility(View.GONE);
