@@ -47,6 +47,7 @@ public class MandiPricesActivity extends BaseActivity {
     private Markwon markwon;
     private View loadingIndicator;
     private View cardResult;
+    private android.widget.ScrollView mandiScrollView;
     // Container view captured for PDF rendering
     private View resultPdfContainer;
 
@@ -122,6 +123,7 @@ public class MandiPricesActivity extends BaseActivity {
         tvPriceResults = findViewById(R.id.tvPriceResults);
         loadingIndicator = findViewById(R.id.loadingIndicator);
         cardResult = findViewById(R.id.cardResult);
+        mandiScrollView = findViewById(R.id.mandiScrollView);
         resultPdfContainer = cardResult;
 
         tvUiModalPrice = findViewById(R.id.tvUiModalPrice);
@@ -374,6 +376,13 @@ public class MandiPricesActivity extends BaseActivity {
             cardResult.setVisibility(View.GONE);
             btnGetPrices.setEnabled(false);
             tvPriceResults.setText(LanguageManager.getDual(this, "Generating Market Insights...", "thinking"));
+            
+            // Auto-scroll so that loading indicator and progress are clearly visible on any device
+            if (mandiScrollView != null && loadingIndicator != null) {
+                mandiScrollView.post(() -> {
+                    mandiScrollView.smoothScrollTo(0, loadingIndicator.getTop() - 60);
+                });
+            }
         });
 
         // Directly call AI API
@@ -534,6 +543,12 @@ public class MandiPricesActivity extends BaseActivity {
                     loadingIndicator.setVisibility(View.GONE);
                     cardResult.setVisibility(View.VISIBLE);
                     btnGetPrices.setEnabled(true);
+                    
+                    if (mandiScrollView != null && cardResult != null) {
+                        mandiScrollView.post(() -> {
+                            mandiScrollView.smoothScrollTo(0, cardResult.getTop() - 40);
+                        });
+                    }
                 });
             }
         });
