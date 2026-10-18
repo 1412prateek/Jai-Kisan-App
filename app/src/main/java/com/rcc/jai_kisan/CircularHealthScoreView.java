@@ -15,9 +15,8 @@ public class CircularHealthScoreView extends View {
     private Paint backgroundPaint;
     private Paint progressPaint;
     private Paint textPaint;
-    private Paint subTextPaint;
     private RectF rectF;
-    private float strokeWidth = 24f;
+    private float strokeWidth = 18f;
 
     public CircularHealthScoreView(Context context) {
         super(context);
@@ -35,43 +34,45 @@ public class CircularHealthScoreView extends View {
     }
 
     private void init() {
-        strokeWidth = getResources().getDisplayMetrics().density * 8f;
+        strokeWidth = getResources().getDisplayMetrics().density * 6.5f;
 
         backgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         backgroundPaint.setStyle(Paint.Style.STROKE);
         backgroundPaint.setStrokeWidth(strokeWidth);
-        backgroundPaint.setColor(0xFFE0E0E0);
+        backgroundPaint.setStrokeCap(Paint.Cap.ROUND);
+        backgroundPaint.setColor(0xFFECEFF1);
 
         progressPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         progressPaint.setStyle(Paint.Style.STROKE);
         progressPaint.setStrokeWidth(strokeWidth);
         progressPaint.setStrokeCap(Paint.Cap.ROUND);
-        progressPaint.setColor(0xFF2E7D32);
 
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setTextAlign(Paint.Align.CENTER);
-        textPaint.setTextSize(getResources().getDisplayMetrics().density * 26f);
+        textPaint.setTextSize(getResources().getDisplayMetrics().density * 24f);
         textPaint.setFakeBoldText(true);
-        textPaint.setColor(0xFF212121);
-
-        subTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        subTextPaint.setTextAlign(Paint.Align.CENTER);
-        subTextPaint.setTextSize(getResources().getDisplayMetrics().density * 11f);
-        subTextPaint.setColor(0xFF757575);
 
         rectF = new RectF();
+
+        updateColors();
+    }
+
+    private void updateColors() {
+        int color;
+        if (score >= 70) {
+            color = 0xFF2E7D32; // Green
+        } else if (score >= 40) {
+            color = 0xFFF59E0B; // Amber
+        } else {
+            color = 0xFFD32F2F; // Red
+        }
+        if (progressPaint != null) progressPaint.setColor(color);
+        if (textPaint != null) textPaint.setColor(color);
     }
 
     public void setScore(int score) {
         this.score = Math.max(0, Math.min(100, score));
-
-        if (this.score >= 70) {
-            progressPaint.setColor(0xFF2E7D32);
-        } else if (this.score >= 40) {
-            progressPaint.setColor(0xFFF59E0B);
-        } else {
-            progressPaint.setColor(0xFFD32F2F);
-        }
+        updateColors();
         invalidate();
     }
 
@@ -81,7 +82,7 @@ public class CircularHealthScoreView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int defaultSize = (int) (getResources().getDisplayMetrics().density * 110f);
+        int defaultSize = (int) (getResources().getDisplayMetrics().density * 82f);
         int width = resolveSize(defaultSize, widthMeasureSpec);
         int height = resolveSize(defaultSize, heightMeasureSpec);
         int size = Math.min(width, height);
@@ -95,19 +96,20 @@ public class CircularHealthScoreView extends View {
         float padding = strokeWidth / 2f + 4f;
         rectF.set(padding, padding, getWidth() - padding, getHeight() - padding);
 
-        // Draw track
-        canvas.drawArc(rectF, -90f, 360f, false, backgroundPaint);
+        // Draw background track arc (open at bottom: 270 degrees total, start at 135 degrees)
+        canvas.drawArc(rectF, 135f, 270f, false, backgroundPaint);
 
-        // Draw progress
-        float sweepAngle = (score / 100f) * 360f;
-        canvas.drawArc(rectF, -90f, sweepAngle, false, progressPaint);
+        // Draw progress arc
+        float sweepAngle = (score / 100f) * 270f;
+        if (sweepAngle > 0.5f) {
+            canvas.drawArc(rectF, 135f, sweepAngle, false, progressPaint);
+        }
 
-        // Draw center text
+        // Draw center score number (centered horizontally and vertically)
         float centerX = getWidth() / 2f;
         float centerY = getHeight() / 2f;
 
         float textOffsetY = (textPaint.descent() + textPaint.ascent()) / 2f;
-        canvas.drawText(String.valueOf(score), centerX, centerY - textOffsetY - 4f, textPaint);
-        canvas.drawText("/ 100", centerX, centerY + textPaint.getTextSize() / 2f + 4f, subTextPaint);
+        canvas.drawText(String.valueOf(score), centerX, centerY - textOffsetY, textPaint);
     }
 }

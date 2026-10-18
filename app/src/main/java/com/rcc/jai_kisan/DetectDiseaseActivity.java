@@ -78,7 +78,7 @@ public class DetectDiseaseActivity extends BaseActivity {
     // Results UI Elements
     private TextView tvCropName, tvHealthStatus;
     private CircularHealthScoreView healthScoreView;
-    private MaterialCardView cardDiseaseBadge;
+    private MaterialCardView cardDiseaseBadge, cardSurvivalChance;
     private ImageView ivDiseaseIcon;
     private TextView tvDiseaseTitle, tvScientificName;
     private LinearLayout layoutDosContainer, layoutDontsContainer, layoutFertilizersContainer;
@@ -178,6 +178,7 @@ public class DetectDiseaseActivity extends BaseActivity {
         tvHealthStatus = findViewById(R.id.tvHealthStatus);
         tvResponseTime = findViewById(R.id.tvResponseTime);
         healthScoreView = findViewById(R.id.healthScoreView);
+        cardSurvivalChance = findViewById(R.id.cardSurvivalChance);
         cardDiseaseBadge = findViewById(R.id.cardDiseaseBadge);
         ivDiseaseIcon = findViewById(R.id.ivDiseaseIcon);
         tvDiseaseTitle = findViewById(R.id.tvDiseaseTitle);
@@ -839,6 +840,7 @@ public class DetectDiseaseActivity extends BaseActivity {
         tvHealthStatus.setVisibility(View.VISIBLE);
         tvResponseTime.setVisibility(View.VISIBLE);
         healthScoreView.setVisibility(View.VISIBLE);
+        if (cardSurvivalChance != null) cardSurvivalChance.setVisibility(View.VISIBLE);
         cardDiseaseBadge.setVisibility(View.VISIBLE);
         layoutDosContainer.setVisibility(View.VISIBLE);
         layoutDontsContainer.setVisibility(View.VISIBLE);
@@ -864,6 +866,7 @@ public class DetectDiseaseActivity extends BaseActivity {
 
         if (isHealthy) {
             cardDiseaseBadge.setCardBackgroundColor(0xFFE8F5E9); // Greenish background
+            cardDiseaseBadge.setStrokeColor(0xFFC8E6C9);
             ivDiseaseIcon.setImageResource(R.drawable.ic_sprout);
             ivDiseaseIcon.setImageTintList(ColorStateList.valueOf(0xFF2E7D32));
             tvDiseaseTitle.setText(LanguageManager.getDual(this, "Healthy", "healthy"));
@@ -871,6 +874,7 @@ public class DetectDiseaseActivity extends BaseActivity {
             tvScientificName.setVisibility(View.GONE);
         } else {
             cardDiseaseBadge.setCardBackgroundColor(0xFFFCE8E6); // Reddish background
+            cardDiseaseBadge.setStrokeColor(0xFFFFCDD2);
             ivDiseaseIcon.setImageResource(R.drawable.ic_pest);
             ivDiseaseIcon.setImageTintList(ColorStateList.valueOf(0xFFC62828));
             tvDiseaseTitle.setText(LanguageManager.getDual(this, "Detected: ", "detected") + " " + LanguageManager.formatDual(this, result.diseaseNameEn, result.diseaseNameHi));
@@ -952,10 +956,22 @@ public class DetectDiseaseActivity extends BaseActivity {
         int survivalColor;
         if (result.survivalChance >= 70) {
             survivalColor = 0xFF2E7D32;
+            if (cardSurvivalChance != null) {
+                cardSurvivalChance.setCardBackgroundColor(0xFFF1F8E9);
+                cardSurvivalChance.setStrokeColor(0xFFDCEDC8);
+            }
         } else if (result.survivalChance >= 40) {
             survivalColor = 0xFFF59E0B;
+            if (cardSurvivalChance != null) {
+                cardSurvivalChance.setCardBackgroundColor(0xFFFFF8E1);
+                cardSurvivalChance.setStrokeColor(0xFFFFECB3);
+            }
         } else {
             survivalColor = 0xFFD32F2F;
+            if (cardSurvivalChance != null) {
+                cardSurvivalChance.setCardBackgroundColor(0xFFFCE8E6);
+                cardSurvivalChance.setStrokeColor(0xFFFFCDD2);
+            }
         }
         tvSurvivalChancePercent.setTextColor(survivalColor);
         survivalProgressIndicator.setIndicatorColor(survivalColor);
@@ -1020,6 +1036,7 @@ public class DetectDiseaseActivity extends BaseActivity {
 
         // Hide other structured cards for an elegant fallback display
         healthScoreView.setVisibility(View.GONE);
+        if (cardSurvivalChance != null) cardSurvivalChance.setVisibility(View.GONE);
         cardDiseaseBadge.setVisibility(View.GONE);
         layoutDosContainer.setVisibility(View.GONE);
         layoutDontsContainer.setVisibility(View.GONE);
