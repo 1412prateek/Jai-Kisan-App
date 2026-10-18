@@ -267,7 +267,7 @@ public class MandiPricesActivity extends BaseActivity {
             if (LanguageManager.isEnglishOnly(this)) {
                 tvTitleModalPrice.setText("Modal Price");
             } else {
-                tvTitleModalPrice.setText("Modal Price • " + LanguageManager.getRegional(this, "modal_price", "सामान्य मूल्य"));
+                tvTitleModalPrice.setText("Modal Price\n" + LanguageManager.getRegional(this, "modal_price", "सामान्य मूल्य"));
             }
         }
         if (tvTitleMarketTrend != null) tvTitleMarketTrend.setText(LanguageManager.getDual(this, "Market Trend", "market_trend"));
@@ -673,9 +673,9 @@ public class MandiPricesActivity extends BaseActivity {
 
             String displayTrend;
             if (isEngOnly || trendHiClean.isEmpty() || trendHiClean.equalsIgnoreCase(trendEnClean)) {
-                displayTrend = arrowSymbol + "Market Trend: " + trendEnClean;
+                displayTrend = arrowSymbol + trendEnClean;
             } else {
-                displayTrend = arrowSymbol + "Market Trend: " + trendEnClean + " • " + trendHiClean;
+                displayTrend = arrowSymbol + trendEnClean + "\n" + trendHiClean;
             }
             tvUiTrend.setText(displayTrend);
             tvUiTrend.setTextColor(trendColor);

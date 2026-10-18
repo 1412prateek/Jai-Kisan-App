@@ -298,30 +298,59 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <!-- Option 2: Clean Vertical Stack for Modal Price & Trend -->
+                    <!-- Option 1: Top Header (Title + Trend Badge) + Full-Width Price -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_marginBottom="14dp">
+                        android:layout_marginBottom="12dp">
 
-                        <!-- Title: Modal Price • Regional -->
-                        <TextView
-                            android:id="@+id/tv_title_modal_price"
+                        <!-- Top Row: Bilingual Title on Left, Trend Chip on Right -->
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Modal Price • सामान्य मूल्य"
-                            android:textColor="#1B5E20"
-                            android:textStyle="bold"
-                            android:textSize="12sp" />
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
 
-                        <!-- Main Modal Price Row (Full Width) -->
+                            <TextView
+                                android:id="@+id/tv_title_modal_price"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Modal Price\nसामान्य मूल्य"
+                                android:textColor="#1B5E20"
+                                android:textStyle="bold"
+                                android:textSize="12sp"
+                                android:lineSpacingExtra="1dp" />
+
+                            <TextView
+                                android:id="@+id/tv_title_market_trend"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/tvUiTrend"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:background="@drawable/bg_trend_chip"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="4dp"
+                                android:gravity="center"
+                                android:text="--"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:textColor="#1B5E20" />
+                        </LinearLayout>
+
+                        <!-- Main Modal Price Row (Full Width - 100%) -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:gravity="bottom"
-                            android:layout_marginTop="3dp">
+                            android:layout_marginTop="8dp">
 
                             <TextView
                                 android:id="@+id/tvUiModalPrice"
@@ -367,33 +396,6 @@
                                 android:textSize="12sp"
                                 android:textColor="#757575"
                                 android:layout_marginStart="3dp" />
-                        </LinearLayout>
-
-                        <!-- Market Trend Chip Row -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:layout_marginTop="8dp">
-
-                            <TextView
-                                android:id="@+id/tv_title_market_trend"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:visibility="gone" />
-
-                            <TextView
-                                android:id="@+id/tvUiTrend"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/bg_trend_chip"
-                                android:paddingHorizontal="12dp"
-                                android:paddingVertical="5dp"
-                                android:text="--"
-                                android:textSize="12sp"
-                                android:textStyle="bold"
-                                android:textColor="#1B5E20" />
                         </LinearLayout>
                     </LinearLayout>
 
