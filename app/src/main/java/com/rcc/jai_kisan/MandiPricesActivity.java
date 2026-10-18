@@ -66,6 +66,7 @@ public class MandiPricesActivity extends BaseActivity {
     private MaterialButton btnSharePdf;
     private MaterialToolbar toolbar;
     private String[] currentSortFieldDisplay;
+    private String[] currentSortOrderDisplay;
 
     private static final String[] MODELS = {
             "gemini-2.5-flash",
@@ -257,10 +258,10 @@ public class MandiPricesActivity extends BaseActivity {
             tvNoteOptionalDate.setText(LanguageManager.getDual(this, "Note: Date selection is optional.", "note_optional_date"));
         }
         if (btnReset != null) {
-            btnReset.setText(LanguageManager.getDual(this, "Reset", "reset"));
+            btnReset.setText(LanguageManager.getButtonLines(this, "Reset", "reset"));
         }
         if (btnGetPrices != null) {
-            btnGetPrices.setText(LanguageManager.getDual(this, "Preview", "preview"));
+            btnGetPrices.setText(LanguageManager.getButtonLines(this, "Preview", "preview"));
         }
 
         if (tvTitleModalPrice != null) {
@@ -302,18 +303,21 @@ public class MandiPricesActivity extends BaseActivity {
                 LanguageManager.getDual(this, "Price", "price")
         };
         spinnerSortField.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, currentSortFieldDisplay));
-        if (spinnerSortField.getText().toString().isEmpty()) {
-            spinnerSortField.setText(currentSortFieldDisplay[0], false);
+        int fieldIndex = 0;
+        if ("Market".equalsIgnoreCase(selectedSortField)) {
+            fieldIndex = 1;
+        } else if ("Modal Price".equalsIgnoreCase(selectedSortField) || "Price".equalsIgnoreCase(selectedSortField)) {
+            fieldIndex = 2;
         }
+        spinnerSortField.setText(currentSortFieldDisplay[fieldIndex], false);
 
-        String[] sortOrderDisplay = {
+        currentSortOrderDisplay = new String[]{
                 LanguageManager.getDual(this, "Ascending", "ascending"),
                 LanguageManager.getDual(this, "Descending", "descending")
         };
-        spinnerSortOrder.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, sortOrderDisplay));
-        if (spinnerSortOrder.getText().toString().isEmpty()) {
-            spinnerSortOrder.setText(sortOrderDisplay[0], false);
-        }
+        spinnerSortOrder.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, currentSortOrderDisplay));
+        int orderIndex = "DESC".equalsIgnoreCase(selectedSortOrder) ? 1 : 0;
+        spinnerSortOrder.setText(currentSortOrderDisplay[orderIndex], false);
     }
 
     private void resetFields() {
@@ -322,13 +326,24 @@ public class MandiPricesActivity extends BaseActivity {
         spinnerCity.setText("", false);
         spinnerCrop.setText("", false);
         spinnerVariety.setText("", false);
+        selectedSortField = "Date";
+        selectedSortOrder = "ASC";
         if (currentSortFieldDisplay != null && currentSortFieldDisplay.length > 0) {
             spinnerSortField.setText(currentSortFieldDisplay[0], false);
+        }
+        if (currentSortOrderDisplay != null && currentSortOrderDisplay.length > 0) {
+            spinnerSortOrder.setText(currentSortOrderDisplay[0], false);
         }
         btnDateFrom.setText(LanguageManager.getDual(this, "From", "from"));
         btnDateTo.setText(LanguageManager.getDual(this, "To", "to"));
         btnDateFrom.setTag(null);
         btnDateTo.setTag(null);
+        if (btnReset != null) {
+            btnReset.setText(LanguageManager.getButtonLines(this, "Reset", "reset"));
+        }
+        if (btnGetPrices != null) {
+            btnGetPrices.setText(LanguageManager.getButtonLines(this, "Preview", "preview"));
+        }
         tvPriceResults.setText(LanguageManager.getDual(this, "Market data will be shown here.", "market_insight"));
         cardResult.setVisibility(View.VISIBLE);
         loadingIndicator.setVisibility(View.GONE);

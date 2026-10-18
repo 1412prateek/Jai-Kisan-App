@@ -195,13 +195,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:baselineAligned="false"
                         android:weightSum="2">
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/layout_sort_by"
                             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
+                            android:minHeight="58dp"
                             android:hint="Sort By / क्रमबद्ध करें"
                             app:boxStrokeColor="@color/theme_cambridge_blue"
                             app:hintTextColor="@color/theme_cambridge_blue"
@@ -209,7 +211,9 @@
                             <AutoCompleteTextView
                                 android:id="@+id/spinnerSortField"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
+                                android:minHeight="58dp"
+                                android:gravity="center_vertical"
                                 android:inputType="none" />
                         </com.google.android.material.textfield.TextInputLayout>
                         <com.google.android.material.textfield.TextInputLayout
@@ -217,7 +221,8 @@
                             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
+                            android:minHeight="58dp"
                             android:hint="Order / क्रम"
                             app:boxStrokeColor="@color/theme_cambridge_blue"
                             app:hintTextColor="@color/theme_cambridge_blue"
@@ -225,7 +230,9 @@
                             <AutoCompleteTextView
                                 android:id="@+id/spinnerSortOrder"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
+                                android:minHeight="58dp"
+                                android:gravity="center_vertical"
                                 android:inputType="none" />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
@@ -247,28 +254,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:baselineAligned="false"
                 android:layout_marginBottom="20dp">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnReset"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Reset / रीसेट"
+                    android:layout_height="match_parent"
+                    android:minHeight="56dp"
+                    android:gravity="center"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="Reset\nरीसेट"
                     app:icon="@drawable/ic_restart_alt"
+                    app:iconGravity="textStart"
                     android:textColor="@color/theme_paynes_gray"
                     app:strokeColor="@color/theme_paynes_gray"
                     app:iconTint="@color/theme_paynes_gray"
-                    android:layout_marginEnd="16dp" />
+                    android:layout_marginEnd="12dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnGetPrices"
                     style="@style/Widget.Material3.Button"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="Preview / पूर्वावलोकन"
+                    android:layout_height="match_parent"
+                    android:minHeight="56dp"
+                    android:gravity="center"
+                    android:text="Preview\nपूर्वावलोकन"
                     app:backgroundTint="#294FF6"
+                    app:iconGravity="textStart"
                     app:icon="@drawable/ic_modern_search"/>
             </LinearLayout>
 

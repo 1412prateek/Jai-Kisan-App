@@ -1684,25 +1684,7 @@ public class LanguageManager {
 
         String regional = langMap.get(key);
         if (regional == null || regional.trim().isEmpty()) {
-            if ("market_trend".equals(key)) regional = langMap.get("market_insight");
-            else if ("price_range_label".equals(key)) regional = langMap.get("price_range");
-            else if ("trend_7day_title".equals(key)) regional = langMap.get("price_trend");
-            else if ("weather_impact_title".equals(key)) regional = langMap.get("weather_impact");
-            else if ("farmer_advisory_title".equals(key)) regional = langMap.get("farmer_advice");
-            else if ("quintal_suffix".equals(key)) regional = langMap.get("quintals");
-            else if ("kg_suffix".equals(key)) {
-                switch (lang.toLowerCase()) {
-                    case "bn": regional = "কেজি"; break;
-                    case "te": regional = "కిలో"; break;
-                    case "mr": regional = "किग्रा"; break;
-                    case "ta": regional = "கிலோ"; break;
-                    case "gu": regional = "કિગ્રા"; break;
-                    case "kn": regional = "ಕೆಜಿ"; break;
-                    case "ml": regional = "കിലോ"; break;
-                    case "pa": regional = "ਕਿਲੋ"; break;
-                    default: regional = "किग्रा"; break;
-                }
-            }
+            regional = resolveRegionalFallback(key, lang, langMap);
         }
 
         if (regional == null || regional.trim().isEmpty()) {
@@ -1808,27 +1790,93 @@ public class LanguageManager {
 
         String regional = langMap.get(key);
         if (regional == null || regional.trim().isEmpty()) {
-            if ("market_trend".equals(key)) regional = langMap.get("market_insight");
-            else if ("price_range_label".equals(key)) regional = langMap.get("price_range");
-            else if ("trend_7day_title".equals(key)) regional = langMap.get("price_trend");
-            else if ("weather_impact_title".equals(key)) regional = langMap.get("weather_impact");
-            else if ("farmer_advisory_title".equals(key)) regional = langMap.get("farmer_advice");
-            else if ("quintal_suffix".equals(key)) regional = langMap.get("quintals");
-            else if ("kg_suffix".equals(key)) {
-                switch (lang.toLowerCase()) {
-                    case "bn": regional = "কেজি"; break;
-                    case "te": regional = "కిలో"; break;
-                    case "mr": regional = "किग्रा"; break;
-                    case "ta": regional = "கிலோ"; break;
-                    case "gu": regional = "કિગ્રા"; break;
-                    case "kn": regional = "ಕೆಜಿ"; break;
-                    case "ml": regional = "കിലോ"; break;
-                    case "pa": regional = "ਕਿਲੋ"; break;
-                    default: regional = "किग्रा"; break;
-                }
-            }
+            regional = resolveRegionalFallback(key, lang, langMap);
         }
         return (regional != null && !regional.trim().isEmpty()) ? regional : defaultEnglish;
+    }
+
+    private static String resolveRegionalFallback(String key, String lang, Map<String, String> langMap) {
+        String regional = null;
+        if ("market_trend".equals(key)) regional = langMap.get("market_insight");
+        else if ("price_range_label".equals(key)) regional = langMap.get("price_range");
+        else if ("trend_7day_title".equals(key)) regional = langMap.get("price_trend");
+        else if ("weather_impact_title".equals(key)) regional = langMap.get("weather_impact");
+        else if ("farmer_advisory_title".equals(key)) regional = langMap.get("farmer_advice");
+        else if ("quintal_suffix".equals(key)) regional = langMap.get("quintals");
+        else if ("kg_suffix".equals(key)) {
+            switch (lang.toLowerCase()) {
+                case "bn": regional = "কেজি"; break;
+                case "te": regional = "కిలో"; break;
+                case "mr": regional = "किग्रा"; break;
+                case "ta": regional = "கிலோ"; break;
+                case "gu": regional = "કિગ્રા"; break;
+                case "kn": regional = "ಕೆಜಿ"; break;
+                case "ml": regional = "കിലോ"; break;
+                case "pa": regional = "ਕਿਲੋ"; break;
+                default: regional = "किग्रा"; break;
+            }
+        } else if ("reset".equals(key)) {
+            switch (lang.toLowerCase()) {
+                case "bn": regional = "রিসেট"; break;
+                case "te": regional = "రీసెట్"; break;
+                case "mr": regional = "रीसेट"; break;
+                case "ta": regional = "மீட்டமை"; break;
+                case "gu": regional = "રીસેટ"; break;
+                case "kn": regional = "ರೀಸೆಟ್"; break;
+                case "ml": regional = "റീസെറ്റ്"; break;
+                case "pa": regional = "ਰੀਸੈੱਟ"; break;
+                default: regional = "रीसेट"; break;
+            }
+        } else if ("preview".equals(key)) {
+            switch (lang.toLowerCase()) {
+                case "bn": regional = "পূর্বরূপ"; break;
+                case "te": regional = "ప్రివ్యూ"; break;
+                case "mr": regional = "पूर्वावलोकन"; break;
+                case "ta": regional = "முன்னோட்டம்"; break;
+                case "gu": regional = "પૂર્વાવલોકન"; break;
+                case "kn": regional = "ಪೂರ್ವವೀಕ್ಷಣೆ"; break;
+                case "ml": regional = "പ്രിവ്യൂ"; break;
+                case "pa": regional = "ਪੂਰਵਦਰਸ਼ਨ"; break;
+                default: regional = "पूर्वावलोकन"; break;
+            }
+        } else if ("ascending".equals(key)) {
+            switch (lang.toLowerCase()) {
+                case "bn": regional = "ঊর্ধ্বক্রম"; break;
+                case "te": regional = "ఆరోహణ"; break;
+                case "mr": regional = "चढता क्रम"; break;
+                case "ta": regional = "ஏறுவரிசை"; break;
+                case "gu": regional = "ચડતો ક્રમ"; break;
+                case "kn": regional = "ಏರಿಕೆ ಕ್ರಮ"; break;
+                case "ml": regional = "ആരോഹണ ക്രമം"; break;
+                case "pa": regional = "ਚੜ੍ਹਦਾ ਕ੍ਰਮ"; break;
+                default: regional = "आरोही"; break;
+            }
+        } else if ("descending".equals(key)) {
+            switch (lang.toLowerCase()) {
+                case "bn": regional = "অধঃক্রম"; break;
+                case "te": regional = "అవరోహణ"; break;
+                case "mr": regional = "उतरता क्रम"; break;
+                case "ta": regional = "இறங்குவரிசை"; break;
+                case "gu": regional = "ઊતરતો ક્રમ"; break;
+                case "kn": regional = "ಇಳಿಕೆ ಕ್ರಮ"; break;
+                case "ml": regional = "അവരോഹണ ക്രമം"; break;
+                case "pa": regional = "ਘਟਦਾ ਕ੍ਰਮ"; break;
+                default: regional = "अवरोही"; break;
+            }
+        } else if ("order".equals(key)) {
+            switch (lang.toLowerCase()) {
+                case "bn": regional = "ক্রম"; break;
+                case "te": regional = "క్రమం"; break;
+                case "mr": regional = "क्रम"; break;
+                case "ta": regional = "வரிசை"; break;
+                case "gu": regional = "ક્રમ"; break;
+                case "kn": regional = "ಕ್ರಮ"; break;
+                case "ml": regional = "ക്രമം"; break;
+                case "pa": regional = "ਕ੍ਰਮ"; break;
+                default: regional = "क्रम"; break;
+            }
+        }
+        return regional;
     }
 
     public static class NamedItem {
