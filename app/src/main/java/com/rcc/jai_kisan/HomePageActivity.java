@@ -27,10 +27,15 @@ public class HomePageActivity extends BaseActivity {
     TextView tvCardFarmingTools;
     TextView tvCardAbout;
 
+    private InAppUpdateHelper inAppUpdateHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+
+        inAppUpdateHelper = new InAppUpdateHelper(this);
+        inAppUpdateHelper.checkForAppUpdate();
 
         homeTitle = findViewById(R.id.homeTitle);
         btnHomeSettings = findViewById(R.id.btnHomeSettings);
@@ -106,6 +111,9 @@ public class HomePageActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (inAppUpdateHelper != null) {
+            inAppUpdateHelper.onResume();
+        }
         updateLocalizedTexts();
     }
 }
