@@ -224,6 +224,46 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Community & Free Service Transparency Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="#C5D3C8"
+                app:cardBackgroundColor="#F1F8F3">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/tvSettingsTransparencyTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Transparency &amp; Support / पारदर्शिता और सहायता"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#2E7D32" />
+
+                    <TextView
+                        android:id="@+id/tvSettingsTransparencyDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Jai Kisan is a free community service. We display minimal ads solely to cover AI server and API costs, keeping this tool completely free for all farmers."
+                        android:textSize="12sp"
+                        android:lineSpacingExtra="3dp"
+                        android:textColor="#333333"
+                        android:layout_marginTop="6dp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
 
     </ScrollView>

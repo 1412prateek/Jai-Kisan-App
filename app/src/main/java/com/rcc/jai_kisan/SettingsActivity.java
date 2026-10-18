@@ -49,6 +49,22 @@ public class SettingsActivity extends BaseActivity {
         tvHeaderPreferences.setText(LanguageManager.getDual(this, "Preferences", "settings"));
         tvLanguageTitle.setText(LanguageManager.getDual(this, "Language", "language"));
         tvCurrentLanguage.setText(LanguageManager.getActiveLanguageDisplayName(this));
+
+        TextView tvSettingsTransparencyTitle = findViewById(R.id.tvSettingsTransparencyTitle);
+        if (tvSettingsTransparencyTitle != null) {
+            tvSettingsTransparencyTitle.setText(LanguageManager.getDual(this, "Transparency & Support", "ad_transparency_title"));
+        }
+
+        TextView tvSettingsTransparencyDesc = findViewById(R.id.tvSettingsTransparencyDesc);
+        if (tvSettingsTransparencyDesc != null) {
+            String enMsg = "Jai Kisan is a free community service. We display minimal ads solely to cover AI server and API costs, keeping this tool completely free for all farmers.";
+            if (LanguageManager.isEnglishOnly(this)) {
+                tvSettingsTransparencyDesc.setText(enMsg);
+            } else {
+                String regMsg = LanguageManager.getRegional(this, "ad_transparency_msg", enMsg);
+                tvSettingsTransparencyDesc.setText(LanguageManager.formatLines(this, enMsg, regMsg));
+            }
+        }
     }
 
     private void showLanguageSelectionDialog() {

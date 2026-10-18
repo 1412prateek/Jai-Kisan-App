@@ -82,6 +82,22 @@ public class AboutDeveloperActivity extends BaseActivity {
                 tvAppMotto.setText(LanguageManager.getRegional(this, "app_motto", "मेरी मिट्टी मेरे किसान"));
             }
         }
+
+        TextView tvTransparencyTitle = findViewById(R.id.tvTransparencyTitle);
+        if (tvTransparencyTitle != null) {
+            tvTransparencyTitle.setText(LanguageManager.getDual(this, "Transparency & Support", "ad_transparency_title"));
+        }
+
+        TextView tvTransparencyDesc = findViewById(R.id.tvTransparencyDesc);
+        if (tvTransparencyDesc != null) {
+            String enMsg = "Jai Kisan is a free community service. We display minimal ads solely to cover AI server and API costs, keeping this tool completely free for all farmers.";
+            if (LanguageManager.isEnglishOnly(this)) {
+                tvTransparencyDesc.setText(enMsg);
+            } else {
+                String regMsg = LanguageManager.getRegional(this, "ad_transparency_msg", enMsg);
+                tvTransparencyDesc.setText(LanguageManager.formatLines(this, enMsg, regMsg));
+            }
+        }
     }
 
     private void showTributeDialog() {
