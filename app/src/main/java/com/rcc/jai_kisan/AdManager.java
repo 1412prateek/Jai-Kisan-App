@@ -100,12 +100,62 @@ public class AdManager {
             AdSize adSize = getAdaptiveAdSize(activity);
             adView.setAdSize(adSize);
 
+            adView.setAdListener(new com.google.android.gms.ads.AdListener() {
+                @Override
+                public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                    super.onAdFailedToLoad(loadAdError);
+                    checkIsAdBlockedByDnsAsync(activity, isBlocked -> {
+                        if (isBlocked && activity != null && !activity.isFinishing()) {
+                            showDnsNoticeInBanner(activity, adContainer);
+                        }
+                    });
+                }
+            });
+
             AdRequest adRequest = new AdRequest.Builder().build();
             adView.loadAd(adRequest);
             Log.d(TAG, "Loading adaptive banner with AdUnit: " + getBannerAdUnitId());
         } catch (Exception e) {
             Log.e(TAG, "Error loading adaptive banner: " + e.getMessage(), e);
         }
+    }
+
+    private static void showDnsNoticeInBanner(Activity activity, ViewGroup adContainer) {
+        try {
+            adContainer.removeAllViews();
+            android.widget.LinearLayout strip = new android.widget.LinearLayout(activity);
+            strip.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+            strip.setGravity(android.view.Gravity.CENTER_VERTICAL);
+            strip.setBackgroundColor(android.graphics.Color.parseColor("#FFF3E0")); // Warm light orange/amber
+            strip.setPadding(32, 16, 32, 16);
+
+            android.widget.TextView tv = new android.widget.TextView(activity);
+            String regNotice = LanguageManager.getRegional(activity, "adblock_banner_strip", "Ad-blocker active. Please consider disabling Private DNS to keep Jai Kisan free.");
+            tv.setText("🛡️ " + regNotice);
+            tv.setTextColor(android.graphics.Color.parseColor("#E65100"));
+            tv.setTextSize(11f);
+            tv.setLayoutParams(new android.widget.LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+
+            android.widget.TextView btn = new android.widget.TextView(activity);
+            btn.setText("⚙️");
+            btn.setTextSize(16f);
+            btn.setPadding(16, 8, 8, 8);
+
+            strip.addView(tv);
+            strip.addView(btn);
+
+            strip.setOnClickListener(v -> {
+                try {
+                    activity.startActivity(new android.content.Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+                } catch (Exception e) {
+                    try {
+                        activity.startActivity(new android.content.Intent(android.provider.Settings.ACTION_SETTINGS));
+                    } catch (Exception ignored) {}
+                }
+            });
+
+            adContainer.addView(strip);
+        } catch (Exception ignored) {}
     }
 
     public static void loadBanner(Activity activity, ViewGroup adContainer) {
@@ -154,7 +204,8 @@ public class AdManager {
 
     /**
      * Increments the global PDF counter. If counter reaches 3, shows the interstitial ad,
-     * resets counter to 0, and notifies onComplete. Otherwise runs onComplete immediately.
+     * resets counter to 0, and notifies onComplete.
+     * If blocked by Private DNS, intercepts with friendly guidance dialog before sharing.
      */
     public void onPdfGenerated(Activity activity, Runnable onComplete) {
         if (activity == null) {
@@ -167,8 +218,8 @@ public class AdManager {
         Log.d(TAG, "Global PDF generated count: " + currentCount + " / " + PDF_AD_TRIGGER_INTERVAL);
 
         if (currentCount >= PDF_AD_TRIGGER_INTERVAL) {
-            prefs.edit().putInt(KEY_PDF_COUNT, 0).apply();
             if (mInterstitialAd != null) {
+                prefs.edit().putInt(KEY_PDF_COUNT, 0).apply();
                 mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
                     @Override
                     public void onAdDismissedFullScreenContent() {
@@ -188,8 +239,18 @@ public class AdManager {
                 mInterstitialAd.show(activity);
                 return;
             } else {
-                Log.d(TAG, "Interstitial not ready yet, loading next time.");
-                loadInterstitialAd(activity.getApplicationContext());
+                // Ad is not ready. Check if blocked by Private DNS / AdGuard!
+                checkIsAdBlockedByDnsAsync(activity, isBlockedByDns -> {
+                    if (isBlockedByDns && activity != null && !activity.isFinishing()) {
+                        showPdfAdBlockerDialog(activity, onComplete);
+                    } else {
+                        // Normal network delay or 1st load, don't punish normal users
+                        prefs.edit().putInt(KEY_PDF_COUNT, 0).apply();
+                        loadInterstitialAd(activity.getApplicationContext());
+                        if (onComplete != null) onComplete.run();
+                    }
+                });
+                return;
             }
         } else {
             prefs.edit().putInt(KEY_PDF_COUNT, currentCount).apply();
@@ -198,6 +259,37 @@ public class AdManager {
         if (onComplete != null) {
             onComplete.run();
         }
+    }
+
+    private static void showPdfAdBlockerDialog(Activity activity, Runnable onContinueAnyway) {
+        String title = LanguageManager.getDual(activity, "Ad-Blocker / Private DNS Detected", "adblock_dns_title");
+        String enDesc = "Private DNS (such as dns.adguard.com) is active on your device. PDF reports are supported by short ads to keep Jai Kisan completely free for all farmers.\n\nPlease disable Private DNS in settings to support our service.";
+        String message;
+        if (LanguageManager.isEnglishOnly(activity)) {
+            message = enDesc;
+        } else {
+            String regDesc = LanguageManager.getRegional(activity, "adblock_pdf_desc", enDesc);
+            message = LanguageManager.formatLines(activity, enDesc, regDesc);
+        }
+        String settingsBtn = LanguageManager.getDual(activity, "Open Settings", "open_settings");
+        String continueBtn = LanguageManager.getDual(activity, "Continue", "continue");
+
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(activity)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(settingsBtn, (dialog, which) -> {
+                    try {
+                        activity.startActivity(new android.content.Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+                    } catch (Exception e) {
+                        try {
+                            activity.startActivity(new android.content.Intent(android.provider.Settings.ACTION_SETTINGS));
+                        } catch (Exception ignored) {}
+                    }
+                })
+                .setNegativeButton(continueBtn, (dialog, which) -> {
+                    if (onContinueAnyway != null) onContinueAnyway.run();
+                })
+                .show();
     }
 
     // =========================================================================
