@@ -39,7 +39,11 @@ public class SplashScreenActivity extends BaseActivity {
                 }
             }
         });
-        animator.start();
+        progressBar.post(() -> {
+            if (!isFinishing() && animator != null) {
+                animator.start();
+            }
+        });
     }
 
     @Override
