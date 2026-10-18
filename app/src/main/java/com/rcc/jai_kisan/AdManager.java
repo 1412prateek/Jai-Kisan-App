@@ -124,14 +124,21 @@ public class AdManager {
         try {
             adContainer.removeAllViews();
             android.widget.LinearLayout strip = new android.widget.LinearLayout(activity);
+            strip.setTag("adblock_dns_strip");
             strip.setOrientation(android.widget.LinearLayout.HORIZONTAL);
             strip.setGravity(android.view.Gravity.CENTER_VERTICAL);
             strip.setBackgroundColor(android.graphics.Color.parseColor("#FFF3E0")); // Warm light orange/amber
             strip.setPadding(32, 16, 32, 16);
 
             android.widget.TextView tv = new android.widget.TextView(activity);
-            String regNotice = LanguageManager.getRegional(activity, "adblock_banner_strip", "Ad-blocker active. Please consider disabling Private DNS to keep Jai Kisan free.");
-            tv.setText("🛡️ " + regNotice);
+            String enDefault = "Ad-blocker active. Please disable Private DNS to keep Jai Kisan free.";
+            String noticeText;
+            if (LanguageManager.isEnglishOnly(activity)) {
+                noticeText = enDefault;
+            } else {
+                noticeText = LanguageManager.getRegional(activity, "adblock_banner_strip", enDefault);
+            }
+            tv.setText("🛡️ " + noticeText);
             tv.setTextColor(android.graphics.Color.parseColor("#E65100"));
             tv.setTextSize(11f);
             tv.setLayoutParams(new android.widget.LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));

@@ -9,8 +9,26 @@ import androidx.appcompat.app.AppCompatActivity;
  */
 public class BaseActivity extends AppCompatActivity {
 
+    private String currentAttachedLanguage;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LanguageManager.wrapContext(newBase));
+    }
+
+    @Override
+    protected void onCreate(android.os.Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        currentAttachedLanguage = LanguageManager.getLanguage(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String activeLang = LanguageManager.getLanguage(this);
+        if (currentAttachedLanguage != null && !currentAttachedLanguage.equalsIgnoreCase(activeLang)) {
+            currentAttachedLanguage = activeLang;
+            recreate();
+        }
     }
 }
