@@ -255,24 +255,24 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:baselineAligned="false"
+                android:weightSum="2"
                 android:layout_marginBottom="20dp">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnReset"
                     style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="match_parent"
                     android:minHeight="56dp"
                     android:gravity="center"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
                     android:text="Reset\nरीसेट"
                     app:icon="@drawable/ic_restart_alt"
                     app:iconGravity="textStart"
                     android:textColor="@color/theme_paynes_gray"
                     app:strokeColor="@color/theme_paynes_gray"
                     app:iconTint="@color/theme_paynes_gray"
-                    android:layout_marginEnd="12dp" />
+                    android:layout_marginEnd="8dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnGetPrices"
@@ -285,7 +285,8 @@
                     android:text="Preview\nपूर्वावलोकन"
                     app:backgroundTint="#294FF6"
                     app:iconGravity="textStart"
-                    app:icon="@drawable/ic_modern_search"/>
+                    app:icon="@drawable/ic_modern_search"
+                    android:layout_marginStart="8dp" />
             </LinearLayout>
 
             <com.google.android.material.loadingindicator.LoadingIndicator
