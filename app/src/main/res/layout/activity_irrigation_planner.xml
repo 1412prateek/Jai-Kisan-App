@@ -99,7 +99,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp">
                         <AutoCompleteTextView android:id="@+id/dropdown_crop" android:layout_width="match_parent"
-                            android:layout_height="wrap_content" android:hint="Crop Type" android:inputType="none" />
+                            android:layout_height="wrap_content" android:inputType="none" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <Space android:layout_height="16dp" android:layout_width="match_parent" />
@@ -113,7 +113,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp">
                         <AutoCompleteTextView android:id="@+id/dropdown_soil" android:layout_width="match_parent"
-                            android:layout_height="wrap_content" android:hint="Soil Type" android:inputType="none" />
+                            android:layout_height="wrap_content" android:inputType="none" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <Space android:layout_height="16dp" android:layout_width="match_parent" />
@@ -127,7 +127,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp">
                         <AutoCompleteTextView android:id="@+id/dropdown_method" android:layout_width="match_parent"
-                            android:layout_height="wrap_content" android:hint="Method" android:inputType="none" />
+                            android:layout_height="wrap_content" android:inputType="none" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <Space android:layout_height="24dp" android:layout_width="match_parent" />

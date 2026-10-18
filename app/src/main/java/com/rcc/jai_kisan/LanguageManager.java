@@ -287,6 +287,9 @@ public class LanguageManager {
         hi.put("unit", "इकाई");
         hi.put("area", "क्षेत्रफल");
         hi.put("calculate_requirements", "आवश्यकता की गणना करें");
+        hi.put("disclaimer_title", "अस्वीकरण");
+        hi.put("disclaimer_body", "अस्वीकरण: ये परिणाम सामान्य डेटा और स्वचालित सुझावों पर आधारित हैं। वास्तविक परिस्थितियां भिन्न हो सकती हैं। अंतिम निर्णय लेने से पहले स्थानीय कृषि विशेषज्ञ से सलाह लें।");
+        hi.put("disclaimer_pdf_body", "यह रिपोर्ट एआई/संख्यात्मक विश्लेषण और स्वचालित सुझावों द्वारा तैयार की गई है। कोई भी कदम उठाने से पहले कृपया व्यावहारिक रूप से पुष्टि करें। किसान/उपयोगकर्ता इस रिपोर्ट के आधार पर लिए गए किसी भी निर्णय के लिए स्वयं जिम्मेदार हैं।");
         DICTIONARY.put("hi", hi);
 
         Map<String, String> bn = new HashMap<>();
@@ -456,6 +459,9 @@ public class LanguageManager {
         bn.put("unit", "একক");
         bn.put("area", "পরিমাপ");
         bn.put("calculate_requirements", "প্রয়োজনীয়তা গণনা করুন");
+        bn.put("disclaimer_title", "দাবিত্যাগ");
+        bn.put("disclaimer_body", "দাবিত্যাগ: এই ফলাফলগুলি সাধারণ ডেটা এবং স্বয়ংক্রিয় পরামর্শের উপর ভিত্তি করে তৈরি। প্রকৃত ক্ষেত্রের অবস্থা ভিন্ন হতে পারে। চূড়ান্ত সিদ্ধান্ত নেওয়ার আগে স্থানীয় কৃষি বিশেষজ্ঞের সাথে পরামর্শ করুন।");
+        bn.put("disclaimer_pdf_body", "এই প্রতিবেদনটি এআই/সংখ্যাগত বিশ্লেষণ এবং স্বয়ংক্রিয় পরামর্শের মাধ্যমে তৈরি। কোনো পদক্ষেপ নেওয়ার আগে দয়া করে ব্যবহারিকভাবে যাচাই করুন। এই প্রতিবেদনের ভিত্তিতে গৃহীত যেকোনো সিদ্ধান্তের জন্য কৃষক/ব্যবহারকারী নিজে দায়ী।");
         DICTIONARY.put("bn", bn);
 
         Map<String, String> te = new HashMap<>();
@@ -625,6 +631,9 @@ public class LanguageManager {
         te.put("unit", "యూనిట్");
         te.put("area", "వైశాల్యం");
         te.put("calculate_requirements", "ఎరువుల అవసరాలు లెక్కించండి");
+        te.put("disclaimer_title", "నిరాకరణ");
+        te.put("disclaimer_body", "నిరాకరణ: ఈ ఫలితాలు సాధారణ డేటా మరియు ఆటోమేటెడ్ సూచనలపై ఆధారపడి ఉన్నాయి. క్షేత్రస్థాయి పరిస్థితులు మారవచ్చు. తుది నిర్ణయాలు తీసుకునే ముందు స్థానిక వ్యవసాయ నిపుణుడిని సంప్రదించండి.");
+        te.put("disclaimer_pdf_body", "ఈ నివేదిక AI/విశ్లేషణ మరియు ఆటోమేటెడ్ సూచనల ఆధారంగా రూపొందించబడింది. ఎలాంటి చర్యలు తీసుకునే ముందైనా క్షేత్రస్థాయిలో సరిచూసుకోండి. ఈ నివేదిక ఆధారంగా తీసుకునే నిర్ణయాలకు రైతులే/వినియోగదారులే బాధ్యులు.");
         DICTIONARY.put("te", te);
 
         Map<String, String> mr = new HashMap<>();
@@ -794,6 +803,9 @@ public class LanguageManager {
         mr.put("unit", "एकक");
         mr.put("area", "क्षेत्रफळ");
         mr.put("calculate_requirements", "गरज मोजा");
+        mr.put("disclaimer_title", "अस्वीकरण");
+        mr.put("disclaimer_body", "अस्वीकरण: हे परिणाम सामान्य डेटा आणि स्वयंचलित सूचनांवर आधारित आहेत. प्रत्यक्ष शेतातील परिस्थिती वेगळी असू शकते. अंतिम निर्णय घेण्यापूर्वी स्थानिक कृषी तज्ञांचा सल्ला घ्या.");
+        mr.put("disclaimer_pdf_body", "हा अहवाल एआय/संख्यात्मक विश्लेषण आणि स्वयंचलित सूचनांच्या आधारे तयार केला आहे. कोणतीही कृती करण्यापूर्वी कृपया प्रत्यक्ष पडताळणी करा. या अहवालाच्या आधारे घेतलेल्या निर्णयांची जबाबदारी शेतकरी/वापरकर्त्याची राहील.");
         DICTIONARY.put("mr", mr);
 
         Map<String, String> ta = new HashMap<>();
@@ -963,6 +975,9 @@ public class LanguageManager {
         ta.put("unit", "அலகு");
         ta.put("area", "பரப்பளவு");
         ta.put("calculate_requirements", "உரத் தேவையை கணக்கிடுங்கள்");
+        ta.put("disclaimer_title", "பொறுப்புத் துறப்பு");
+        ta.put("disclaimer_body", "பொறுப்புத் துறப்பு: இந்த முடிவுகள் பொதுவான தரவு மற்றும் தானியங்கி பரிந்துரைகளை அடிப்படையாகக் கொண்டவை. கள நிலவரங்கள் மாறுபடலாம். இறுதி முடிவுகளை எடுப்பதற்கு முன் உள்ளூர் வேளாண்மை நிபுணரை அணுகவும்.");
+        ta.put("disclaimer_pdf_body", "இந்த அறிக்கை AI/எண் பகுப்பாய்வு மற்றும் தானியங்கி பரிந்துரைகள் மூலம் உருவாக்கப்பட்டது. எந்தவொரு நடவடிக்கையும் எடுப்பதற்கு முன் தயவுசெய்து நடைமுறையில் சரிபார்க்கவும். இந்த அறிக்கையின் அடிப்படையில் எடுக்கப்படும் முடிவுகளுக்கு விவசாயிகளே/பயனாளர்களே பொறுப்பு.");
         DICTIONARY.put("ta", ta);
 
         Map<String, String> gu = new HashMap<>();
@@ -1132,6 +1147,9 @@ public class LanguageManager {
         gu.put("unit", "એકમ");
         gu.put("area", "વિસ્તાર");
         gu.put("calculate_requirements", "જરૂરિયાત ગણો");
+        gu.put("disclaimer_title", "અસ્વીકરણ");
+        gu.put("disclaimer_body", "અસ્વીકરણ: આ પરિણામો સામાન્ય ડેટા અને સ્વચાલિત સૂચનો પર આધારિત છે. ખેતરની વાસ્તવિક સ્થિતિ અલગ હોઈ શકે છે. અંતિમ નિર્ણય લેતા પહેલા સ્થાનિક કૃષિ નિષ્ણાતની સલાહ લો.");
+        gu.put("disclaimer_pdf_body", "આ અહેવાલ AI/વિશ્લેષણ અને સ્વચાલિત સૂચનો દ્વારા તૈયાર કરવામાં આવ્યો છે. કોઈપણ પગલું ભરતા પહેલા કૃપા કરીને વ્યવહારિક રીતે ચકાસણી કરો. આ અહેવાલના આધારે લીધેલા નિર્ણયો માટે ખેડૂત/વપરાશકર્તા પોતે જવાબદાર રહેશે.");
         DICTIONARY.put("gu", gu);
 
         Map<String, String> kn = new HashMap<>();
@@ -1301,6 +1319,9 @@ public class LanguageManager {
         kn.put("unit", "ಘಟಕ");
         kn.put("area", "ವಿಸ್ತೀರ್ಣ");
         kn.put("calculate_requirements", "ಅಗತ್ಯವನ್ನು ಲೆಕ್ಕಹಾಕಿ");
+        kn.put("disclaimer_title", "ಹಕ್ಕುತ್ಯಾಗ");
+        kn.put("disclaimer_body", "ಹಕ್ಕುತ್ಯಾಗ: ಈ ಫಲಿತಾಂಶಗಳು ಸಾಮಾನ್ಯ ಮಾಹಿತಿ ಮತ್ತು ಸ್ವಯಂಚಾಲಿತ ಸಲಹೆಗಳನ್ನು ಆಧರಿಸಿವೆ. ನೈಜ ಜಮೀನಿನ ಪರಿಸ್ಥಿತಿಗಳು ಬದಲಾಗಬಹುದು. ಅಂತಿಮ ನಿರ್ಧಾರ ತೆಗೆದುಕೊಳ್ಳುವ ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಿ.");
+        kn.put("disclaimer_pdf_body", "ಈ ವರದಿಯನ್ನು AI/ವಿಶ್ಲೇಷಣೆ ಮತ್ತು ಸ್ವಯಂಚಾಲಿತ ಸಲಹೆಗಳ ಆಧಾರದ ಮೇಲೆ ರಚಿಸಲಾಗಿದೆ. ಯಾವುದೇ ಕ್ರಮ ತೆಗೆದುಕೊಳ್ಳುವ ಮೊದಲು ದಯವಿಟ್ಟು ಪರಿಶೀಲಿಸಿ. ಈ ವರದಿಯ ಆಧಾರದ ಮೇಲೆ ತೆಗೆದುಕೊಳ್ಳುವ ನಿರ್ಧಾರಗಳಿಗೆ ರೈತರೇ/ಬಳಕೆದಾರರೇ ಜವಾಬ್ದಾರರು.");
         DICTIONARY.put("kn", kn);
 
         Map<String, String> ml = new HashMap<>();
@@ -1470,6 +1491,9 @@ public class LanguageManager {
         ml.put("unit", "യൂണിറ്റ്");
         ml.put("area", "വിസ്തീർണ്ണം");
         ml.put("calculate_requirements", "ആവശ്യം കണക്കാക്കുക");
+        ml.put("disclaimer_title", "നിരാകരണം");
+        ml.put("disclaimer_body", "നിരാകരണം: ഈ ഫലങ്ങൾ പൊതുവായ വിവരങ്ങളെയും ഓട്ടോമേറ്റഡ് നിർദ്ദേശങ്ങളെയും അടിസ്ഥാനമാക്കിയുള്ളതാണ്. യഥാർത്ഥ കൃഷിയിട സാഹചര്യങ്ങൾ വ്യത്യാസപ്പെടാം. അന്തിമ തീരുമാനങ്ങൾ എടുക്കുന്നതിന് മുമ്പ് പ്രാദേശിക കൃഷി വിദഗ്ദ്ധനെ സമീപിക്കുക.");
+        ml.put("disclaimer_pdf_body", "ഈ റിപ്പോർട്ട് AI/വിശകലനവും ഓട്ടോമേറ്റഡ് നിർദ്ദേശങ്ങളും അടിസ്ഥാനമാക്കി തയ്യാറാക്കിയതാണ്. എന്തെങ്കിലും നടപടികൾ സ്വീകരിക്കുന്നതിന് മുമ്പ് ദയവായി പ്രായോഗികമായി പരിശോധിക്കുക. ഈ റിപ്പോർട്ടിന്റെ അടിസ്ഥാനത്തിൽ എടുക്കുന്ന തീരുമാനങ്ങൾക്ക് കർഷകർ/ഉപയോക്താക്കൾ തന്നെയാണ് ഉത്തരവാദികൾ.");
         DICTIONARY.put("ml", ml);
 
         Map<String, String> pa = new HashMap<>();
@@ -1639,6 +1663,9 @@ public class LanguageManager {
         pa.put("unit", "ਇਕਾਈ");
         pa.put("area", "ਰਕਬਾ");
         pa.put("calculate_requirements", "ਲੋੜ ਦੀ ਗਣਨਾ ਕਰੋ");
+        pa.put("disclaimer_title", "ਬੇਦਾਅਵਾ");
+        pa.put("disclaimer_body", "ਬੇਦਾਅਵਾ: ਇਹ ਨਤੀਜੇ ਆਮ ਡੇਟਾ ਅਤੇ ਸਵੈ-ਚਾਲਿਤ ਸੁਝਾਵਾਂ 'ਤੇ ਅਧਾਰਤ ਹਨ। ਅਸਲ ਖੇਤ ਦੀਆਂ ਸਥਿਤੀਆਂ ਵੱਖਰੀਆਂ ਹੋ ਸਕਦੀਆਂ ਹਨ। ਅੰਤਿਮ ਫੈਸਲੇ ਲੈਣ ਤੋਂ ਪਹਿਲਾਂ ਸਥਾਨਕ ਖੇਤੀ ਮਾਹਿਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।");
+        pa.put("disclaimer_pdf_body", "ਇਹ ਰਿਪੋਰਟ AI/ਸੰਖਿਆਤਮਕ ਵਿਸ਼ਲੇਸ਼ਣ ਅਤੇ ਸਵੈ-ਚਾਲਿਤ ਸੁਝਾਵਾਂ ਦੁਆਰਾ ਤਿਆਰ ਕੀਤੀ ਗਈ ਹੈ। ਕੋਈ ਵੀ ਕਦਮ ਚੁੱਕਣ ਤੋਂ ਪਹਿਲਾਂ ਕਿਰਪਾ ਕਰਕੇ ਅਮਲੀ ਤੌਰ 'ਤੇ ਜਾਂਚ ਕਰੋ। ਇਸ ਰਿਪੋਰਟ ਦੇ ਆਧਾਰ 'ਤੇ ਲਏ ਗਏ ਕਿਸੇ ਵੀ ਫੈਸਲੇ ਲਈ ਕਿਸਾਨ/ਵਰਤੋਂਕਾਰ ਖੁਦ ਜ਼ਿੰਮੇਵਾਰ ਹਨ।");
         DICTIONARY.put("pa", pa);
 
     }
@@ -1709,6 +1736,35 @@ public class LanguageManager {
             return defaultEnglish;
         }
         return defaultEnglish + "\n" + regional;
+    }
+
+    public static String getAppDisclaimer(Context context) {
+        String en = "* Disclaimer: These results are automated suggestions based on general data. Actual field conditions vary. Consult a local agriculture specialist before making final decisions.";
+        if (isEnglishOnly(context)) {
+            return en;
+        }
+        String regional = getRegional(context, "disclaimer_body", "");
+        if (regional == null || regional.trim().isEmpty()) {
+            return en;
+        }
+        return en + "\n\n" + regional;
+    }
+
+    public static String getPdfDisclaimerHtml(Context context) {
+        String title = "* " + getDual(context, "Disclaimer", "disclaimer_title") + " *";
+        String enText = "This report is generated using AI/numerical analysis and automated suggestions. Please verify practically before taking any actions. Farmers/users are responsible for any decisions made based on this report.";
+        StringBuilder sb = new StringBuilder();
+        sb.append("<div class=\"pdf-disclaimer\" style=\"margin-top: 25px; padding: 12px; background: #FFFDF5; border: 1px solid #FFE082; border-radius: 6px; font-size: 11px; color: #5D4037; text-align: center; line-height: 1.5; page-break-inside: avoid; break-inside: avoid;\">\n");
+        sb.append("    <div style=\"font-weight: bold; color: #E65100; font-size: 12px; margin-bottom: 4px;\">").append(title).append("</div>\n");
+        sb.append("    <div>").append(enText).append("</div>\n");
+        if (!isEnglishOnly(context)) {
+            String regional = getRegional(context, "disclaimer_pdf_body", "");
+            if (regional != null && !regional.trim().isEmpty()) {
+                sb.append("    <div style=\"margin-top: 5px; color: #795548;\">").append(regional).append("</div>\n");
+            }
+        }
+        sb.append("</div>\n");
+        return sb.toString();
     }
 
     public static String getLocalizedCropName(Context context, String cropEn, String cropHi) {

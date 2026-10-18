@@ -109,14 +109,19 @@ public class YieldEstimatorActivity extends BaseActivity {
 
         if (selectedCropString != null) {
             cropDropdown.setText(selectedCropString, false);
+        } else if (!cropList.isEmpty()) {
+            cropDropdown.setText(cropList.get(0), false);
         }
 
         // Regional logic trigger
+        if (defaultStates.length > 0) {
+            stateDropdown.setText(defaultStates[0], false);
+            loadUnitsForState(defaultStates[0]);
+        }
         stateDropdown.setOnItemClickListener((parent, view, position, id) -> {
             String selectedState = defaultStates[position];
             loadUnitsForState(selectedState);
         });
-        loadUnitsForState("NORTH");
 
         if (btnEstimate != null) btnEstimate.setOnClickListener(v -> calculateYield());
         if (btnShare != null) btnShare.setOnClickListener(v -> shareResult());
@@ -140,14 +145,20 @@ public class YieldEstimatorActivity extends BaseActivity {
         if (tvTitleSelectCrop != null) {
             tvTitleSelectCrop.setText("1. " + LanguageManager.getDual(this, "Select Crop", "select_crop"));
         }
+        if (cropDropdown != null) {
+            cropDropdown.setHint(null);
+        }
         if (layoutDropdownCrop != null) {
-            layoutDropdownCrop.setHint(LanguageManager.getDual(this, "Crop Type", "crop"));
+            layoutDropdownCrop.setHint(null);
         }
         if (tvTitleSelectState != null) {
             tvTitleSelectState.setText("2. " + LanguageManager.getDual(this, "Select State", "select_state"));
         }
+        if (stateDropdown != null) {
+            stateDropdown.setHint(null);
+        }
         if (layoutDropdownState != null) {
-            layoutDropdownState.setHint(LanguageManager.getDual(this, "Select State", "select_state"));
+            layoutDropdownState.setHint(null);
         }
         if (tvTitleLandArea != null) {
             tvTitleLandArea.setText("3. " + LanguageManager.getDual(this, "Land Area", "land_area"));
@@ -171,12 +182,7 @@ public class YieldEstimatorActivity extends BaseActivity {
             btnShare.setText(LanguageManager.getButtonLines(this, "Share Advice", "share_report"));
         }
         if (tvDisclaimer != null) {
-            if (LanguageManager.isEnglishOnly(this)) {
-                tvDisclaimer.setText("* Disclaimer: These results are automated suggestions based on general data. Actual field conditions vary. Consult a local agriculture specialist before making final decisions.");
-            } else {
-                tvDisclaimer.setText("* Disclaimer: These results are automated suggestions based on general data. Actual field conditions vary. Consult a local agriculture specialist before making final decisions.\n\n"
-                        + LanguageManager.getRegional(this, "disclaimer_body", "अस्वीकरण: ये परिणाम सामान्य डेटा पर आधारित स्वचालित सुझाव हैं। वास्तविक स्थिति भिन्न हो सकती है।"));
-            }
+            tvDisclaimer.setText(LanguageManager.getAppDisclaimer(this));
         }
     }
 
@@ -352,7 +358,10 @@ public class YieldEstimatorActivity extends BaseActivity {
                 "<head>\n" +
                 "<meta charset=\"UTF-8\">\n" +
                 "<style>\n" +
-                "    body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; margin: 20px; }\n" +
+                "    @page { size: A4; margin: 10mm 8mm; }\n" +
+                "    body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; margin: 0; padding: 0; }\n" +
+                "    h1, h2, h3, h4, .section-title { page-break-after: avoid; break-after: avoid; }\n" +
+                "    .meta-box, .summary-box, .insight-container, .pdf-disclaimer { page-break-inside: avoid; break-inside: avoid; }\n" +
                 "    .header { border-bottom: 3px solid #2E7D32; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }\n" +
                 "    .app-title { color: #2E7D32; font-size: 28px; font-weight: bold; margin: 0; }\n" +
                 "    .report-title { font-size: 14px; text-transform: uppercase; color: #666; letter-spacing: 1px; }\n" +
@@ -368,7 +377,7 @@ public class YieldEstimatorActivity extends BaseActivity {
                 "    .lang-block { font-size: 12px; line-height: 1.6; }\n" +
                 "    .lang-block h3 { color: #2E7D32; font-size: 14px; margin-top: 0; margin-bottom: 8px; border-bottom: 1px solid #DDD; padding-bottom: 4px; }\n" +
                 "    \n" +
-                "    .footer { text-align: center; font-size: 11px; color: #999; margin-top: 40px; border-top: 1px solid #EEE; padding-top: 10px; }\n" +
+                "    .footer { text-align: center; font-size: 11px; color: #999; margin-top: 30px; border-top: 1px solid #EEE; padding-top: 10px; }\n" +
                 "</style>\n" +
                 "</head>\n" +
                 "<body>\n" +
@@ -398,6 +407,8 @@ public class YieldEstimatorActivity extends BaseActivity {
                 "        <p style=\"white-space: pre-line;\">" + tvYieldSummary.getText().toString() + "</p>\n" +
                 "    </div>\n" +
                 "</div>\n" +
+                "\n" +
+                LanguageManager.getPdfDisclaimerHtml(this) +
                 "\n" +
                 "<div class=\"footer\">\n" +
                 "    " + footerText + "\n" +

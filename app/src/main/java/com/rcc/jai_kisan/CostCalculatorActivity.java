@@ -144,12 +144,7 @@ public class CostCalculatorActivity extends BaseActivity {
             btnShare.setText(LanguageManager.getButtonLines(this, "Share Report", "share_report"));
         }
         if (tvDisclaimer != null) {
-            if (LanguageManager.isEnglishOnly(this)) {
-                tvDisclaimer.setText("* Disclaimer: These results are automated suggestions based on general data. Actual field conditions vary. Consult a local agriculture specialist before making final decisions.");
-            } else {
-                tvDisclaimer.setText("* Disclaimer: These results are automated suggestions based on general data. Actual field conditions vary. Consult a local agriculture specialist before making final decisions.\n\n"
-                        + LanguageManager.getRegional(this, "disclaimer_body", "अस्वीकरण: ये परिणाम सामान्य डेटा पर आधारित स्वचालित सुझाव हैं। वास्तविक स्थिति भिन्न हो सकती है।"));
-            }
+            tvDisclaimer.setText(LanguageManager.getAppDisclaimer(this));
         }
     }
 
@@ -306,7 +301,10 @@ public class CostCalculatorActivity extends BaseActivity {
                 "<head>\n" +
                 "<meta charset=\"UTF-8\">\n" +
                 "<style>\n" +
-                "    body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; margin: 20px; }\n" +
+                "    @page { size: A4; margin: 10mm 8mm; }\n" +
+                "    body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; margin: 0; padding: 0; }\n" +
+                "    h1, h2, h3, h4, .section-title { page-break-after: avoid; break-after: avoid; }\n" +
+                "    .meta-box, .results-table, .summary-box, .insight-container, .pdf-disclaimer { page-break-inside: avoid; break-inside: avoid; }\n" +
                 "    .header { border-bottom: 3px solid #E64A19; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }\n" +
                 "    .app-title { color: #E64A19; font-size: 28px; font-weight: bold; margin: 0; }\n" +
                 "    .report-title { font-size: 14px; text-transform: uppercase; color: #666; letter-spacing: 1px; }\n" +
@@ -326,7 +324,7 @@ public class CostCalculatorActivity extends BaseActivity {
                 "    .lang-block { font-size: 12px; line-height: 1.6; }\n" +
                 "    .lang-block h3 { color: #E64A19; font-size: 14px; margin-top: 0; margin-bottom: 8px; border-bottom: 1px solid #DDD; padding-bottom: 4px; }\n" +
                 "    \n" +
-                "    .footer { text-align: center; font-size: 11px; color: #999; margin-top: 40px; border-top: 1px solid #EEE; padding-top: 10px; }\n" +
+                "    .footer { text-align: center; font-size: 11px; color: #999; margin-top: 30px; border-top: 1px solid #EEE; padding-top: 10px; }\n" +
                 "</style>\n" +
                 "</head>\n" +
                 "<body>\n" +
@@ -380,6 +378,8 @@ public class CostCalculatorActivity extends BaseActivity {
                 "        <p style=\"white-space: pre-line;\">" + tvAdviceDesc.getText().toString() + "</p>\n" +
                 "    </div>\n" +
                 "</div>\n" +
+                "\n" +
+                LanguageManager.getPdfDisclaimerHtml(this) +
                 "\n" +
                 "<div class=\"footer\">\n" +
                 "    " + footerText + "\n" +

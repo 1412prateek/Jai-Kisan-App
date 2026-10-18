@@ -71,6 +71,8 @@ public class IrrigationPlannerActivity extends BaseActivity {
         String[] methods = LanguageManager.getLocalizedMethods(this);
         soilDropdown.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, soils));
         methodDropdown.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, methods));
+        if (soils.length > 0) soilDropdown.setText(soils[0], false);
+        if (methods.length > 0) methodDropdown.setText(methods[0], false);
 
         // Dynamic crop dropdown selection and insertion
         String[] defaultCrops = LanguageManager.getLocalizedCrops(this);
@@ -99,6 +101,8 @@ public class IrrigationPlannerActivity extends BaseActivity {
 
         if (selectedCropString != null) {
             cropDropdown.setText(selectedCropString, false);
+        } else if (!cropList.isEmpty()) {
+            cropDropdown.setText(cropList.get(0), false);
         }
 
         if (btnCalculateIrrigation != null) btnCalculateIrrigation.setOnClickListener(v -> calculateIrrigation());
@@ -125,20 +129,29 @@ public class IrrigationPlannerActivity extends BaseActivity {
         if (tvTitleSelectCrop != null) {
             tvTitleSelectCrop.setText("1. " + LanguageManager.getDual(this, "Select Crop", "select_crop"));
         }
+        if (cropDropdown != null) {
+            cropDropdown.setHint(null);
+        }
         if (layoutDropdownCrop != null) {
-            layoutDropdownCrop.setHint(LanguageManager.getDual(this, "Crop Type", "crop"));
+            layoutDropdownCrop.setHint(null);
         }
         if (tvTitleSelectSoil != null) {
             tvTitleSelectSoil.setText("2. " + LanguageManager.getDual(this, "Select Soil", "soil_type"));
         }
+        if (soilDropdown != null) {
+            soilDropdown.setHint(null);
+        }
         if (layoutDropdownSoil != null) {
-            layoutDropdownSoil.setHint(LanguageManager.getDual(this, "Soil Type", "soil_type"));
+            layoutDropdownSoil.setHint(null);
         }
         if (tvTitleSelectMethod != null) {
             tvTitleSelectMethod.setText("3. " + LanguageManager.getDual(this, "Method", "irrigation_method"));
         }
+        if (methodDropdown != null) {
+            methodDropdown.setHint(null);
+        }
         if (layoutDropdownMethod != null) {
-            layoutDropdownMethod.setHint(LanguageManager.getDual(this, "Method", "irrigation_method"));
+            layoutDropdownMethod.setHint(null);
         }
         if (btnCalculateIrrigation != null) {
             btnCalculateIrrigation.setText(LanguageManager.getButtonLines(this, "Plan Irrigation", "generate_plan"));
@@ -150,12 +163,7 @@ public class IrrigationPlannerActivity extends BaseActivity {
             btnShare.setText(LanguageManager.getButtonLines(this, "Share Schedule", "share_report"));
         }
         if (tvDisclaimer != null) {
-            if (LanguageManager.isEnglishOnly(this)) {
-                tvDisclaimer.setText("* Disclaimer: These results are automated suggestions based on general data. Actual field conditions vary. Consult a local agriculture specialist before making final decisions.");
-            } else {
-                tvDisclaimer.setText("* Disclaimer: These results are automated suggestions based on general data. Actual field conditions vary. Consult a local agriculture specialist before making final decisions.\n\n"
-                        + LanguageManager.getRegional(this, "disclaimer_body", "अस्वीकरण: ये परिणाम सामान्य डेटा पर आधारित स्वचालित सुझाव हैं। वास्तविक स्थिति भिन्न हो सकती है।"));
-            }
+            tvDisclaimer.setText(LanguageManager.getAppDisclaimer(this));
         }
     }
 
@@ -291,7 +299,10 @@ public class IrrigationPlannerActivity extends BaseActivity {
                 "<head>\n" +
                 "<meta charset=\"UTF-8\">\n" +
                 "<style>\n" +
-                "    body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; margin: 20px; }\n" +
+                "    @page { size: A4; margin: 10mm 8mm; }\n" +
+                "    body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; margin: 0; padding: 0; }\n" +
+                "    h1, h2, h3, h4, .section-title { page-break-after: avoid; break-after: avoid; }\n" +
+                "    .meta-box, .summary-box, .details-table, .pdf-disclaimer { page-break-inside: avoid; break-inside: avoid; }\n" +
                 "    .header { border-bottom: 3px solid #0288D1; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }\n" +
                 "    .app-title { color: #0288D1; font-size: 28px; font-weight: bold; margin: 0; }\n" +
                 "    .report-title { font-size: 14px; text-transform: uppercase; color: #666; letter-spacing: 1px; }\n" +
@@ -306,7 +317,7 @@ public class IrrigationPlannerActivity extends BaseActivity {
                 "    .details-table th { background: #0288D1; color: white; text-align: left; padding: 10px; font-size: 14px; }\n" +
                 "    .details-table td { border: 1px solid #E0E0E0; padding: 12px; font-size: 13px; vertical-align: top; line-height: 1.5; }\n" +
                 "    \n" +
-                "    .footer { text-align: center; font-size: 11px; color: #999; margin-top: 40px; border-top: 1px solid #EEE; padding-top: 10px; }\n" +
+                "    .footer { text-align: center; font-size: 11px; color: #999; margin-top: 30px; border-top: 1px solid #EEE; padding-top: 10px; }\n" +
                 "</style>\n" +
                 "</head>\n" +
                 "<body>\n" +
@@ -343,6 +354,8 @@ public class IrrigationPlannerActivity extends BaseActivity {
                 "        </tr>\n" +
                 "    </tbody>\n" +
                 "</table>\n" +
+                "\n" +
+                LanguageManager.getPdfDisclaimerHtml(this) +
                 "\n" +
                 "<div class=\"footer\">\n" +
                 "    " + footerText + "\n" +

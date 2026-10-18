@@ -987,7 +987,10 @@ public class MandiPricesActivity extends BaseActivity {
                 "<head>\n" +
                 "<meta charset='utf-8'>\n" +
                 "<style>\n" +
-                "  body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 24px; color: #333333; background: #ffffff; }\n" +
+                "  @page { size: A4; margin: 10mm 8mm; }\n" +
+                "  body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 0; color: #333333; background: #ffffff; }\n" +
+                "  h1, h2, h3, h4, .section-title { page-break-after: avoid; break-after: avoid; }\n" +
+                "  .meta-box, table, .trend-section, .advisory-section, .pdf-disclaimer { page-break-inside: avoid; break-inside: avoid; }\n" +
                 "  .header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 3px solid #1B5E20; padding-bottom: 10px; margin-bottom: 20px; }\n" +
                 "  .header h1 { margin: 0; font-size: 26px; color: #1B5E20; font-weight: bold; }\n" +
                 "  .header .subtitle { margin-top: 5px; font-size: 13px; color: #666666; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }\n" +
@@ -1014,7 +1017,7 @@ public class MandiPricesActivity extends BaseActivity {
                 "  .advisory-col ul { margin: 0; padding-left: 18px; }\n" +
                 "  .advisory-col li { font-size: 12.5px; line-height: 1.6; margin-bottom: 8px; color: #333333; }\n" +
                 "  \n" +
-                "  .footer { text-align: center; font-size: 11px; color: #888888; margin-top: 35px; border-top: 1px solid #EEEEEE; padding-top: 10px; }\n" +
+                "  .footer { text-align: center; font-size: 11px; color: #888888; margin-top: 30px; border-top: 1px solid #EEEEEE; padding-top: 10px; }\n" +
                 "</style>\n" +
                 "</head>\n" +
                 "<body>\n" +
@@ -1088,6 +1091,8 @@ public class MandiPricesActivity extends BaseActivity {
                 "    </ul>\n" +
                 "  </div>\n" +
                 "</div>\n" +
+                "\n" +
+                LanguageManager.getPdfDisclaimerHtml(this) +
                 "\n" +
                 "<div class='footer'>\n" +
                 "  " + LanguageManager.getRegional(this, "generated_via", "Generated via Jai Kisan App &bull; Supporting Indian Agriculture") + "\n" +

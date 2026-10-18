@@ -463,7 +463,10 @@ public class DetectDiseaseActivity extends BaseActivity {
                 "<head>\n" +
                 "<meta charset=\"UTF-8\">\n" +
                 "<style>\n" +
-                "    body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; margin: 20px; }\n" +
+                "    @page { size: A4; margin: 10mm 8mm; }\n" +
+                "    body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; margin: 0; padding: 0; }\n" +
+                "    h1, h2, h3, h4, .section-title { page-break-after: avoid; break-after: avoid; }\n" +
+                "    .meta-box, .gauge-container, .badge, .list-box, .list-container, .cures-box, .summary-container, .pdf-disclaimer { page-break-inside: avoid; break-inside: avoid; }\n" +
                 "    .header { border-bottom: 3px solid #2E7D32; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }\n" +
                 "    .app-title { color: #2E7D32; font-size: 28px; font-weight: bold; margin: 0; }\n" +
                 "    .report-title { font-size: 14px; text-transform: uppercase; color: #666; letter-spacing: 1px; }\n" +
@@ -550,11 +553,15 @@ public class DetectDiseaseActivity extends BaseActivity {
                 "    <ul>" + curesList.toString() + "</ul>\n" +
                 "</div>\n" : "") +
                 "\n" +
-                "<div class=\"section-title\">" + summaryLabel + "</div>\n" +
-                "<div class=\"content-text\">\n" +
-                "    " + res.summaryEn + "\n" +
-                (LanguageManager.isEnglishOnly(this) ? "" : "    <br>" + res.summaryHi + "\n") +
+                "<div class=\"summary-container\">\n" +
+                "    <div class=\"section-title\">" + summaryLabel + "</div>\n" +
+                "    <div class=\"content-text\">\n" +
+                "        " + res.summaryEn + "\n" +
+                (LanguageManager.isEnglishOnly(this) ? "" : "        <br>" + res.summaryHi + "\n") +
+                "    </div>\n" +
                 "</div>\n" +
+                "\n" +
+                LanguageManager.getPdfDisclaimerHtml(this) +
                 "\n" +
                 "<div class=\"footer\">\n" +
                 "    " + footerText + "\n" +

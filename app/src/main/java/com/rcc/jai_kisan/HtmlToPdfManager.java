@@ -61,7 +61,7 @@ public class HtmlToPdfManager {
                             PrintAttributes attributes = new PrintAttributes.Builder()
                                     .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
                                     .setResolution(new PrintAttributes.Resolution("pdf", "pdf", 300, 300))
-                                    .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
+                                    .setMinMargins(new PrintAttributes.Margins(400, 500, 400, 500))
                                     .build();
 
                             new android.print.PdfPrint(attributes).print(adapter, reportsDir, safeFileName, new android.print.PdfPrint.Callback() {

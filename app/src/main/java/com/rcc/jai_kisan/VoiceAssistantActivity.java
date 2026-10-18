@@ -508,7 +508,10 @@ public class VoiceAssistantActivity extends BaseActivity {
                 "<head>\n" +
                 "<meta charset=\"UTF-8\">\n" +
                 "<style>\n" +
-                "    body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; margin: 20px; }\n" +
+                "    @page { size: A4; margin: 10mm 8mm; }\n" +
+                "    body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; margin: 0; padding: 0; }\n" +
+                "    h1, h2, h3, h4, .section-title { page-break-after: avoid; break-after: avoid; }\n" +
+                "    .meta-box, .section-title, .content-text, .pdf-disclaimer { page-break-inside: avoid; break-inside: avoid; }\n" +
                 "    .header { border-bottom: 3px solid #009688; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }\n" +
                 "    .app-title { color: #009688; font-size: 28px; font-weight: bold; margin: 0; }\n" +
                 "    .report-title { font-size: 14px; text-transform: uppercase; color: #666; letter-spacing: 1px; }\n" +
@@ -521,7 +524,7 @@ public class VoiceAssistantActivity extends BaseActivity {
                 "    .content-text ul { margin: 0; padding-left: 18px; }\n" +
                 "    .content-text li { margin-bottom: 5px; }\n" +
                 "    \n" +
-                "    .footer { text-align: center; font-size: 11px; color: #999; margin-top: 40px; border-top: 1px solid #EEE; padding-top: 10px; }\n" +
+                "    .footer { text-align: center; font-size: 11px; color: #999; margin-top: 30px; border-top: 1px solid #EEE; padding-top: 10px; }\n" +
                 "</style>\n" +
                 "</head>\n" +
                 "<body>\n" +
@@ -547,6 +550,8 @@ public class VoiceAssistantActivity extends BaseActivity {
                 "<div class=\"content-text\">\n" +
                 "    " + formattedEnglish + "\n" +
                 "</div>\n" +
+                "\n" +
+                LanguageManager.getPdfDisclaimerHtml(this) +
                 "\n" +
                 "<div class=\"footer\">\n" +
                 "    " + footerText + "\n" +
