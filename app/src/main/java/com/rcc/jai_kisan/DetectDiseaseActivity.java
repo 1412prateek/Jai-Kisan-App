@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,6 +69,7 @@ public class DetectDiseaseActivity extends BaseActivity {
 
     private ImageView imagePreview;
     private TextView placeholderText;
+    private ScrollView detectScrollView;
     private LinearLayout cardResult;
     private View loadingIndicator;
     private MaterialButton btnDetectDisease;
@@ -247,6 +249,7 @@ public class DetectDiseaseActivity extends BaseActivity {
 
         imagePreview = findViewById(R.id.imagePreview);
         placeholderText = findViewById(R.id.placeholderText);
+        detectScrollView = findViewById(R.id.detectScrollView);
         cardResult = findViewById(R.id.cardResult);
         loadingIndicator = findViewById(R.id.loadingIndicator);
         btnDetectDisease = findViewById(R.id.btnDetectDisease);
@@ -334,6 +337,14 @@ public class DetectDiseaseActivity extends BaseActivity {
                     loadingIndicator.setVisibility(View.VISIBLE);
                     btnDetectDisease.setEnabled(false);
                     cardResult.setVisibility(View.GONE);
+
+                    // Auto-scroll so that loading indicator and progress are clearly visible on any device
+                    if (detectScrollView != null && loadingIndicator != null) {
+                        detectScrollView.post(() -> {
+                            detectScrollView.smoothScrollTo(0, loadingIndicator.getTop() - 60);
+                        });
+                    }
+
                     callGeminiAPI(selectedBitmap);
                 }
             }
@@ -1125,6 +1136,13 @@ public class DetectDiseaseActivity extends BaseActivity {
         cardResult.setVisibility(View.VISIBLE);
         loadingIndicator.setVisibility(View.GONE);
         btnDetectDisease.setEnabled(true);
+
+        // Auto-scroll to results card so farmer immediately sees the diagnosis
+        if (detectScrollView != null && cardResult != null) {
+            detectScrollView.post(() -> {
+                detectScrollView.smoothScrollTo(0, cardResult.getTop() - 40);
+            });
+        }
     }
 
     private void populateList(LinearLayout container, List<String> itemsEn, List<String> itemsHi, int iconResId, int iconTint) {

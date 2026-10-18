@@ -201,21 +201,89 @@ public class VoiceAssistantActivity extends BaseActivity {
     }
 
     private void speak() {
+        if (!android.speech.SpeechRecognizer.isRecognitionAvailable(this)) {
+            showVoiceNotAvailableDialog();
+            return;
+        }
+
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
+
+        String langTag;
         if (LanguageManager.isEnglishOnly(this)) {
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-IN");
+            langTag = "en-IN";
         } else {
             LanguageManager.LangItem lItem = LanguageManager.getSelectedLanguageItem(this);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, lItem.code + "-IN");
+            langTag = lItem.code + "-IN";
         }
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, LanguageManager.getDual(this, "Ask your question", "tap_to_ask"));
+
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, langTag);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, langTag);
+        intent.putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, langTag);
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, LanguageManager.getDual(this, "Ask your farming question...", "tap_to_ask"));
 
         try {
             startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
+        } catch (android.content.ActivityNotFoundException e) {
+            showVoiceNotAvailableDialog();
         } catch (Exception e) {
-            Toast.makeText(this, "Voice input not supported on this device.", Toast.LENGTH_SHORT).show();
+            showVoiceNotAvailableDialog();
         }
+    }
+
+    private void showVoiceNotAvailableDialog() {
+        com.google.android.material.dialog.MaterialAlertDialogBuilder builder =
+                new com.google.android.material.dialog.MaterialAlertDialogBuilder(this);
+
+        String title = LanguageManager.getDual(this, "Voice Search Unavailable", "voice_assistant");
+        builder.setTitle(title);
+
+        String msg = LanguageManager.isEnglishOnly(this)
+                ? "Google Voice Search is not enabled or installed on this device. You can type your agricultural question below, or install Google Speech Services from Play Store."
+                : LanguageManager.formatLines(this,
+                "Google Voice Search is not enabled on this device. You can type your question below:",
+                LanguageManager.getRegional(this, "voice_not_supported", "इस डिवाइस पर आवाज़ खोज उपलब्ध नहीं है। आप नीचे अपना सवाल लिखकर पूछ सकते हैं:"));
+        builder.setMessage(msg);
+
+        // Add an EditText for typing the question directly
+        final android.widget.EditText input = new android.widget.EditText(this);
+        input.setHint(LanguageManager.getDual(this, "Type your question here...", "tap_to_ask"));
+        input.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        
+        android.widget.FrameLayout container = new android.widget.FrameLayout(this);
+        android.widget.FrameLayout.LayoutParams params = new android.widget.FrameLayout.LayoutParams(
+                android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.leftMargin = (int) (20 * getResources().getDisplayMetrics().density);
+        params.rightMargin = (int) (20 * getResources().getDisplayMetrics().density);
+        input.setLayoutParams(params);
+        container.addView(input);
+        builder.setView(container);
+
+        builder.setPositiveButton(LanguageManager.getDual(this, "Ask / पूछें", "crop"), (dialog, which) -> {
+            String typedQuery = input.getText().toString().trim();
+            if (!typedQuery.isEmpty()) {
+                tvStatus.setText("You asked: " + typedQuery);
+                askGemini(typedQuery);
+            }
+        });
+
+        builder.setNeutralButton("Google App", (dialog, which) -> {
+            try {
+                Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.google.android.googlequicksearchbox"));
+                marketIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(marketIntent);
+            } catch (Exception ex) {
+                try {
+                    Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.googlequicksearchbox"));
+                    startActivity(webIntent);
+                } catch (Exception ignored) {}
+            }
+        });
+
+        builder.setNegativeButton(LanguageManager.getDual(this, "Cancel", "cancel"), (dialog, which) -> dialog.dismiss());
+        builder.show();
     }
 
     private void speakText(String text, Locale locale) {
