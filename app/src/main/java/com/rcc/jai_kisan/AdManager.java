@@ -419,6 +419,19 @@ public class AdManager {
                 // Network can reach ad servers now! Reload any failed ads immediately
                 getInstance().loadInterstitialAd(activity.getApplicationContext());
                 getInstance().loadRewardedAd(activity.getApplicationContext());
+
+                // If this activity has an adBannerContainer currently showing the DNS notice strip, reload the real banner!
+                try {
+                    android.view.View container = activity.findViewById(R.id.adBannerContainer);
+                    if (container instanceof ViewGroup) {
+                        ViewGroup bannerGroup = (ViewGroup) container;
+                        android.view.View noticeStrip = bannerGroup.findViewWithTag("adblock_dns_strip");
+                        if (noticeStrip != null) {
+                            Log.d(TAG, "Private DNS turned off, reloading adaptive banner immediately.");
+                            loadAdaptiveBanner(activity, bannerGroup);
+                        }
+                    }
+                } catch (Exception ignored) {}
             }
         });
     }
