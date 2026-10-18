@@ -1875,6 +1875,30 @@ public class LanguageManager {
                 case "pa": regional = "ਕ੍ਰਮ"; break;
                 default: regional = "क्रम"; break;
             }
+        } else if ("from".equals(key)) {
+            switch (lang.toLowerCase()) {
+                case "bn": regional = "হতে"; break;
+                case "te": regional = "నుండి"; break;
+                case "mr": regional = "पासून"; break;
+                case "ta": regional = "இருந்து"; break;
+                case "gu": regional = "થી"; break;
+                case "kn": regional = "ಇಂದ"; break;
+                case "ml": regional = "മുതൽ"; break;
+                case "pa": regional = "ਤੋਂ"; break;
+                default: regional = "से"; break;
+            }
+        } else if ("to".equals(key)) {
+            switch (lang.toLowerCase()) {
+                case "bn": regional = "পর্যন্ত"; break;
+                case "te": regional = "వరకు"; break;
+                case "mr": regional = "पर्यंत"; break;
+                case "ta": regional = "வரை"; break;
+                case "gu": regional = "સુધી"; break;
+                case "kn": regional = "ವರೆಗೆ"; break;
+                case "ml": regional = "വരെ"; break;
+                case "pa": regional = "ਤੱਕ"; break;
+                default: regional = "तक"; break;
+            }
         }
         return regional;
     }
