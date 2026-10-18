@@ -1899,6 +1899,54 @@ public class LanguageManager {
                 case "pa": regional = "ਤੱਕ"; break;
                 default: regional = "तक"; break;
             }
+        } else if ("unlock_analysis_title".equals(key)) {
+            switch (lang.toLowerCase()) {
+                case "bn": regional = "বিশ্লেষণ আনলক করুন"; break;
+                case "te": regional = "విశ్లేషణను అన్‌లాక్ చేయండి"; break;
+                case "mr": regional = "विश्लेषण अनलॉक करा"; break;
+                case "ta": regional = "பகுப்பாய்வைத் திறக்கவும்"; break;
+                case "gu": regional = "વિશ્લેષણ અનલૉક કરો"; break;
+                case "kn": regional = "ವಿಶ್ಲೇಷಣೆ ಅನ್‌ಲಾಕ್ ಮಾಡಿ"; break;
+                case "ml": regional = "വിശകലനം അൺലോക്ക് ചെയ്യുക"; break;
+                case "pa": regional = "ਵਿਸ਼ਲੇਸ਼ਣ ਅਨਲੌਕ ਕਰੋ"; break;
+                default: regional = "विश्लेषण अनलॉक करें"; break;
+            }
+        } else if ("unlock_analysis_desc".equals(key)) {
+            switch (lang.toLowerCase()) {
+                case "bn": regional = "আরও ৩টি ছবি বিশ্লেষণ আনলক করতে একটি ছোট বিজ্ঞাপন দেখুন।"; break;
+                case "te": regional = "మరిన్ని 3 ఫోటో విశ్లేషణలను అన్‌లాక్ చేయడానికి చిన్న ప్రకటనను చూడండి."; break;
+                case "mr": regional = "आणखी ३ फोटो विश्लेषण अनलॉक करण्यासाठी एक छोटी जाहिरात पहा."; break;
+                case "ta": regional = "மேலும் 3 புகைப்பட பகுப்பாய்வுகளைத் திறக்க ஒரு சிறிய விளம்பரத்தைப் பார்க்கவும்."; break;
+                case "gu": regional = "વધુ ૩ ફોટો વિશ્લેષણ અનલૉક કરવા માટે એક નાની જાહેરાત જુઓ."; break;
+                case "kn": regional = "ಇನ್ನಷ್ಟು ೩ ಫೋಟೋ ವಿಶ್ಲೇಷಣೆಗಳನ್ನು ಅನ್‌ಲಾಕ್ ಮಾಡಲು ಸಣ್ಣ ಜಾಹೀರಾತು ವೀಕ್ಷಿಸಿ."; break;
+                case "ml": regional = "കൂടുതൽ 3 ഫോട്ടോ വിശകലനം അൺലോക്ക് ചെയ്യാൻ ഒരു ചെറിയ പരസ്യം കാണുക."; break;
+                case "pa": regional = "ਹੋਰ ੩ ਫੋਟੋ ਵਿਸ਼ਲੇਸ਼ਣ ਅਨਲੌਕ ਕਰਨ ਲਈ ਇੱਕ ਛੋਟਾ ਇਸ਼ਤਿਹਾਰ ਦੇਖੋ।"; break;
+                default: regional = "अगले ३ फोटो विश्लेषण अनलॉक करने के लिए एक छोटा विज्ञापन देखें।"; break;
+            }
+        } else if ("watch_ad_btn".equals(key)) {
+            switch (lang.toLowerCase()) {
+                case "bn": regional = "বিজ্ঞাপন দেখুন (+৩)"; break;
+                case "te": regional = "ప్రకటన చూడండి (+3)"; break;
+                case "mr": regional = "जाहिरात पहा (+३)"; break;
+                case "ta": regional = "விளம்பரம் பார்க்கவும் (+3)"; break;
+                case "gu": regional = "જાહેરાત જુઓ (+૩)"; break;
+                case "kn": regional = "ಜಾಹೀರಾತು ನೋಡಿ (+೩)"; break;
+                case "ml": regional = "പരസ്യം കാണുക (+3)"; break;
+                case "pa": regional = "ਇਸ਼ਤਿਹਾਰ ਦੇਖੋ (+੩)"; break;
+                default: regional = "विज्ञापन देखें (+३)"; break;
+            }
+        } else if ("analyses_left".equals(key)) {
+            switch (lang.toLowerCase()) {
+                case "bn": regional = "অবশিষ্ট বিশ্লেষণ:"; break;
+                case "te": regional = "మిగిలిన విశ్లేషణలు:"; break;
+                case "mr": regional = "उर्वरित विश्लेषण:"; break;
+                case "ta": regional = "மீதமுள்ள பகுப்பாய்வு:"; break;
+                case "gu": regional = "બાકી વિશ્લેષણ:"; break;
+                case "kn": regional = "ಉಳಿದಿರುವ ವಿಶ್ಲೇಷಣೆಗಳು:"; break;
+                case "ml": regional = "ബാക്കിയുള്ള വിശകലനം:"; break;
+                case "pa": regional = "ਬਾਕੀ ਵਿਸ਼ਲੇਸ਼ਣ:"; break;
+                default: regional = "शेष विश्लेषण:"; break;
+            }
         }
         return regional;
     }

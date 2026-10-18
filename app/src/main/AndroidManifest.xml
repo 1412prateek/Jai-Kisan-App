@@ -28,6 +28,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Jai_Kisan">
 
+        <!-- Google AdMob App ID -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-5394244233679690~6621865195"/>
+
         <activity android:name=".HomePageActivity"
             android:exported="false" />
 

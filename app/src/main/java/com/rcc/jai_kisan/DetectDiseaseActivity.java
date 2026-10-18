@@ -93,6 +93,50 @@ public class DetectDiseaseActivity extends BaseActivity {
 
     private TextView tvResponseTime;
     private long apiStartTime;
+    private TextView tvAnalysesLeft;
+    private MaterialButton btnWatchAdUnlock;
+
+    private void updateCreditsDisplay() {
+        if (tvAnalysesLeft != null) {
+            int credits = AdManager.getPhotoCredits(this);
+            String label = LanguageManager.getDual(this, "Analyses Available: ", "analyses_left") + " " + credits;
+            tvAnalysesLeft.setText(label);
+        }
+        if (btnWatchAdUnlock != null) {
+            btnWatchAdUnlock.setText(LanguageManager.getButtonLines(this, "Watch Ad (+3)", "watch_ad_btn"));
+        }
+    }
+
+    private void promptWatchAdToUnlock() {
+        String title = LanguageManager.getDual(this, "Unlock Analyses", "unlock_analysis_title");
+        String message = LanguageManager.getDual(this, "Watch a short ad to unlock 3 more Photo Expert analyses & support Jai Kisan.", "unlock_analysis_desc");
+        String positiveBtn = LanguageManager.getDual(this, "Watch Ad (+3)", "watch_ad_btn");
+        String cancelBtn = LanguageManager.getDual(this, "Cancel", "cancel");
+
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(positiveBtn, (dialog, which) -> {
+                    AdManager.getInstance().showRewardedAd(this, new AdManager.RewardedAdCallback() {
+                        @Override
+                        public void onUserEarnedReward(int addedCredits) {
+                            runOnUiThread(() -> {
+                                updateCreditsDisplay();
+                                Toast.makeText(DetectDiseaseActivity.this, "Unlocked 3 Photo Expert analyses!", Toast.LENGTH_SHORT).show();
+                            });
+                        }
+
+                        @Override
+                        public void onAdFailed() {
+                            runOnUiThread(() -> {
+                                Toast.makeText(DetectDiseaseActivity.this, "Ad could not be loaded. Please try again in a moment.", Toast.LENGTH_SHORT).show();
+                            });
+                        }
+                    });
+                })
+                .setNegativeButton(cancelBtn, null)
+                .show();
+    }
 
     // Structured DiseaseResult class mirroring the Kotlin definition
     public static class DiseaseResult {
@@ -202,6 +246,13 @@ public class DetectDiseaseActivity extends BaseActivity {
         btnShareReport = findViewById(R.id.btnShareReport);
         layoutFindCentersShareRow = findViewById(R.id.layoutFindCentersShareRow);
 
+        tvAnalysesLeft = findViewById(R.id.tvAnalysesLeft);
+        btnWatchAdUnlock = findViewById(R.id.btnWatchAdUnlock);
+
+        if (btnWatchAdUnlock != null) {
+            btnWatchAdUnlock.setOnClickListener(v -> promptWatchAdToUnlock());
+        }
+
         resultPdfContainer = cardResult;
 
         MaterialButton btnCaptureImage = findViewById(R.id.btnCaptureImage);
@@ -240,16 +291,24 @@ public class DetectDiseaseActivity extends BaseActivity {
             if (selectedBitmap == null) {
                 Toast.makeText(this, LanguageManager.getDual(this, "Please select or capture an image first", "no_image_selected"), Toast.LENGTH_SHORT).show();
             } else {
-                loadingIndicator.setVisibility(View.VISIBLE);
-                btnDetectDisease.setEnabled(false);
-                cardResult.setVisibility(View.GONE);
-                callGeminiAPI(selectedBitmap);
+                int credits = AdManager.getPhotoCredits(this);
+                if (credits <= 0) {
+                    promptWatchAdToUnlock();
+                } else {
+                    AdManager.usePhotoCredit(this);
+                    updateCreditsDisplay();
+                    loadingIndicator.setVisibility(View.VISIBLE);
+                    btnDetectDisease.setEnabled(false);
+                    cardResult.setVisibility(View.GONE);
+                    callGeminiAPI(selectedBitmap);
+                }
             }
         });
 
         btnShareReport.setOnClickListener(v -> shareReport());
 
         localizeUI();
+        updateCreditsDisplay();
     }
 
     @Override
@@ -331,6 +390,7 @@ public class DetectDiseaseActivity extends BaseActivity {
         if (btnShareReport != null) {
             btnShareReport.setText(LanguageManager.getButtonLines(this, "Share Report", "share_report"));
         }
+        updateCreditsDisplay();
         if (lastDiseaseResult != null) {
             displayResult(currentResultText);
         }

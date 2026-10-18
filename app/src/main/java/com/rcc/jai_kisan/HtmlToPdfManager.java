@@ -1,5 +1,6 @@
 package com.rcc.jai_kisan;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -86,7 +87,19 @@ public class HtmlToPdfManager {
                                                     LanguageManager.getDual(context, "Share PDF Report", "share_pdf")
                                             );
                                             chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                            context.startActivity(chooser);
+                                            
+                                            // Handle global interstitial ad counter (every 3 PDFs)
+                                            if (context instanceof Activity) {
+                                                AdManager.getInstance().onPdfGenerated((Activity) context, () -> {
+                                                    try {
+                                                        context.startActivity(chooser);
+                                                    } catch (Exception ex) {
+                                                        Toast.makeText(context, "Failed to share PDF: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            } else {
+                                                context.startActivity(chooser);
+                                            }
                                         } catch (Exception e) {
                                             Toast.makeText(context, "Failed to share PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                         }

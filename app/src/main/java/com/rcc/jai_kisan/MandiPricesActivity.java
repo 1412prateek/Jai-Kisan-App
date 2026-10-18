@@ -228,6 +228,8 @@ public class MandiPricesActivity extends BaseActivity {
             });
         }
 
+        AdManager.getInstance().loadAdaptiveBanner(this, findViewById(R.id.adBannerContainer));
+
         localizeUI();
     }
 

@@ -37,6 +37,9 @@ public class HomePageActivity extends BaseActivity {
         inAppUpdateHelper = new InAppUpdateHelper(this);
         inAppUpdateHelper.checkForAppUpdate();
 
+        // Initialize Google Mobile Ads (AdMob)
+        AdManager.initialize(this);
+
         homeTitle = findViewById(R.id.homeTitle);
         btnHomeSettings = findViewById(R.id.btnHomeSettings);
         if (btnHomeSettings != null) {

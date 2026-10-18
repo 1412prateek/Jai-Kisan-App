@@ -39,6 +39,8 @@ public class FarmingToolsActivity extends BaseActivity {
         cardIrrigation.setOnClickListener(v -> startActivity(new Intent(this, IrrigationPlannerActivity.class)));
         cardCost.setOnClickListener(v -> startActivity(new Intent(this, CostCalculatorActivity.class)));
 
+        AdManager.getInstance().loadAdaptiveBanner(this, findViewById(R.id.adBannerContainer));
+
         updateLocalizedTexts();
     }
 

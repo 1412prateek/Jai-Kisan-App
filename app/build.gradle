@@ -85,4 +85,7 @@ dependencies {
     // Google Play In-App Updates
     implementation 'com.google.android.play:app-update:2.1.0'
 
+    // Google Mobile Ads (AdMob)
+    implementation 'com.google.android.gms:play-services-ads:23.6.0'
+
 }
