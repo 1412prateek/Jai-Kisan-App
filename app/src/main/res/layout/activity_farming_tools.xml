@@ -26,7 +26,7 @@
             app:cardMaxElevation="6dp"
             app:cardUseCompatPadding="false"
             app:strokeWidth="0dp"
-            app:cardBackgroundColor="#E07854">
+            app:cardBackgroundColor="#F9A825">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
