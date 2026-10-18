@@ -251,38 +251,54 @@
                             app:cardCornerRadius="16dp"
                             app:cardElevation="0dp"
                             app:strokeWidth="1dp"
-                            app:strokeColor="#DCEDC8"
-                            app:cardBackgroundColor="#F1F8E9">
+                            app:strokeColor="#D7ECD9"
+                            app:cardPreventCornerOverlap="false"
+                            app:cardBackgroundColor="#F2F9F2">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                android:padding="14dp">
+                                android:padding="16dp">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="horizontal"
-                                    android:gravity="center_vertical"
-                                    android:layout_marginBottom="8dp">
+                                    android:gravity="center_vertical">
 
-                                    <TextView
-                                        android:id="@+id/tvSurvivalChanceLabel"
+                                    <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
-                                        android:text="Survival Chance / बचने की संभावना"
-                                        android:textSize="13sp"
-                                        android:textColor="#33691E"
-                                        android:textStyle="bold" />
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/tvSurvivalChanceLabelEn"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Survival Chance"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold"
+                                            android:textColor="#1A1A1A" />
+
+                                        <TextView
+                                            android:id="@+id/tvSurvivalChanceLabelHi"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="जीवित रहने की संभावना"
+                                            android:textSize="13sp"
+                                            android:textStyle="bold"
+                                            android:textColor="#1A1A1A"
+                                            android:layout_marginTop="2dp" />
+                                    </LinearLayout>
 
                                     <TextView
                                         android:id="@+id/tvSurvivalChancePercent"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="75%"
-                                        android:textSize="18sp"
+                                        android:text="70%"
+                                        android:textSize="22sp"
                                         android:textStyle="bold"
                                         android:textColor="#2E7D32" />
                                 </LinearLayout>
@@ -290,10 +306,11 @@
                                 <com.google.android.material.progressindicator.LinearProgressIndicator
                                     android:id="@+id/survivalProgressIndicator"
                                     android:layout_width="match_parent"
-                                    android:layout_height="8dp"
-                                    app:trackCornerRadius="4dp"
-                                    app:trackThickness="8dp"
-                                    app:trackColor="#E0E0E0"
+                                    android:layout_height="6dp"
+                                    android:layout_marginTop="12dp"
+                                    app:trackCornerRadius="3dp"
+                                    app:trackThickness="6dp"
+                                    app:trackColor="#D7ECD9"
                                     app:indicatorColor="#2E7D32" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
@@ -467,7 +484,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="Fertilizer Calc\nउर्वरक गणक"
+                                    android:text="Fertilizer Calc\nउर्वरक कैलकुलेटर"
                                     android:textSize="12sp"
                                     android:layout_marginEnd="4dp" />
 
@@ -477,7 +494,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="Cost Calculator\nलागत गणक"
+                                    android:text="Cost Calculator\nलागत कैलकुलेटर"
                                     android:textSize="12sp"
                                     android:layout_marginStart="4dp" />
                             </LinearLayout>
@@ -532,7 +549,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="KVK Centers\nकृषि केंद्र खोजें"
+                                android:text="Find Centers\nकृषि केंद्र खोजें"
                                 android:textSize="12sp"
                                 android:layout_marginEnd="4dp"
                                 app:icon="@drawable/ic_weather_location" />

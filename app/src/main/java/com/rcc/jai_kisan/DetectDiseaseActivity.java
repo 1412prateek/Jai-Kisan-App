@@ -85,7 +85,7 @@ public class DetectDiseaseActivity extends BaseActivity {
     private LinearLayout layoutCalculatorButtons;
     private MaterialButton btnFertilizersCalc, btnCostsCalc, btnIrrigationPlanner, btnYieldEstimator;
     private TextView tvSummaryEn, tvSummaryHi;
-    private TextView tvSurvivalChancePercent;
+    private TextView tvSurvivalChancePercent, tvSurvivalChanceLabelEn, tvSurvivalChanceLabelHi;
     private LinearProgressIndicator survivalProgressIndicator;
     private MaterialButton btnGovtScheme;
     private MaterialButton btnFindCenters, btnShareReport;
@@ -179,6 +179,8 @@ public class DetectDiseaseActivity extends BaseActivity {
         tvResponseTime = findViewById(R.id.tvResponseTime);
         healthScoreView = findViewById(R.id.healthScoreView);
         cardSurvivalChance = findViewById(R.id.cardSurvivalChance);
+        tvSurvivalChanceLabelEn = findViewById(R.id.tvSurvivalChanceLabelEn);
+        tvSurvivalChanceLabelHi = findViewById(R.id.tvSurvivalChanceLabelHi);
         cardDiseaseBadge = findViewById(R.id.cardDiseaseBadge);
         ivDiseaseIcon = findViewById(R.id.ivDiseaseIcon);
         tvDiseaseTitle = findViewById(R.id.tvDiseaseTitle);
@@ -262,25 +264,34 @@ public class DetectDiseaseActivity extends BaseActivity {
         }
         TextView tvDetectDescription = findViewById(R.id.tvDetectDescription);
         if (tvDetectDescription != null) {
-            tvDetectDescription.setText(LanguageManager.getDual(this, "Analyze any crop, leaf, or fruit. Capture or upload a photo for an expert report.", "detect_desc"));
+            String enDesc = "Analyze any crop, leaf, or fruit. Capture or upload a photo for an expert report.";
+            String regDesc = LanguageManager.getRegional(this, "detect_desc", "किसी भी फसल, पत्ती या फल का विश्लेषण करें। विशेषज्ञ रिपोर्ट पाने के लिए फोटो खींचें या अपलोड करें।");
+            tvDetectDescription.setText(LanguageManager.formatLines(this, enDesc, regDesc));
         }
         if (placeholderText != null) {
-            placeholderText.setText(LanguageManager.getDual(this, "No Image Selected", "no_image_selected"));
+            placeholderText.setText(LanguageManager.formatLines(this, "No Image Selected", LanguageManager.getRegional(this, "no_image_selected", "कोई छवि चयनित नहीं")));
         }
         MaterialButton btnCapture = findViewById(R.id.btnCaptureImage);
         if (btnCapture != null) {
-            btnCapture.setText(LanguageManager.getDual(this, "Capture", "capture"));
+            btnCapture.setText(LanguageManager.getButtonLines(this, "Capture", "capture"));
         }
         MaterialButton btnUpload = findViewById(R.id.btnUploadImage);
         if (btnUpload != null) {
-            btnUpload.setText(LanguageManager.getDual(this, "Upload", "upload"));
+            btnUpload.setText(LanguageManager.getButtonLines(this, "Upload", "upload"));
         }
         if (btnDetectDisease != null) {
-            btnDetectDisease.setText(LanguageManager.getDual(this, "Analyze Photo", "analyze_photo"));
+            btnDetectDisease.setText(LanguageManager.getButtonLines(this, "Analyze Photo", "analyze_photo"));
         }
-        TextView tvSurvivalChanceLabel = findViewById(R.id.tvSurvivalChanceLabel);
-        if (tvSurvivalChanceLabel != null) {
-            tvSurvivalChanceLabel.setText(LanguageManager.getDual(this, "Survival Chance", "survival_chance"));
+        if (tvSurvivalChanceLabelEn != null) {
+            tvSurvivalChanceLabelEn.setText("Survival Chance");
+        }
+        if (tvSurvivalChanceLabelHi != null) {
+            if (LanguageManager.isEnglishOnly(this)) {
+                tvSurvivalChanceLabelHi.setVisibility(View.GONE);
+            } else {
+                tvSurvivalChanceLabelHi.setText(LanguageManager.getRegional(this, "survival_chance", "जीवित रहने की संभावना"));
+                tvSurvivalChanceLabelHi.setVisibility(View.VISIBLE);
+            }
         }
         TextView tvSummaryLabel = findViewById(R.id.tvSummaryLabel);
         if (tvSummaryLabel != null) {
@@ -303,22 +314,22 @@ public class DetectDiseaseActivity extends BaseActivity {
             tvApplyToolsLabel.setText(LanguageManager.getDual(this, "Apply to Farming Tools", "apply_to_tools"));
         }
         if (btnFertilizersCalc != null) {
-            btnFertilizersCalc.setText(LanguageManager.getDual(this, "Fertilizer Calc", "fertilizer_calc"));
+            btnFertilizersCalc.setText(LanguageManager.getButtonLines(this, "Fertilizer Calc", "fertilizer_calc"));
         }
         if (btnCostsCalc != null) {
-            btnCostsCalc.setText(LanguageManager.getDual(this, "Cost Calculator", "cost_calc"));
+            btnCostsCalc.setText(LanguageManager.getButtonLines(this, "Cost Calculator", "cost_calc"));
         }
         if (btnIrrigationPlanner != null) {
-            btnIrrigationPlanner.setText(LanguageManager.getDual(this, "Irrigation Planner", "irrigation_plan"));
+            btnIrrigationPlanner.setText(LanguageManager.getButtonLines(this, "Irrigation Planner", "irrigation_plan"));
         }
         if (btnYieldEstimator != null) {
-            btnYieldEstimator.setText(LanguageManager.getDual(this, "Yield Estimator", "yield_estimator"));
+            btnYieldEstimator.setText(LanguageManager.getButtonLines(this, "Yield Estimator", "yield_estimator"));
         }
         if (btnFindCenters != null) {
-            btnFindCenters.setText(LanguageManager.getDual(this, "Find Centers", "find_centers"));
+            btnFindCenters.setText(LanguageManager.getButtonLines(this, "Find Centers", "find_centers"));
         }
         if (btnShareReport != null) {
-            btnShareReport.setText(LanguageManager.getDual(this, "Share Report", "share_report"));
+            btnShareReport.setText(LanguageManager.getButtonLines(this, "Share Report", "share_report"));
         }
         if (lastDiseaseResult != null) {
             displayResult(currentResultText);
@@ -957,20 +968,29 @@ public class DetectDiseaseActivity extends BaseActivity {
         if (result.survivalChance >= 70) {
             survivalColor = 0xFF2E7D32;
             if (cardSurvivalChance != null) {
-                cardSurvivalChance.setCardBackgroundColor(0xFFF1F8E9);
-                cardSurvivalChance.setStrokeColor(0xFFDCEDC8);
+                cardSurvivalChance.setCardBackgroundColor(0xFFF2F9F2);
+                cardSurvivalChance.setStrokeColor(0xFFD7ECD9);
+            }
+            if (survivalProgressIndicator != null) {
+                survivalProgressIndicator.setTrackColor(0xFFD7ECD9);
             }
         } else if (result.survivalChance >= 40) {
             survivalColor = 0xFFF59E0B;
             if (cardSurvivalChance != null) {
-                cardSurvivalChance.setCardBackgroundColor(0xFFFFF8E1);
-                cardSurvivalChance.setStrokeColor(0xFFFFECB3);
+                cardSurvivalChance.setCardBackgroundColor(0xFFFFF9E6);
+                cardSurvivalChance.setStrokeColor(0xFFFFE082);
+            }
+            if (survivalProgressIndicator != null) {
+                survivalProgressIndicator.setTrackColor(0xFFFFECB3);
             }
         } else {
             survivalColor = 0xFFD32F2F;
             if (cardSurvivalChance != null) {
                 cardSurvivalChance.setCardBackgroundColor(0xFFFCE8E6);
                 cardSurvivalChance.setStrokeColor(0xFFFFCDD2);
+            }
+            if (survivalProgressIndicator != null) {
+                survivalProgressIndicator.setTrackColor(0xFFFFCDD2);
             }
         }
         tvSurvivalChancePercent.setTextColor(survivalColor);

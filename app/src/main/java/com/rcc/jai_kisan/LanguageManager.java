@@ -170,7 +170,10 @@ public class LanguageManager {
         hi.put("voice_report", "आवाज सहायक रिपोर्ट");
         hi.put("share_report", "रिपोर्ट साझा करें");
         hi.put("share_text", "टेक्स्ट के रूप में साझा करें");
-        hi.put("share_pdf", "पीडीएफ के रूप में साझा करें");
+        hi.put("share_pdf", "पीडीएफ साझा करें");
+        hi.put("share_option", "साझा करने का विकल्प");
+        hi.put("share_text_desc", "रिपोर्ट को संदेश के रूप में साझा करें।");
+        hi.put("share_pdf_desc", "एक सुंदर पीडीएफ दस्तावेज साझा करें।");
         hi.put("cancel", "रद्द करें");
         hi.put("settings", "सेटिंग्स");
         hi.put("language", "भाषा");
@@ -220,7 +223,7 @@ public class LanguageManager {
         hi.put("estimate_yield", "पैदावार का अनुमान लगाएं");
         hi.put("generate_plan", "सिंचाई योजना बनाएं");
         hi.put("health_status", "स्वास्थ्य स्थिति");
-        hi.put("survival_chance", "बचने की संभावना");
+        hi.put("survival_chance", "जीवित रहने की संभावना");
         hi.put("summary", "सारांश");
         hi.put("recommended_actions", "क्या करें (Do's)");
         hi.put("things_to_avoid", "क्या न करें (Don'ts)");
@@ -333,7 +336,10 @@ public class LanguageManager {
         bn.put("voice_report", "ভয়েস সহকারী রিপোর্ট");
         bn.put("share_report", "রিপোর্ট শেয়ার করুন");
         bn.put("share_text", "টেক্সট হিসেবে শেয়ার করুন");
-        bn.put("share_pdf", "পিডিএফ হিসেবে শেয়ার করুন");
+        bn.put("share_pdf", "পিডিএফ শেয়ার করুন");
+        bn.put("share_option", "শেয়ার বিকল্প");
+        bn.put("share_text_desc", "রিপোর্টটি বার্তা হিসেবে শেয়ার করুন।");
+        bn.put("share_pdf_desc", "একটি সুন্দর পিডিএফ নথি শেয়ার করুন।");
         bn.put("cancel", "বাতিল");
         bn.put("settings", "সেটিংস");
         bn.put("language", "ভাষা");
@@ -496,7 +502,10 @@ public class LanguageManager {
         te.put("voice_report", "వాయిస్ అసిస్టెంట్ నివేదిక");
         te.put("share_report", "నివేదికను పంచుకోండి");
         te.put("share_text", "టెక్స్ట్‌గా పంచుకోండి");
-        te.put("share_pdf", "PDFగా పంచుకోండి");
+        te.put("share_pdf", "పిడిఎఫ్‌గా పంచుకోండి");
+        te.put("share_option", "షేర్ ఎంపిక");
+        te.put("share_text_desc", "నివేదికను సందేశంగా పంచుకోండి.");
+        te.put("share_pdf_desc", "అందమైన పిడిఎఫ్ పత్రాన్ని పంచుకోండి.");
         te.put("cancel", "రద్దు చేయండి");
         te.put("settings", "సెట్టింగులు");
         te.put("language", "భాష");
@@ -659,7 +668,10 @@ public class LanguageManager {
         mr.put("voice_report", "व्हॉइस असिस्टंट अहवाल");
         mr.put("share_report", "अहवाल शेअर करा");
         mr.put("share_text", "मजकूर म्हणून शेअर करा");
-        mr.put("share_pdf", "पीडीएफ म्हणून शेअर करा");
+        mr.put("share_pdf", "पीडीएफ शेअर करा");
+        mr.put("share_option", "शेअर पर्याय");
+        mr.put("share_text_desc", "अहवाल संदेश म्हणून शेअर करा.");
+        mr.put("share_pdf_desc", "एक सुंदर पीडीएफ दस्तऐवज शेअर करा.");
         mr.put("cancel", "रद्द करा");
         mr.put("settings", "सेटिंग्ज");
         mr.put("language", "भाषा");
@@ -822,7 +834,10 @@ public class LanguageManager {
         ta.put("voice_report", "குரல் உதவியாளர் அறிக்கை");
         ta.put("share_report", "அறிக்கையைப் பகிரவும்");
         ta.put("share_text", "உரையாகப் பகிரவும்");
-        ta.put("share_pdf", "PDF ஆகப் பகிரவும்");
+        ta.put("share_pdf", "PDF பகிரவும்");
+        ta.put("share_option", "பகிர்வு விருப்பம்");
+        ta.put("share_text_desc", "அறிக்கையை செய்தியாகப் பகிரவும்.");
+        ta.put("share_pdf_desc", "அழகான PDF ஆவணத்தைப் பகிரவும்.");
         ta.put("cancel", "ரத்து செய்");
         ta.put("settings", "அமைப்புகள்");
         ta.put("language", "மொழி");
@@ -985,7 +1000,10 @@ public class LanguageManager {
         gu.put("voice_report", "વોઇસ આસિસ્ટન્ટ રિપોર્ટ");
         gu.put("share_report", "રિપોર્ટ શેર કરો");
         gu.put("share_text", "ટેક્સ્ટ તરીકે શેર કરો");
-        gu.put("share_pdf", "PDF તરીકે શેર કરો");
+        gu.put("share_pdf", "પીડીએફ શેર કરો");
+        gu.put("share_option", "શેર વિકલ્પ");
+        gu.put("share_text_desc", "અહેવાલ સંદેશ તરીકે શેર કરો.");
+        gu.put("share_pdf_desc", "એક સુંદર પીડીએફ દસ્તાવેજ શેર કરો.");
         gu.put("cancel", "રદ કરો");
         gu.put("settings", "સેટિંગ્સ");
         gu.put("language", "ભાષા");
@@ -1148,7 +1166,10 @@ public class LanguageManager {
         kn.put("voice_report", "ಧ್ವನಿ ಸಹಾಯಕ ವರದಿ");
         kn.put("share_report", "ವರದಿ ಹಂಚಿಕೊಳ್ಳಿ");
         kn.put("share_text", "ಪಠ್ಯವಾಗಿ ಹಂಚಿಕೊಳ್ಳಿ");
-        kn.put("share_pdf", "PDF ಆಗಿ ಹಂಚಿಕೊಳ್ಳಿ");
+        kn.put("share_pdf", "ಪಿಡಿಎಫ್ ಹಂಚಿಕೊಳ್ಳಿ");
+        kn.put("share_option", "ಹಂಚಿಕೆ ಆಯ್ಕೆ");
+        kn.put("share_text_desc", "ವರದಿಯನ್ನು ಸಂದೇಶವಾಗಿ ಹಂಚಿಕೊಳ್ಳಿ.");
+        kn.put("share_pdf_desc", "ಸುಂದರವಾದ ಪಿಡಿಎಫ್ ಡಾಕ್ಯುಮೆಂಟ್ ಹಂಚಿಕೊಳ್ಳಿ.");
         kn.put("cancel", "ರದ್ದುಮಾಡಿ");
         kn.put("settings", "ಸೆಟ್ಟಿಂಗ್‌ಗಳು");
         kn.put("language", "ಭಾಷೆ");
@@ -1311,7 +1332,10 @@ public class LanguageManager {
         ml.put("voice_report", "വോയ്സ് അസിസ്റ്റന്റ് റിപ്പോർട്ട്");
         ml.put("share_report", "റിപ്പോർട്ട് പങ്കിടുക");
         ml.put("share_text", "ടെക്സ്റ്റായി പങ്കിടുക");
-        ml.put("share_pdf", "PDF ആയി പങ്കിടുക");
+        ml.put("share_pdf", "പിഡിഎഫ് പങ്കിടുക");
+        ml.put("share_option", "പങ്കിടൽ ഓപ്ഷൻ");
+        ml.put("share_text_desc", "റിപ്പോർട്ട് സന്ദേശമായി പങ്കിടുക.");
+        ml.put("share_pdf_desc", "മനോഹരമായ ഒരു പിഡിഎഫ് പ്രമാണം പങ്കിടുക.");
         ml.put("cancel", "റദ്ദാക്കുക");
         ml.put("settings", "ക്രമീകരണങ്ങൾ");
         ml.put("language", "ഭാഷ");
@@ -1474,7 +1498,10 @@ public class LanguageManager {
         pa.put("voice_report", "ਆਵਾਜ਼ ਸਹਾਇਕ ਰਿਪੋਰਟ");
         pa.put("share_report", "ਰਿਪੋਰਟ ਸਾਂਝੀ ਕਰੋ");
         pa.put("share_text", "ਟੈਕਸਟ ਵਜੋਂ ਸਾਂਝਾ ਕਰੋ");
-        pa.put("share_pdf", "ਪੀਡੀਐਫ ਵਜੋਂ ਸਾਂਝਾ ਕਰੋ");
+        pa.put("share_pdf", "ਪੀਡੀਐਫ ਸਾਂਝਾ ਕਰੋ");
+        pa.put("share_option", "ਸਾਂਝਾ ਕਰਨ ਦਾ ਵਿਕਲਪ");
+        pa.put("share_text_desc", "ਰਿਪੋਰਟ ਨੂੰ ਸੁਨੇਹੇ ਵਜੋਂ ਸਾਂਝਾ ਕਰੋ।");
+        pa.put("share_pdf_desc", "ਇੱਕ ਸੁੰਦਰ ਪੀਡੀਐਫ ਦਸਤਾਵੇਜ਼ ਸਾਂਝਾ ਕਰੋ।");
         pa.put("cancel", "ਰੱਦ ਕਰੋ");
         pa.put("settings", "ਸੈਟਿੰਗਾਂ");
         pa.put("language", "ਭਾਸ਼ਾ");
@@ -1623,6 +1650,38 @@ public class LanguageManager {
             return english;
         }
         return english + " / " + regional;
+    }
+
+    /**
+     * Formats an English string and regional string on separate lines without slashes.
+     * If 'en' is chosen, returns english only.
+     * Otherwise returns english + "\n" + regional.
+     */
+    public static String formatLines(Context context, String english, String regional) {
+        if (english == null) return regional != null ? regional : "";
+        String lang = getLanguage(context);
+        if ("en".equalsIgnoreCase(lang)) {
+            return english;
+        }
+        if (regional == null || regional.trim().isEmpty() || regional.equalsIgnoreCase(english)) {
+            return english;
+        }
+        return english + "\n" + regional;
+    }
+
+    /**
+     * Formats button text with English on line 1 and regional text on line 2 (no slashes).
+     * If 'en' is chosen, returns english only.
+     */
+    public static String getButtonLines(Context context, String defaultEnglish, String key) {
+        if (isEnglishOnly(context)) {
+            return defaultEnglish;
+        }
+        String regional = getRegional(context, key, "");
+        if (regional == null || regional.trim().isEmpty() || regional.equalsIgnoreCase(defaultEnglish)) {
+            return defaultEnglish;
+        }
+        return defaultEnglish + "\n" + regional;
     }
 
     public static String getLocalizedCropName(Context context, String cropEn, String cropHi) {

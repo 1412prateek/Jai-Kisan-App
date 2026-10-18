@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_bottom_sheet_dialog"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="22dp"
+    android:paddingBottom="24dp">
+
+    <!-- Header Title -->
+    <TextView
+        android:id="@+id/tvShareDialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Share Option / साझा करने का विकल्प"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#3E1F16"
+        android:layout_marginBottom="20dp" />
+
+    <!-- Option 1: Share as Text -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardShareText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="2dp"
+        app:strokeWidth="1.5dp"
+        app:strokeColor="#78909C"
+        app:cardPreventCornerOverlap="false"
+        app:cardBackgroundColor="@android:color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/ivShareTextIcon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_modern_share"
+                android:tint="#2E7D32"
+                app:tint="#2E7D32"
+                android:contentDescription="Share Text Icon" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvShareTextTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Share as Text / टेक्स्ट के रूप में साझा करें"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="#3E1F16" />
+
+                <TextView
+                    android:id="@+id/tvShareTextDesc1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Copies report as readable text message."
+                    android:textSize="12sp"
+                    android:textColor="#616161"
+                    android:layout_marginTop="2dp" />
+
+                <TextView
+                    android:id="@+id/tvShareTextDesc2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="रिपोर्ट को संदेश के रूप में साझा करें।"
+                    android:textSize="12sp"
+                    android:textColor="#616161"
+                    android:layout_marginTop="1dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Option 2: Share as PDF Report -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardSharePdf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="2dp"
+        app:strokeWidth="1.5dp"
+        app:strokeColor="#78909C"
+        app:cardPreventCornerOverlap="false"
+        app:cardBackgroundColor="@android:color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/ivSharePdfIcon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_modern_share"
+                android:tint="#0288D1"
+                app:tint="#0288D1"
+                android:contentDescription="Share PDF Icon" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvSharePdfTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Share as PDF Report / पीडीएफ साझा करें"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="#3E1F16" />
+
+                <TextView
+                    android:id="@+id/tvSharePdfDesc1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Generates and shares styled A4 PDF document."
+                    android:textSize="12sp"
+                    android:textColor="#616161"
+                    android:layout_marginTop="2dp" />
+
+                <TextView
+                    android:id="@+id/tvSharePdfDesc2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="एक सुंदर पीडीएफ दस्तावेज साझा करें।"
+                    android:textSize="12sp"
+                    android:textColor="#616161"
+                    android:layout_marginTop="1dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Cancel Action -->
+    <TextView
+        android:id="@+id/btnShareCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Cancel / रद्द करें"
+        android:textSize="14sp"
+        android:textColor="#546E7A"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp" />
+
+</LinearLayout>
