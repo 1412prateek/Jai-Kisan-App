@@ -7,9 +7,11 @@
     android:background="#F9F6ED">
 
     <ScrollView
+        android:id="@+id/aboutScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:scrollbars="vertical"
         android:fillViewport="true">
 
     <LinearLayout
@@ -17,16 +19,20 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:padding="20dp">
+        android:paddingHorizontal="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="36dp">
 
+        <!-- Logo with subtle warm elevation -->
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            app:cardCornerRadius="65dp"
-            app:strokeWidth="3dp"
+            android:layout_width="104dp"
+            android:layout_height="104dp"
+            app:cardCornerRadius="52dp"
+            app:strokeWidth="2.5dp"
             app:strokeColor="#A69659"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="16dp">
+            app:cardElevation="3dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
             <ImageView
                 android:id="@+id/imgGrandfather"
                 android:layout_width="match_parent"
@@ -39,81 +45,110 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Jai Kisan"
-            android:textSize="26sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="#1B1B1B"
-            android:layout_marginTop="-10dp"/>
+            android:layout_marginTop="2dp"/>
 
         <TextView
             android:id="@+id/tvAppMotto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="मेरी मिट्टी मेरे किसान"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="#388E3C"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="12dp"/>
 
+        <!-- Card 1: About Jai Kisan -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="4dp"
-            android:layout_marginVertical="8dp"
-            app:cardCornerRadius="28dp"
-            app:cardElevation="3dp"
-            app:cardMaxElevation="6dp"
-            app:cardPreventCornerOverlap="true"
-            app:strokeColor="@color/white"
+            android:layout_marginVertical="6dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#EAE5D9"
             app:cardBackgroundColor="#FFFFFF">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="16dp">
 
-                <TextView
-                    android:text="About Jai Kisan"
-                    android:textStyle="bold"
-                    android:textSize="17sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_sprout"
+                        app:tint="#2E7D32"
+                        android:layout_marginEnd="8dp"/>
+
+                    <TextView
+                        android:text="About Jai Kisan"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+                        android:textColor="#1B1B1B"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="6dp"
                     android:text="A comprehensive digital tool for farmers featuring crop disease detection, mandi market prices, weather updates and AI-powered assistance designed to support modern agriculture."
                     android:textSize="13sp"
                     android:textColor="#555555"
-                    android:lineSpacingExtra="3dp"/>
+                    android:lineSpacingExtra="2dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#E6E6E6"
-                    android:layout_marginVertical="16dp"/>
+        <!-- Card 2: Developer & Studio -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="6dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#EAE5D9"
+            app:cardBackgroundColor="#FFFFFF">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Developer Header -->
                 <TextView
                     android:text="Developer"
                     android:textStyle="bold"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
+                    android:textColor="#1B1B1B"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
                 <TextView
                     android:text="Prateek Kumar"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textColor="#333333"
-                    android:layout_marginTop="6dp"
+                    android:textColor="#2E7D32"
+                    android:layout_marginTop="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
                 <TextView
                     android:text="Founder – RSVP Studios"
-                    android:textSize="13sp"
+                    android:textSize="12sp"
                     android:textColor="#777777"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -121,78 +156,131 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#E6E6E6"
-                    android:layout_marginVertical="16dp"/>
+                    android:background="#F0EDE4"
+                    android:layout_marginVertical="10dp"/>
 
+                <!-- RSVP Studios Header -->
                 <TextView
                     android:text="About RSVP Studios"
                     android:textStyle="bold"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
+                    android:textColor="#1B1B1B"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:text="RSVP Studios is an independent development studio dedicated to building meaningful and practical technology solutions that improve real-world lives."
                     android:textSize="13sp"
-                    android:textColor="#666666"/>
+                    android:textColor="#555555"
+                    android:lineSpacingExtra="2dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#E6E6E6"
-                    android:layout_marginVertical="16dp"/>
+        <!-- Card 3: Connect & Support -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="6dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#EAE5D9"
+            app:cardBackgroundColor="#FFFFFF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <TextView
                     android:text="Contact"
                     android:textStyle="bold"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
+                    android:textColor="#1B1B1B"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnEmail"
-                    style="@style/Widget.Material3.Button.ElevatedButton"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="Email Support"
-                    app:backgroundTint="#FFFFFF"
-                    app:icon="@android:drawable/ic_dialog_email"
-                    app:iconTint="#388E3C"
-                    android:textColor="#333333"/>
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnLinkedIn"
-                    style="@style/Widget.Material3.Button.ElevatedButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="LinkedIn"
-                    app:backgroundTint="#FFFFFF"
-                    app:icon="@drawable/ic_linkedin"
-                    app:iconTint="#0077B5"
-                    android:textColor="#333333"/>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnEmail"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:text="Email"
+                        android:textSize="13sp"
+                        app:strokeColor="#C8E6C9"
+                        app:strokeWidth="1dp"
+                        app:icon="@android:drawable/ic_dialog_email"
+                        app:iconTint="#388E3C"
+                        android:textColor="#2E7D32"
+                        android:layout_marginEnd="6dp"/>
 
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnLinkedIn"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:text="LinkedIn"
+                        android:textSize="13sp"
+                        app:strokeColor="#BBDEFB"
+                        app:strokeWidth="1dp"
+                        app:icon="@drawable/ic_linkedin"
+                        app:iconTint="#0077B5"
+                        android:textColor="#0077B5"
+                        android:layout_marginStart="6dp"/>
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Subtle "More Below" scroll hint that guides the user -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:rotation="270"
+                android:src="@drawable/ic_arrow_back_24"
+                app:tint="#8D805B"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Scroll down for tribute &amp; details"
+                android:textSize="11sp"
+                android:textColor="#8D805B"
+                android:layout_marginStart="4dp"/>
+        </LinearLayout>
+
+        <!-- Tribute Button (Kept 100% untouched) -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnMemory"
             style="@style/Widget.Material3.Button.ElevatedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:text="In Loving Memory"
             android:textColor="#605435"
-
             app:icon="@drawable/ic_tribute_flower"
             app:iconTint="@null"
             app:iconSize="32dp"
             app:iconPadding="10dp"
-
             app:backgroundTint="#F2EFE4"
             android:paddingHorizontal="24dp"/>
 
@@ -201,8 +289,7 @@
             android:id="@+id/cardTransparency"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="4dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="2dp"
             app:strokeWidth="1dp"
@@ -256,14 +343,14 @@
             android:id="@+id/btnRateApp"
             style="@style/Widget.Material3.Button.ElevatedButton"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="52dp"
             android:text="⭐ Rate this App"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             app:backgroundTint="#388E3C"
             android:textColor="#FFFFFF"
-            app:cardElevation="6dp"
-            android:layout_marginTop="20dp"/>
+            app:cardElevation="4dp"
+            android:layout_marginTop="16dp"/>
 
         <TextView
             android:id="@+id/appVersionText"
@@ -272,7 +359,7 @@
             android:text="Version 1.0.3"
             android:textSize="12sp"
             android:textColor="#999999"
-            android:layout_marginTop="32dp"/>
+            android:layout_marginTop="20dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -281,7 +368,7 @@
             android:textSize="11sp"
             android:textColor="#AAAAAA"
             android:layout_marginTop="4dp"
-            android:layout_marginBottom="24dp"/>
+            android:layout_marginBottom="28dp"/>
 
     </LinearLayout>
     </ScrollView>
