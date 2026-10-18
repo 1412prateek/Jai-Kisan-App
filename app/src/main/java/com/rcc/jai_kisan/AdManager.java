@@ -210,9 +210,10 @@ public class AdManager {
     }
 
     /**
-     * Increments the global PDF counter. If counter reaches 3, shows the interstitial ad,
-     * resets counter to 0, and notifies onComplete.
-     * If blocked by Private DNS, intercepts with friendly guidance dialog before sharing.
+     * Checks if ads can be shown before exporting PDF.
+     * If blocked by Private DNS, intercepts with friendly guidance dialog (with Settings and Close buttons, NO Continue)
+     * so that Private DNS must be disabled to support free community services.
+     * If an ad is ready or can be loaded, shows the ad before proceeding with onComplete.
      */
     public void onPdfGenerated(Activity activity, Runnable onComplete) {
         if (activity == null) {
@@ -220,13 +221,15 @@ public class AdManager {
             return;
         }
 
-        SharedPreferences prefs = activity.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        int currentCount = prefs.getInt(KEY_PDF_COUNT, 0) + 1;
-        Log.d(TAG, "Global PDF generated count: " + currentCount + " / " + PDF_AD_TRIGGER_INTERVAL);
+        // First, verify whether Google Ad servers are being blocked by Private DNS / AdGuard
+        checkIsAdBlockedByDnsAsync(activity, isBlockedByDns -> {
+            if (isBlockedByDns && activity != null && !activity.isFinishing()) {
+                showPdfAdBlockerDialog(activity);
+                return;
+            }
 
-        if (currentCount >= PDF_AD_TRIGGER_INTERVAL) {
+            // Private DNS is not blocking. Check interstitial ad.
             if (mInterstitialAd != null) {
-                prefs.edit().putInt(KEY_PDF_COUNT, 0).apply();
                 mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
                     @Override
                     public void onAdDismissedFullScreenContent() {
@@ -242,35 +245,21 @@ public class AdManager {
                         if (onComplete != null) onComplete.run();
                     }
                 });
-                Log.i(TAG, "Showing Interstitial Ad after 3 PDFs.");
+                Log.i(TAG, "Showing Interstitial Ad for PDF export.");
                 mInterstitialAd.show(activity);
-                return;
             } else {
-                // Ad is not ready. Check if blocked by Private DNS / AdGuard!
-                checkIsAdBlockedByDnsAsync(activity, isBlockedByDns -> {
-                    if (isBlockedByDns && activity != null && !activity.isFinishing()) {
-                        showPdfAdBlockerDialog(activity, onComplete);
-                    } else {
-                        // Normal network delay or 1st load, don't punish normal users
-                        prefs.edit().putInt(KEY_PDF_COUNT, 0).apply();
-                        loadInterstitialAd(activity.getApplicationContext());
-                        if (onComplete != null) onComplete.run();
-                    }
-                });
-                return;
+                // If ad is currently loading or not ready yet, load it now and allow the user through
+                loadInterstitialAd(activity.getApplicationContext());
+                if (onComplete != null) {
+                    onComplete.run();
+                }
             }
-        } else {
-            prefs.edit().putInt(KEY_PDF_COUNT, currentCount).apply();
-        }
-
-        if (onComplete != null) {
-            onComplete.run();
-        }
+        });
     }
 
-    private static void showPdfAdBlockerDialog(Activity activity, Runnable onContinueAnyway) {
+    private static void showPdfAdBlockerDialog(Activity activity) {
         String title = LanguageManager.getDual(activity, "Ad-Blocker / Private DNS Detected", "adblock_dns_title");
-        String enDesc = "Private DNS (such as dns.adguard.com) is active on your device. PDF reports are supported by short ads to keep Jai Kisan completely free for all farmers.\n\nPlease disable Private DNS in settings to support our service.";
+        String enDesc = "Private DNS (such as dns.adguard.com) is active on your device, blocking advertisements.\n\nJai Kisan is a free community service for farmers supported by brief ads. To export your PDF report, please temporarily disable Private DNS in your phone settings.";
         String message;
         if (LanguageManager.isEnglishOnly(activity)) {
             message = enDesc;
@@ -279,11 +268,12 @@ public class AdManager {
             message = LanguageManager.formatLines(activity, enDesc, regDesc);
         }
         String settingsBtn = LanguageManager.getDual(activity, "Open Settings", "open_settings");
-        String continueBtn = LanguageManager.getDual(activity, "Continue", "continue");
+        String closeBtn = LanguageManager.getDual(activity, "Close", "cancel");
 
         new com.google.android.material.dialog.MaterialAlertDialogBuilder(activity)
                 .setTitle(title)
                 .setMessage(message)
+                .setCancelable(false)
                 .setPositiveButton(settingsBtn, (dialog, which) -> {
                     try {
                         activity.startActivity(new android.content.Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
@@ -293,9 +283,7 @@ public class AdManager {
                         } catch (Exception ignored) {}
                     }
                 })
-                .setNegativeButton(continueBtn, (dialog, which) -> {
-                    if (onContinueAnyway != null) onContinueAnyway.run();
-                })
+                .setNegativeButton(closeBtn, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
