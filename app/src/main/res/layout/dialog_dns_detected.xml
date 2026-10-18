@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_bottom_sheet_dialog"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:paddingTop="26dp"
+    android:paddingBottom="24dp">
+
+    <!-- Top Drag Handle -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#D7CCC8"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Shield Icon Badge -->
+    <FrameLayout
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bg_circle_amber"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="🛡️"
+            android:textSize="32sp" />
+    </FrameLayout>
+
+    <!-- Dialog Title -->
+    <TextView
+        android:id="@+id/tvDnsDialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Ad-Blocker / Private DNS Detected"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#E65100"
+        android:layout_marginBottom="10dp" />
+
+    <!-- Dialog Description -->
+    <TextView
+        android:id="@+id/tvDnsDialogDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Private DNS is active on your device. To keep Jai Kisan free for all farmers, please turn off Private DNS in your phone settings."
+        android:textSize="13sp"
+        android:textColor="#424242"
+        android:lineSpacingExtra="3dp"
+        android:layout_marginBottom="22dp" />
+
+    <!-- Open Settings CTA Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDnsOpenSettings"
+        style="@style/Widget.Material3.Button.ElevatedButton"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:text="⚙️  Open Settings / सेटिंग्स खोलें"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        app:backgroundTint="#E65100"
+        app:cornerRadius="27dp"
+        app:elevation="4dp"
+        android:layout_marginBottom="10dp" />
+
+    <!-- Close Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDnsClose"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Close / बंद करें"
+        android:textSize="14sp"
+        android:textColor="#757575" />
+
+</LinearLayout>

@@ -29,6 +29,9 @@ public class BaseActivity extends AppCompatActivity {
         if (currentAttachedLanguage != null && !currentAttachedLanguage.equalsIgnoreCase(activeLang)) {
             currentAttachedLanguage = activeLang;
             recreate();
+            return;
         }
+        // Eagerly reload ads if user just came back from toggling Private DNS in phone settings
+        AdManager.onActivityResumed(this);
     }
 }

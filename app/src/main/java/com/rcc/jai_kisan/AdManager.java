@@ -257,34 +257,61 @@ public class AdManager {
         });
     }
 
-    private static void showPdfAdBlockerDialog(Activity activity) {
+    public static void showModernDnsDialog(Activity activity, String customEnDesc, String customKey) {
+        if (activity == null || activity.isFinishing()) return;
+
+        com.google.android.material.bottomsheet.BottomSheetDialog dialog = new com.google.android.material.bottomsheet.BottomSheetDialog(activity);
+        android.view.View view = android.view.LayoutInflater.from(activity).inflate(R.layout.dialog_dns_detected, null);
+        dialog.setContentView(view);
+
+        if (dialog.getWindow() != null) {
+            android.view.View bottomSheet = dialog.getWindow().findViewById(com.google.android.material.R.id.design_bottom_sheet);
+            if (bottomSheet != null) {
+                bottomSheet.setBackground(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+            }
+        }
+
+        android.widget.TextView tvTitle = view.findViewById(R.id.tvDnsDialogTitle);
+        android.widget.TextView tvDesc = view.findViewById(R.id.tvDnsDialogDesc);
+        com.google.android.material.button.MaterialButton btnOpen = view.findViewById(R.id.btnDnsOpenSettings);
+        com.google.android.material.button.MaterialButton btnClose = view.findViewById(R.id.btnDnsClose);
+
         String title = LanguageManager.getDual(activity, "Ad-Blocker / Private DNS Detected", "adblock_dns_title");
-        String enDesc = "Private DNS (such as dns.adguard.com) is active on your device, blocking advertisements.\n\nJai Kisan is a free community service for farmers supported by brief ads. To export your PDF report, please temporarily disable Private DNS in your phone settings.";
+        String enDesc = (customEnDesc != null) ? customEnDesc :
+                "Private DNS (such as dns.adguard.com) is active on your device, blocking advertisements.\n\nJai Kisan is a free community service supported by brief ads. Please temporarily disable Private DNS in your phone settings.";
+        String descKey = (customKey != null) ? customKey : "adblock_dns_desc";
+
         String message;
         if (LanguageManager.isEnglishOnly(activity)) {
             message = enDesc;
         } else {
-            String regDesc = LanguageManager.getRegional(activity, "adblock_pdf_desc", enDesc);
+            String regDesc = LanguageManager.getRegional(activity, descKey, enDesc);
             message = LanguageManager.formatLines(activity, enDesc, regDesc);
         }
-        String settingsBtn = LanguageManager.getDual(activity, "Open Settings", "open_settings");
-        String closeBtn = LanguageManager.getDual(activity, "Close", "cancel");
 
-        new com.google.android.material.dialog.MaterialAlertDialogBuilder(activity)
-                .setTitle(title)
-                .setMessage(message)
-                .setCancelable(false)
-                .setPositiveButton(settingsBtn, (dialog, which) -> {
-                    try {
-                        activity.startActivity(new android.content.Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
-                    } catch (Exception e) {
-                        try {
-                            activity.startActivity(new android.content.Intent(android.provider.Settings.ACTION_SETTINGS));
-                        } catch (Exception ignored) {}
-                    }
-                })
-                .setNegativeButton(closeBtn, (dialog, which) -> dialog.dismiss())
-                .show();
+        tvTitle.setText(title);
+        tvDesc.setText(message);
+        btnOpen.setText(LanguageManager.getDual(activity, "Open Settings", "open_settings"));
+        btnClose.setText(LanguageManager.getDual(activity, "Close", "cancel"));
+
+        btnOpen.setOnClickListener(v -> {
+            dialog.dismiss();
+            try {
+                activity.startActivity(new android.content.Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+            } catch (Exception e) {
+                try {
+                    activity.startActivity(new android.content.Intent(android.provider.Settings.ACTION_SETTINGS));
+                } catch (Exception ignored) {}
+            }
+        });
+
+        btnClose.setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
+    }
+
+    private static void showPdfAdBlockerDialog(Activity activity) {
+        String enDesc = "Private DNS (such as dns.adguard.com) is active on your device, blocking advertisements.\n\nJai Kisan is a free community service for farmers supported by brief ads. To export your PDF report, please temporarily disable Private DNS in your phone settings.";
+        showModernDnsDialog(activity, enDesc, "adblock_pdf_desc");
     }
 
     // =========================================================================
@@ -381,52 +408,113 @@ public class AdManager {
         void onResult(boolean isBlockedByDns);
     }
 
+    /**
+     * Called whenever an activity resumes to eagerly refresh ads if they were blocked
+     * by Private DNS and the user just switched Private DNS off in phone settings.
+     */
+    public static void onActivityResumed(Activity activity) {
+        if (activity == null || activity.isFinishing()) return;
+        checkIsAdBlockedByDnsAsync(activity, isBlockedByDns -> {
+            if (!isBlockedByDns) {
+                // Network can reach ad servers now! Reload any failed ads immediately
+                getInstance().loadInterstitialAd(activity.getApplicationContext());
+                getInstance().loadRewardedAd(activity.getApplicationContext());
+            }
+        });
+    }
+
     public void showRewardedAd(Activity activity, RewardedAdCallback callback) {
         if (activity == null) {
             if (callback != null) callback.onAdFailed();
             return;
         }
 
-        if (mRewardedAd != null) {
-            final boolean[] earned = {false};
-            mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-                @Override
-                public void onAdDismissedFullScreenContent() {
-                    mRewardedAd = null;
-                    loadRewardedAd(activity.getApplicationContext());
-                    if (earned[0]) {
-                        addPhotoCredits(activity, REWARD_PHOTO_CREDITS);
-                        if (callback != null) callback.onUserEarnedReward(REWARD_PHOTO_CREDITS);
-                    } else {
-                        if (callback != null) callback.onAdFailed();
-                    }
-                }
-
-                @Override
-                public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
-                    mRewardedAd = null;
-                    loadRewardedAd(activity.getApplicationContext());
-                    handleFailureWithDnsCheck(activity, callback);
-                }
-            });
-
-            mRewardedAd.show(activity, rewardItem -> {
-                earned[0] = true;
-                Log.i(TAG, "User earned reward: " + rewardItem.getAmount() + " " + rewardItem.getType());
-            });
-        } else {
-            Log.w(TAG, "Rewarded Ad not ready, checking DNS and reloading...");
-            loadRewardedAd(activity.getApplicationContext());
-            handleFailureWithDnsCheck(activity, callback);
-        }
-    }
-
-    private void handleFailureWithDnsCheck(Activity activity, RewardedAdCallback callback) {
+        // First, check whether Private DNS is currently blocking ad requests
         checkIsAdBlockedByDnsAsync(activity, isBlockedByDns -> {
             if (isBlockedByDns) {
                 if (callback != null) callback.onAdBlockedByDns();
+                return;
+            }
+
+            if (mRewardedAd != null) {
+                final boolean[] earned = {false};
+                mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                    @Override
+                    public void onAdDismissedFullScreenContent() {
+                        mRewardedAd = null;
+                        loadRewardedAd(activity.getApplicationContext());
+                        if (earned[0]) {
+                            addPhotoCredits(activity, REWARD_PHOTO_CREDITS);
+                            if (callback != null) callback.onUserEarnedReward(REWARD_PHOTO_CREDITS);
+                        } else {
+                            if (callback != null) callback.onAdFailed();
+                        }
+                    }
+
+                    @Override
+                    public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                        mRewardedAd = null;
+                        loadRewardedAd(activity.getApplicationContext());
+                        if (callback != null) callback.onAdFailed();
+                    }
+                });
+
+                mRewardedAd.show(activity, rewardItem -> {
+                    earned[0] = true;
+                    Log.i(TAG, "User earned reward: " + rewardItem.getAmount() + " " + rewardItem.getType());
+                });
             } else {
-                if (callback != null) callback.onAdFailed();
+                // If not cached yet (e.g. user just turned off Private DNS), load with immediate callback
+                Log.i(TAG, "Rewarded Ad loading on-demand...");
+                android.widget.Toast.makeText(activity, "Loading video ad... / विज्ञापन लोड हो रहा है...", android.widget.Toast.LENGTH_SHORT).show();
+
+                isRewardedLoading = true;
+                AdRequest adRequest = new AdRequest.Builder().build();
+                RewardedAd.load(activity.getApplicationContext(), getRewardedAdUnitId(), adRequest, new RewardedAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
+                        mRewardedAd = rewardedAd;
+                        isRewardedLoading = false;
+                        Log.d(TAG, "On-demand Rewarded Ad loaded successfully.");
+
+                        if (!activity.isFinishing()) {
+                            final boolean[] earned = {false};
+                            mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                                @Override
+                                public void onAdDismissedFullScreenContent() {
+                                    mRewardedAd = null;
+                                    loadRewardedAd(activity.getApplicationContext());
+                                    if (earned[0]) {
+                                        addPhotoCredits(activity, REWARD_PHOTO_CREDITS);
+                                        if (callback != null) callback.onUserEarnedReward(REWARD_PHOTO_CREDITS);
+                                    } else {
+                                        if (callback != null) callback.onAdFailed();
+                                    }
+                                }
+
+                                @Override
+                                public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                                    mRewardedAd = null;
+                                    loadRewardedAd(activity.getApplicationContext());
+                                    if (callback != null) callback.onAdFailed();
+                                }
+                            });
+
+                            mRewardedAd.show(activity, rewardItem -> {
+                                earned[0] = true;
+                                Log.i(TAG, "User earned reward: " + rewardItem.getAmount() + " " + rewardItem.getType());
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        mRewardedAd = null;
+                        isRewardedLoading = false;
+                        Log.e(TAG, "On-demand Rewarded Ad failed to load: " + loadAdError.getMessage());
+                        if (callback != null) callback.onAdFailed();
+                    }
+                });
             }
         });
     }

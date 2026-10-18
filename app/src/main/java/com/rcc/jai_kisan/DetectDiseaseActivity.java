@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.method.LinkMovementMethod;
 import android.util.Base64;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -108,70 +109,67 @@ public class DetectDiseaseActivity extends BaseActivity {
     }
 
     private void promptWatchAdToUnlock() {
-        String title = LanguageManager.getDual(this, "Unlock Analyses", "unlock_analysis_title");
-        String message = LanguageManager.getDual(this, "Watch a short ad to unlock 3 more Photo Expert analyses & support Jai Kisan.", "unlock_analysis_desc");
-        String positiveBtn = LanguageManager.getDual(this, "Watch Ad (+3)", "watch_ad_btn");
-        String cancelBtn = LanguageManager.getDual(this, "Cancel", "cancel");
+        com.google.android.material.bottomsheet.BottomSheetDialog dialog = new com.google.android.material.bottomsheet.BottomSheetDialog(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_unlock_ad, null);
+        dialog.setContentView(view);
 
-        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(positiveBtn, (dialog, which) -> {
-                    AdManager.getInstance().showRewardedAd(this, new AdManager.RewardedAdCallback() {
-                        @Override
-                        public void onUserEarnedReward(int addedCredits) {
-                            runOnUiThread(() -> {
-                                updateCreditsDisplay();
-                                Toast.makeText(DetectDiseaseActivity.this, "Unlocked 3 Photo Expert analyses!", Toast.LENGTH_SHORT).show();
-                            });
-                        }
+        if (dialog.getWindow() != null) {
+            View bottomSheet = dialog.getWindow().findViewById(com.google.android.material.R.id.design_bottom_sheet);
+            if (bottomSheet != null) {
+                bottomSheet.setBackground(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+            }
+        }
 
-                        @Override
-                        public void onAdBlockedByDns() {
-                            runOnUiThread(() -> showAdBlockerDnsDialog());
-                        }
+        TextView tvTitle = view.findViewById(R.id.tvUnlockDialogTitle);
+        TextView tvDesc = view.findViewById(R.id.tvUnlockDialogDesc);
+        com.google.android.material.button.MaterialButton btnConfirm = view.findViewById(R.id.btnWatchAdConfirm);
+        com.google.android.material.button.MaterialButton btnCancel = view.findViewById(R.id.btnWatchAdCancel);
 
-                        @Override
-                        public void onAdFailed() {
-                            runOnUiThread(() -> {
-                                Toast.makeText(DetectDiseaseActivity.this, "Ad could not be loaded. Please try again in a moment.", Toast.LENGTH_SHORT).show();
-                            });
-                        }
+        tvTitle.setText(LanguageManager.getDual(this, "Unlock Analyses", "unlock_analysis_title"));
+
+        String enDesc = "Watch a short ad to unlock 3 more Photo Expert analyses & support Jai Kisan.";
+        if (LanguageManager.isEnglishOnly(this)) {
+            tvDesc.setText(enDesc);
+        } else {
+            String regDesc = LanguageManager.getRegional(this, "unlock_analysis_desc", enDesc);
+            tvDesc.setText(LanguageManager.formatLines(this, enDesc, regDesc));
+        }
+
+        btnConfirm.setText(LanguageManager.getDual(this, "Watch Ad (+3 Credits)", "watch_ad_btn"));
+        btnCancel.setText(LanguageManager.getDual(this, "Cancel", "cancel"));
+
+        btnConfirm.setOnClickListener(v -> {
+            dialog.dismiss();
+            AdManager.getInstance().showRewardedAd(this, new AdManager.RewardedAdCallback() {
+                @Override
+                public void onUserEarnedReward(int addedCredits) {
+                    runOnUiThread(() -> {
+                        updateCreditsDisplay();
+                        Toast.makeText(DetectDiseaseActivity.this, "Unlocked 3 Photo Expert analyses!", Toast.LENGTH_SHORT).show();
                     });
-                })
-                .setNegativeButton(cancelBtn, null)
-                .show();
+                }
+
+                @Override
+                public void onAdBlockedByDns() {
+                    runOnUiThread(() -> showAdBlockerDnsDialog());
+                }
+
+                @Override
+                public void onAdFailed() {
+                    runOnUiThread(() -> {
+                        Toast.makeText(DetectDiseaseActivity.this, "Ad could not be loaded. Please try again in a moment.", Toast.LENGTH_SHORT).show();
+                    });
+                }
+            });
+        });
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
     }
 
     private void showAdBlockerDnsDialog() {
-        String title = LanguageManager.getDual(this, "Ad-Blocker / Private DNS Detected", "adblock_dns_title");
         String enDesc = "Private DNS (such as dns.adguard.com) is active on your device, preventing ads from loading.\n\nTo unlock 3 free Photo Expert analyses & support Jai Kisan, please temporarily disable Private DNS in phone settings for 1 minute.";
-        String message;
-        if (LanguageManager.isEnglishOnly(this)) {
-            message = enDesc;
-        } else {
-            String regDesc = LanguageManager.getRegional(this, "adblock_dns_desc", enDesc);
-            message = LanguageManager.formatLines(this, enDesc, regDesc);
-        }
-        String settingsBtn = LanguageManager.getDual(this, "Open Settings", "open_settings");
-        String closeBtn = LanguageManager.getDual(this, "Close", "cancel");
-
-        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(settingsBtn, (dialog, which) -> {
-                    try {
-                        // Open Android Network & Internet / Private DNS settings directly
-                        Intent intent = new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS);
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        try {
-                            startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
-                        } catch (Exception ignored) {}
-                    }
-                })
-                .setNegativeButton(closeBtn, null)
-                .show();
+        AdManager.showModernDnsDialog(this, enDesc, "adblock_dns_desc");
     }
 
     // Structured DiseaseResult class mirroring the Kotlin definition
