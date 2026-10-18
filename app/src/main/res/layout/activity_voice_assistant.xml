@@ -71,12 +71,12 @@
                 android:padding="16dp"
                 app:tint="#4CAF50"/>
 
-            <ProgressBar
+            <com.google.android.material.loadingindicator.LoadingIndicator
                 android:id="@+id/progressBar"
+                style="@style/Widget.Material3.LoadingIndicator.Contained"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:indeterminateTint="#4CAF50"
                 android:visibility="gone"/>
 
             <com.google.android.material.card.MaterialCardView

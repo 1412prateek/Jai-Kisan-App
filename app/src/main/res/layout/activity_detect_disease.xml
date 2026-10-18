@@ -155,13 +155,12 @@
                 app:iconGravity="textStart"
                 android:layout_marginBottom="20dp"/>
 
-            <com.google.android.material.progressindicator.CircularProgressIndicator
+            <com.google.android.material.loadingindicator.LoadingIndicator
                 android:id="@+id/loadingIndicator"
+                style="@style/Widget.Material3.LoadingIndicator.Contained"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:indeterminate="true"
-                app:indicatorColor="@color/theme_reseda_green"
                 android:visibility="gone"
                 android:layout_marginBottom="16dp"/>
 
