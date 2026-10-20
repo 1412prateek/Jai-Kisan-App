@@ -62,38 +62,6 @@ public class AboutDeveloperActivity extends BaseActivity {
         // 5. Memory Button
         findViewById(R.id.btnMemory).setOnClickListener(v -> showTributeDialog());
 
-        // 6. Circular Scroll Down Indicator
-        android.widget.ScrollView aboutScrollView = findViewById(R.id.aboutScrollView);
-        View btnScrollDown = findViewById(R.id.btnScrollDown);
-        View cardTransparency = findViewById(R.id.cardTransparency);
-        View cardTribute = findViewById(R.id.cardTribute);
-
-        if (btnScrollDown != null && aboutScrollView != null) {
-            btnScrollDown.setOnClickListener(v -> {
-                int targetY = cardTransparency != null ? cardTransparency.getTop() - 20 : (cardTribute != null ? cardTribute.getTop() - 20 : 600);
-                aboutScrollView.smoothScrollTo(0, targetY);
-                btnScrollDown.animate().alpha(0f).scaleX(0.7f).scaleY(0.7f).setDuration(250).withEndAction(() -> {
-                    btnScrollDown.setVisibility(View.GONE);
-                }).start();
-            });
-
-            // Automatically hide when user scrolls down, and reappear if at top
-            aboutScrollView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-                if (scrollY > 150) {
-                    if (btnScrollDown.getVisibility() == View.VISIBLE && btnScrollDown.getAlpha() > 0.5f) {
-                        btnScrollDown.animate().alpha(0f).scaleX(0.7f).scaleY(0.7f).setDuration(200).withEndAction(() -> {
-                            btnScrollDown.setVisibility(View.GONE);
-                        }).start();
-                    }
-                } else if (scrollY < 50) {
-                    if (btnScrollDown.getVisibility() != View.VISIBLE) {
-                        btnScrollDown.setVisibility(View.VISIBLE);
-                        btnScrollDown.animate().alpha(1f).scaleX(1f).scaleY(1f).setDuration(200).start();
-                    }
-                }
-            });
-        }
-
         AdManager.loadAdaptiveBanner(this, findViewById(R.id.adBannerContainer));
 
         localizeUI();
