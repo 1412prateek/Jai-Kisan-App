@@ -1,6 +1,8 @@
 package com.rcc.jai_kisan;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -8,15 +10,18 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -28,6 +33,7 @@ import org.json.JSONObject;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
@@ -40,17 +46,29 @@ public class WeatherActivity extends BaseActivity {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
-    TextView tvTemperature, tvDescription, tvHumidity, tvWind, tvLocation;
-    ImageView ivWeatherIcon;
-    Button btnDetectLocation;
-    AutoCompleteTextView spinnerState, citySpinner;
-    MaterialCardView cardResult;
+    private TextView tvTemperature, tvDescription, tvHumidity, tvWind, tvLocation, tvFeelsLike, tvPressure, tvVisibility;
+    private ImageView ivWeatherIcon;
+    private Button btnDetectLocation;
+    private AutoCompleteTextView spinnerState, citySpinner;
+    private MaterialCardView cardResult, cardFarmingAdvisory;
+    private FrameLayout heroWeatherContainer;
+    private ScrollView weatherScrollView;
+    private View layoutWeatherLoading;
+    private ImageButton btnRefreshWeather;
 
-    MaterialToolbar toolbar;
-    com.google.android.material.textfield.TextInputLayout layoutSpinnerState, layoutCitySpinner;
-    TextView tvOrDivider;
+    // Advisory views
+    private TextView tvAdvisoryTitle, tvSprayingAdvice, tvIrrigationAdvice;
+    private ImageView ivSprayingStatus, ivIrrigationStatus;
 
-    String API_KEY = "1cce38c2c68cf1fb412a1c2cb29c40e7";
+    private MaterialToolbar toolbar;
+    private com.google.android.material.textfield.TextInputLayout layoutSpinnerState, layoutCitySpinner;
+    private TextView tvOrDivider;
+    private TextView tvHumidityLabel, tvWindLabel, tvPressureLabel, tvVisibilityLabel;
+
+    private String lastQueriedCity = "Delhi";
+    private ObjectAnimator iconFloatAnimator;
+
+    private final String API_KEY = "1cce38c2c68cf1fb412a1c2cb29c40e7";
     private FusedLocationProviderClient fusedLocationClient;
     private ExecutorService executorService;
 
@@ -70,19 +88,39 @@ public class WeatherActivity extends BaseActivity {
         }
 
         // --- Find Views ---
+        weatherScrollView = findViewById(R.id.weatherScrollView);
         tvTemperature = findViewById(R.id.tvTemperature);
+        tvFeelsLike = findViewById(R.id.tvFeelsLike);
         tvDescription = findViewById(R.id.tvDescription);
         tvHumidity = findViewById(R.id.tvHumidity);
         tvWind = findViewById(R.id.tvWind);
+        tvPressure = findViewById(R.id.tvPressure);
+        tvVisibility = findViewById(R.id.tvVisibility);
         tvLocation = findViewById(R.id.tvLocation);
         ivWeatherIcon = findViewById(R.id.ivWeatherIcon);
         btnDetectLocation = findViewById(R.id.btnDetectLocation);
         spinnerState = findViewById(R.id.spinnerState);
         citySpinner = findViewById(R.id.citySpinner);
         cardResult = findViewById(R.id.cardResult);
+        cardFarmingAdvisory = findViewById(R.id.cardFarmingAdvisory);
+        heroWeatherContainer = findViewById(R.id.heroWeatherContainer);
+        layoutWeatherLoading = findViewById(R.id.layoutWeatherLoading);
+        btnRefreshWeather = findViewById(R.id.btnRefreshWeather);
+
         layoutSpinnerState = findViewById(R.id.layout_spinner_state);
         layoutCitySpinner = findViewById(R.id.layout_city_spinner);
         tvOrDivider = findViewById(R.id.tvOrDivider);
+
+        tvHumidityLabel = findViewById(R.id.tvHumidityLabel);
+        tvWindLabel = findViewById(R.id.tvWindLabel);
+        tvPressureLabel = findViewById(R.id.tvPressureLabel);
+        tvVisibilityLabel = findViewById(R.id.tvVisibilityLabel);
+
+        tvAdvisoryTitle = findViewById(R.id.tvAdvisoryTitle);
+        tvSprayingAdvice = findViewById(R.id.tvSprayingAdvice);
+        tvIrrigationAdvice = findViewById(R.id.tvIrrigationAdvice);
+        ivSprayingStatus = findViewById(R.id.ivSprayingStatus);
+        ivIrrigationStatus = findViewById(R.id.ivIrrigationStatus);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -90,12 +128,35 @@ public class WeatherActivity extends BaseActivity {
 
         btnDetectLocation.setOnClickListener(v -> detectLocation());
 
+        if (btnRefreshWeather != null) {
+            btnRefreshWeather.setOnClickListener(v -> {
+                btnRefreshWeather.animate().rotationBy(360f).setDuration(500).start();
+                fetchWeather(lastQueriedCity);
+            });
+        }
+
+        setupIconBreathingAnimation();
+
         localizeUI();
 
         AdManager.loadAdaptiveBanner(this, findViewById(R.id.adBannerContainer));
 
         // Fetch weather for a default location on startup
         fetchWeather("Delhi");
+    }
+
+    private void setupIconBreathingAnimation() {
+        if (ivWeatherIcon != null) {
+            PropertyValuesHolder scaleX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1.0f, 1.08f, 1.0f);
+            PropertyValuesHolder scaleY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.0f, 1.08f, 1.0f);
+            PropertyValuesHolder translateY = PropertyValuesHolder.ofFloat(View.TRANSLATION_Y, 0f, -8f, 0f);
+
+            iconFloatAnimator = ObjectAnimator.ofPropertyValuesHolder(ivWeatherIcon, scaleX, scaleY, translateY);
+            iconFloatAnimator.setDuration(2400);
+            iconFloatAnimator.setRepeatCount(ObjectAnimator.INFINITE);
+            iconFloatAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+            iconFloatAnimator.start();
+        }
     }
 
     @Override
@@ -119,10 +180,25 @@ public class WeatherActivity extends BaseActivity {
         }
         if (tvOrDivider != null) {
             if (LanguageManager.isEnglishOnly(this)) {
-                tvOrDivider.setText("... OR ...");
+                tvOrDivider.setText("OR SELECT MANUALLY");
             } else {
-                tvOrDivider.setText("... OR ... / ... " + LanguageManager.getRegional(this, "or", "या") + " ...");
+                tvOrDivider.setText("OR SELECT MANUALLY / या " + LanguageManager.getRegional(this, "or", "चुनें"));
             }
+        }
+        if (tvHumidityLabel != null) {
+            tvHumidityLabel.setText(LanguageManager.getDual(this, "Humidity", "humidity"));
+        }
+        if (tvWindLabel != null) {
+            tvWindLabel.setText(LanguageManager.getDual(this, "Wind", "wind"));
+        }
+        if (tvPressureLabel != null) {
+            tvPressureLabel.setText(LanguageManager.getDual(this, "Pressure", "weather"));
+        }
+        if (tvVisibilityLabel != null) {
+            tvVisibilityLabel.setText(LanguageManager.getDual(this, "Visibility", "weather"));
+        }
+        if (tvAdvisoryTitle != null) {
+            tvAdvisoryTitle.setText(LanguageManager.getDual(this, "Farming Impact & Advice", "irrigation_title"));
         }
     }
 
@@ -154,10 +230,9 @@ public class WeatherActivity extends BaseActivity {
         });
 
         citySpinner.setOnItemClickListener((parent, view, position, id) -> {
-            String cityFull = (String) parent.getItemAtPosition(position);
-            // "Bhagalpur / भागलपुर" -> "Bhagalpur"
-            String cityEnglish = cityFull.split("/")[0].trim();
-            fetchWeather(cityEnglish);
+            String selectedCityFull = (String) parent.getItemAtPosition(position);
+            String selectedCityEnglish = selectedCityFull.split("/")[0].trim();
+            fetchWeather(selectedCityEnglish);
         });
     }
 
@@ -167,11 +242,15 @@ public class WeatherActivity extends BaseActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
             return;
         }
+
+        if (layoutWeatherLoading != null) layoutWeatherLoading.setVisibility(View.VISIBLE);
+
         fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
             if (location != null) {
                 getCityFromLocation(location);
             } else {
-                Toast.makeText(this, "Location not available. Please enable GPS.", Toast.LENGTH_LONG).show();
+                if (layoutWeatherLoading != null) layoutWeatherLoading.setVisibility(View.GONE);
+                Toast.makeText(this, "Could not get current location. Ensure GPS is on.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -179,14 +258,24 @@ public class WeatherActivity extends BaseActivity {
     private void getCityFromLocation(Location loc) {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
-            Address address = geocoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1).get(0);
-            String cityName = address.getLocality();
-            if (cityName != null) {
-                fetchWeather(cityName);
+            List<Address> addresses = geocoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                String cityName = addresses.get(0).getLocality();
+                if (cityName == null || cityName.isEmpty()) {
+                    cityName = addresses.get(0).getSubAdminArea();
+                }
+                if (cityName != null && !cityName.isEmpty()) {
+                    fetchWeather(cityName);
+                } else {
+                    if (layoutWeatherLoading != null) layoutWeatherLoading.setVisibility(View.GONE);
+                    Toast.makeText(this, "City name not found from location.", Toast.LENGTH_SHORT).show();
+                }
             } else {
-                Toast.makeText(this, "Unable to detect city from your location.", Toast.LENGTH_LONG).show();
+                if (layoutWeatherLoading != null) layoutWeatherLoading.setVisibility(View.GONE);
+                Toast.makeText(this, "No address found for location.", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
+            if (layoutWeatherLoading != null) layoutWeatherLoading.setVisibility(View.GONE);
             e.printStackTrace();
             Toast.makeText(this, "Error getting city name.", Toast.LENGTH_SHORT).show();
         }
@@ -194,6 +283,12 @@ public class WeatherActivity extends BaseActivity {
 
     private void fetchWeather(String city) {
         String cleanCity = city.trim();
+        lastQueriedCity = cleanCity;
+
+        runOnUiThread(() -> {
+            if (layoutWeatherLoading != null) layoutWeatherLoading.setVisibility(View.VISIBLE);
+        });
+
         executorService.execute(() -> {
             try {
                 String urlString = "https://api.openweathermap.org/data/2.5/weather?q=" + cleanCity + "&appid=" + API_KEY + "&units=metric";
@@ -205,11 +300,18 @@ public class WeatherActivity extends BaseActivity {
 
                 JSONObject json = new JSONObject(result.toString());
 
-                String temp = json.getJSONObject("main").getString("temp") + "°C";
+                double tempDouble = json.getJSONObject("main").getDouble("temp");
+                double feelsLikeDouble = json.getJSONObject("main").optDouble("feels_like", tempDouble);
+                int humidityInt = json.getJSONObject("main").getInt("humidity");
+                int pressureInt = json.getJSONObject("main").optInt("pressure", 1013);
+                int visibilityInt = json.optInt("visibility", 10000);
+
+                double windSpeedDouble = json.getJSONObject("wind").getDouble("speed");
+                // Convert m/s to km/h for farmers
+                double windSpeedKmH = Math.round(windSpeedDouble * 3.6 * 10.0) / 10.0;
+
                 String descEng = json.getJSONArray("weather").getJSONObject(0).getString("description");
                 String iconCode = json.getJSONArray("weather").getJSONObject(0).getString("icon");
-                String humidityValue = json.getJSONObject("main").getString("humidity");
-                String windSpeedValue = json.getJSONObject("wind").getString("speed");
 
                 String cityName = json.getString("name");
                 String country = json.getJSONObject("sys").getString("country");
@@ -218,25 +320,116 @@ public class WeatherActivity extends BaseActivity {
                 String fullDescription = LanguageManager.getLocalizedWeatherDesc(WeatherActivity.this, descEng);
 
                 runOnUiThread(() -> {
+                    if (layoutWeatherLoading != null) layoutWeatherLoading.setVisibility(View.GONE);
+
                     cardResult.setVisibility(View.VISIBLE);
-                    tvTemperature.setText(temp);
+                    cardFarmingAdvisory.setVisibility(View.VISIBLE);
+
+                    tvTemperature.setText(Math.round(tempDouble) + "°C");
+                    tvFeelsLike.setText("Feels like " + Math.round(feelsLikeDouble) + "°C");
                     tvDescription.setText(fullDescription);
-                    tvHumidity.setText(humidityValue + "%");
-                    tvWind.setText(windSpeedValue + " m/s");
+                    tvHumidity.setText(humidityInt + "%");
+                    tvWind.setText(windSpeedKmH + " km/h");
+                    tvPressure.setText(pressureInt + " hPa");
+                    tvVisibility.setText(Math.round(visibilityInt / 1000.0) + " km");
                     tvLocation.setText(locationText);
 
-                    // Set the icon using the improved logic
+                    // Set dynamic gradient and icon
+                    updateAtmosphericTheme(iconCode);
                     setWeatherIcon(iconCode);
+
+                    // Compute and show farming advisory
+                    updateFarmingAdvisory(tempDouble, humidityInt, windSpeedKmH, iconCode);
+
+                    // Smooth scroll down to result
+                    if (weatherScrollView != null && cardResult != null) {
+                        weatherScrollView.post(() -> {
+                            weatherScrollView.smoothScrollTo(0, cardResult.getTop() - 30);
+                        });
+                    }
                 });
 
             } catch (Exception e) {
-                runOnUiThread(() -> Toast.makeText(WeatherActivity.this, "Could not fetch weather for " + cleanCity, Toast.LENGTH_SHORT).show());
+                runOnUiThread(() -> {
+                    if (layoutWeatherLoading != null) layoutWeatherLoading.setVisibility(View.GONE);
+                    Toast.makeText(WeatherActivity.this, "Could not fetch weather for " + cleanCity, Toast.LENGTH_SHORT).show();
+                });
                 e.printStackTrace();
             }
         });
     }
 
-    // ✅ FIXED ICON LOGIC: Uses your custom icons for Day/Night and specific conditions
+    private void updateAtmosphericTheme(String iconCode) {
+        if (heroWeatherContainer == null) return;
+
+        if (iconCode.contains("01")) {
+            if (iconCode.contains("n")) {
+                heroWeatherContainer.setBackgroundResource(R.drawable.bg_weather_night);
+            } else {
+                heroWeatherContainer.setBackgroundResource(R.drawable.bg_weather_sunny);
+            }
+        } else if (iconCode.contains("09") || iconCode.contains("10") || iconCode.contains("11")) {
+            heroWeatherContainer.setBackgroundResource(R.drawable.bg_weather_rainy);
+        } else if (iconCode.contains("n")) {
+            heroWeatherContainer.setBackgroundResource(R.drawable.bg_weather_night);
+        } else {
+            heroWeatherContainer.setBackgroundResource(R.drawable.bg_weather_cloudy);
+        }
+    }
+
+    private void updateFarmingAdvisory(double temp, int humidity, double windKmH, String iconCode) {
+        boolean isRainOrThunder = iconCode.contains("09") || iconCode.contains("10") || iconCode.contains("11");
+        boolean isEnglish = LanguageManager.isEnglishOnly(this);
+
+        // 1. Spraying Advice
+        if (isRainOrThunder) {
+            ivSprayingStatus.setImageResource(R.drawable.ic_close);
+            ivSprayingStatus.setImageTintList(android.content.res.ColorStateList.valueOf(0xFFD32F2F)); // Red
+            String en = "Postpone chemical spraying: rain will wash away pesticides.";
+            String hi = "कीटनाशक छिड़काव टालें: बारिश से दवा बह जाएगी।";
+            tvSprayingAdvice.setText(isEnglish ? en : LanguageManager.formatLines(this, en, LanguageManager.getRegional(this, "spray_rain", hi)));
+        } else if (windKmH > 18.0) {
+            ivSprayingStatus.setImageResource(R.drawable.ic_close);
+            ivSprayingStatus.setImageTintList(android.content.res.ColorStateList.valueOf(0xFFF57C00)); // Orange
+            String en = "Avoid spraying now: high wind (" + windKmH + " km/h) causes drift.";
+            String hi = "तेज़ हवा (" + windKmH + " km/h) के कारण छिड़काव न करें, दवा उड़ जाएगी।";
+            tvSprayingAdvice.setText(isEnglish ? en : LanguageManager.formatLines(this, en, LanguageManager.getRegional(this, "spray_wind", hi)));
+        } else if (temp > 38.0) {
+            ivSprayingStatus.setImageResource(R.drawable.ic_check_circle);
+            ivSprayingStatus.setImageTintList(android.content.res.ColorStateList.valueOf(0xFFF57C00)); // Orange
+            String en = "Spray early morning or evening: high heat degrades foliar sprays.";
+            String hi = "सुबह जल्दी या शाम को ही छिड़काव करें: तेज़ धूप में दवा असर खो देती है।";
+            tvSprayingAdvice.setText(isEnglish ? en : LanguageManager.formatLines(this, en, LanguageManager.getRegional(this, "spray_heat", hi)));
+        } else {
+            ivSprayingStatus.setImageResource(R.drawable.ic_check_circle);
+            ivSprayingStatus.setImageTintList(android.content.res.ColorStateList.valueOf(0xFF2E7D32)); // Green
+            String en = "Ideal conditions for pesticide and fertilizer spraying today.";
+            String hi = "कीटनाशक एवं उर्वरक छिड़काव के लिए आज का मौसम अनुकूल है।";
+            tvSprayingAdvice.setText(isEnglish ? en : LanguageManager.formatLines(this, en, LanguageManager.getRegional(this, "spray_good", hi)));
+        }
+
+        // 2. Irrigation Advice
+        if (isRainOrThunder || humidity > 85) {
+            ivIrrigationStatus.setImageResource(R.drawable.ic_close);
+            ivIrrigationStatus.setImageTintList(android.content.res.ColorStateList.valueOf(0xFF1976D2));
+            String en = "Rain or high humidity detected: postpone tubewell irrigation.";
+            String hi = "बारिश या अत्यधिक नमी के आसार: सिंचाई टालें और बिजली/डीजल बचाएं।";
+            tvIrrigationAdvice.setText(isEnglish ? en : LanguageManager.formatLines(this, en, LanguageManager.getRegional(this, "irrigation_rain", hi)));
+        } else if (temp > 36.0 && humidity < 40) {
+            ivIrrigationStatus.setImageResource(R.drawable.ic_water_drop);
+            ivIrrigationStatus.setImageTintList(android.content.res.ColorStateList.valueOf(0xFF1976D2));
+            String en = "High evaporation rate: irrigate in the evening to conserve water.";
+            String hi = "अधिक वाष्पीकरण: पानी बचाने और फसल सुरक्षा हेतु शाम को सिंचाई करें।";
+            tvIrrigationAdvice.setText(isEnglish ? en : LanguageManager.formatLines(this, en, LanguageManager.getRegional(this, "irrigation_heat", hi)));
+        } else {
+            ivIrrigationStatus.setImageResource(R.drawable.ic_water_drop);
+            ivIrrigationStatus.setImageTintList(android.content.res.ColorStateList.valueOf(0xFF2E7D32));
+            String en = "Standard moisture balance: maintain regular crop irrigation schedule.";
+            String hi = "सामान्य नमी संतुलन: नियमित सिंचाई चक्र जारी रख सकते हैं।";
+            tvIrrigationAdvice.setText(isEnglish ? en : LanguageManager.formatLines(this, en, LanguageManager.getRegional(this, "irrigation_normal", hi)));
+        }
+    }
+
     private void setWeatherIcon(String iconCode) {
         int iconResId = R.drawable.ic_weather_cloud; // Default fallback
 
@@ -248,12 +441,12 @@ public class WeatherActivity extends BaseActivity {
                 iconResId = R.drawable.ic_weather_sun;  // Day -> Sun
             }
         }
-        // 2. Few Clouds (02) - Distinct Day/Night icons
+        // 2. Few Clouds (02)
         else if (iconCode.contains("02")) {
             if (iconCode.contains("n")) {
-                iconResId = R.drawable.ic_weather_partly_cloudy_night; // Night Clouds
+                iconResId = R.drawable.ic_weather_partly_cloudy_night;
             } else {
-                iconResId = R.drawable.ic_weather_partly_cloudy_day;   // Day Clouds
+                iconResId = R.drawable.ic_weather_partly_cloudy_day;
             }
         }
         // 3. Scattered/Broken Clouds (03, 04)
@@ -289,6 +482,15 @@ public class WeatherActivity extends BaseActivity {
             } else {
                 Toast.makeText(this, "Permission denied. Please select a city manually.", Toast.LENGTH_LONG).show();
             }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (iconFloatAnimator != null) {
+            iconFloatAnimator.cancel();
+            iconFloatAnimator = null;
         }
     }
 

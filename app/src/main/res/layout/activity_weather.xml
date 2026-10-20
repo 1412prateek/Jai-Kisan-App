@@ -22,9 +22,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
-            android:layout_marginTop="8dp"
-            app:cardCornerRadius="38dp"
-            app:cardElevation="0dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="3dp"
             app:strokeWidth="0dp"
             app:cardBackgroundColor="@color/theme_sandy_brown">
 
@@ -34,6 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:titleTextColor="@color/text_on_sandy_brown"
+                app:navigationIcon="@drawable/ic_arrow_back_24"
                 app:navigationIconTint="@color/text_on_sandy_brown" />
 
         </com.google.android.material.card.MaterialCardView>
@@ -41,25 +43,32 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
+        android:id="@+id/weatherScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:scrollbars="none"
         android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingHorizontal="14dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="24dp">
 
-            <!-- Location Selection Card -->
+            <!-- Location Selection Card (Sleek Modern Glass/White Design) -->
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardLocationPicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="#F9FAF7">
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="#E6DFCC"
+                android:layout_marginBottom="14dp"
+                app:cardBackgroundColor="#FFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -69,157 +78,544 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnDetectLocation"
-                        style="@style/Widget.Material3.Button"
+                        style="@style/Widget.Material3.Button.ElevatedButton"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="52dp"
                         android:text="Detect My Location / मेरी लोकेशन पता करें"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
                         app:icon="@drawable/ic_weather_location"
-                        app:backgroundTint="@color/theme_reseda_green"/>
+                        app:iconTint="#FFFFFF"
+                        app:backgroundTint="@color/green"
+                        android:textColor="#FFFFFF"
+                        app:cardElevation="2dp"
+                        app:cornerRadius="16dp"/>
 
-                    <TextView
-                        android:id="@+id/tvOrDivider"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="... OR ... / ... या ..."
-                        android:gravity="center"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="16dp"
-                        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"/>
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginVertical="12dp">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/layout_spinner_state"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="State / राज्य *"
-                        app:boxStrokeColor="@color/theme_reseda_green"
-                        app:hintTextColor="@color/theme_reseda_green"
-                        android:layout_marginBottom="12dp">
-                        <AutoCompleteTextView
-                            android:id="@+id/spinnerState"
-                            android:layout_width="match_parent"
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="1"
+                            android:background="#E0DBCF" />
+
+                        <TextView
+                            android:id="@+id/tvOrDivider"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:inputType="none" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:text="OR SELECT MANUALLY / या चुनें"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#8D805B"
+                            android:paddingHorizontal="10dp" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/layout_city_spinner"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="1"
+                            android:background="#E0DBCF" />
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="City / शहर चुनें"
-                        app:boxStrokeColor="@color/theme_reseda_green"
-                        app:hintTextColor="@color/theme_reseda_green">
-                        <AutoCompleteTextView
-                            android:id="@+id/citySpinner"
-                            android:layout_width="match_parent"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/layout_spinner_state"
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:inputType="none" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:layout_weight="1"
+                            android:hint="State / राज्य *"
+                            app:boxCornerRadiusTopStart="14dp"
+                            app:boxCornerRadiusTopEnd="14dp"
+                            app:boxCornerRadiusBottomStart="14dp"
+                            app:boxCornerRadiusBottomEnd="14dp"
+                            app:boxStrokeColor="@color/green"
+                            app:hintTextColor="@color/green"
+                            android:layout_marginEnd="6dp">
+                            <AutoCompleteTextView
+                                android:id="@+id/spinnerState"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="13sp"
+                                android:inputType="none" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/layout_city_spinner"
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="City / शहर चुनें"
+                            app:boxCornerRadiusTopStart="14dp"
+                            app:boxCornerRadiusTopEnd="14dp"
+                            app:boxCornerRadiusBottomStart="14dp"
+                            app:boxCornerRadiusBottomEnd="14dp"
+                            app:boxStrokeColor="@color/green"
+                            app:hintTextColor="@color/green"
+                            android:layout_marginStart="6dp">
+                            <AutoCompleteTextView
+                                android:id="@+id/citySpinner"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="13sp"
+                                android:inputType="none" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Weather Result Card (Hidden by default) -->
+            <!-- Loading Indicator -->
+            <LinearLayout
+                android:id="@+id/layoutWeatherLoading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:visibility="gone"
+                android:paddingVertical="20dp"
+                android:orientation="vertical">
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    app:indicatorColor="@color/green"
+                    app:trackColor="#E0E0E0" />
+
+                <TextView
+                    android:id="@+id/tvWeatherLoadingText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fetching Live Weather... / मौसम डेटा प्राप्त हो रहा है..."
+                    android:textSize="13sp"
+                    android:textColor="#555555"
+                    android:layout_marginTop="10dp" />
+            </LinearLayout>
+
+            <!-- Dynamic Atmospheric Hero Weather Card -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardResult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="0dp"
                 android:visibility="gone"
                 tools:visibility="visible"
-                app:cardBackgroundColor="#EDEDF2">
+                app:cardBackgroundColor="@android:color/transparent">
+
+                <!-- Inner Frame for Atmospheric Gradients -->
+                <FrameLayout
+                    android:id="@+id/heroWeatherContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_weather_sunny"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal">
+
+                        <!-- Top row: Location chip + Refresh icon -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:src="@drawable/ic_weather_location"
+                                app:tint="#FFFFFF"
+                                android:layout_marginEnd="6dp" />
+
+                            <TextView
+                                android:id="@+id/tvLocation"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                tools:text="Kanpur, IN"
+                                android:textColor="#FFFFFF"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:shadowColor="#40000000"
+                                android:shadowRadius="3"
+                                android:shadowDx="1"
+                                android:shadowDy="1"/>
+
+                            <ImageButton
+                                android:id="@+id/btnRefreshWeather"
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:src="@drawable/ic_restart_alt"
+                                app:tint="#FFFFFF"
+                                android:contentDescription="Refresh Weather" />
+
+                        </LinearLayout>
+
+                        <!-- Main Icon & Temperature Row -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="8dp">
+
+                            <ImageView
+                                android:id="@+id/ivWeatherIcon"
+                                android:layout_width="96dp"
+                                android:layout_height="96dp"
+                                tools:src="@drawable/ic_weather_sun"
+                                app:tint="#FFFFFF"
+                                android:layout_marginStart="8dp" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:gravity="end"
+                                android:layout_marginEnd="8dp">
+
+                                <TextView
+                                    android:id="@+id/tvTemperature"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    tools:text="34°C"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="50sp"
+                                    android:textStyle="bold"
+                                    android:shadowColor="#40000000"
+                                    android:shadowRadius="4"
+                                    android:shadowDx="1"
+                                    android:shadowDy="2"/>
+
+                                <TextView
+                                    android:id="@+id/tvFeelsLike"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    tools:text="Feels like 38°C"
+                                    android:textColor="#E0FFFFFF"
+                                    android:textSize="13sp" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <!-- Weather Condition Description Banner -->
+                        <TextView
+                            android:id="@+id/tvDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="Clear Sky / साफ़ आसमान"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:paddingVertical="4dp"
+                            android:shadowColor="#40000000"
+                            android:shadowRadius="2"/>
+
+                        <!-- 2x2 Frosted Glass Metric Grid -->
+                        <GridLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:columnCount="2"
+                            android:rowCount="2"
+                            android:layout_marginTop="16dp"
+                            android:alignmentMode="alignMargins"
+                            android:columnOrderPreserved="false">
+
+                            <!-- Metric 1: Humidity -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="4dp"
+                                android:background="@drawable/bg_glass_metric"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:layout_width="26dp"
+                                    android:layout_height="26dp"
+                                    android:src="@drawable/ic_weather_humidity"
+                                    app:tint="#FFFFFF"
+                                    android:layout_marginEnd="10dp" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tvHumidityLabel"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Humidity / नमी"
+                                        android:textColor="#D9FFFFFF"
+                                        android:textSize="11sp" />
+
+                                    <TextView
+                                        android:id="@+id/tvHumidity"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        tools:text="45%"
+                                        android:textColor="#FFFFFF"
+                                        android:textSize="15sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <!-- Metric 2: Wind Speed -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="4dp"
+                                android:background="@drawable/bg_glass_metric"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:layout_width="26dp"
+                                    android:layout_height="26dp"
+                                    android:src="@drawable/ic_weather_wind"
+                                    app:tint="#FFFFFF"
+                                    android:layout_marginEnd="10dp" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tvWindLabel"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Wind / हवा"
+                                        android:textColor="#D9FFFFFF"
+                                        android:textSize="11sp" />
+
+                                    <TextView
+                                        android:id="@+id/tvWind"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        tools:text="10 km/h"
+                                        android:textColor="#FFFFFF"
+                                        android:textSize="15sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <!-- Metric 3: Pressure -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="4dp"
+                                android:background="@drawable/bg_glass_metric"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:layout_width="26dp"
+                                    android:layout_height="26dp"
+                                    android:src="@drawable/ic_weather_cloud"
+                                    app:tint="#FFFFFF"
+                                    android:layout_marginEnd="10dp" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tvPressureLabel"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Pressure / दबाव"
+                                        android:textColor="#D9FFFFFF"
+                                        android:textSize="11sp" />
+
+                                    <TextView
+                                        android:id="@+id/tvPressure"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        tools:text="1012 hPa"
+                                        android:textColor="#FFFFFF"
+                                        android:textSize="15sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <!-- Metric 4: Visibility -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="4dp"
+                                android:background="@drawable/bg_glass_metric"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:layout_width="26dp"
+                                    android:layout_height="26dp"
+                                    android:src="@drawable/ic_modern_search"
+                                    app:tint="#FFFFFF"
+                                    android:layout_marginEnd="10dp" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tvVisibilityLabel"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Visibility / दृश्यता"
+                                        android:textColor="#D9FFFFFF"
+                                        android:textSize="11sp" />
+
+                                    <TextView
+                                        android:id="@+id/tvVisibility"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        tools:text="10 km"
+                                        android:textColor="#FFFFFF"
+                                        android:textSize="15sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                        </GridLayout>
+
+                    </LinearLayout>
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Farmer Agricultural Impact / Farming Advisory Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardFarmingAdvisory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="#C8E6C9"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:cardBackgroundColor="#F1F8F3">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:gravity="center_horizontal"
-                    android:padding="20dp">
+                    android:padding="16dp">
 
-                    <TextView
-                        android:id="@+id/tvLocation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="Kanpur, Uttar Pradesh"
-                        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-                        android:textColor="@color/text_on_sandy_brown"
-                        android:textStyle="bold"/>
-
-                    <ImageView
-                        android:id="@+id/ivWeatherIcon"
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:layout_marginTop="15dp"
-                        tools:src="@drawable/ic_weather_sun"
-                        app:tint="@color/theme_sandy_brown"/>
-
-                    <TextView
-                        android:id="@+id/tvTemperature"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="34°C"
-                        android:textAppearance="@style/TextAppearance.Material3.DisplayLarge"
-                        android:textColor="@color/theme_reseda_green"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:id="@+id/tvDescription"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="Clear Sky / साफ़ आसमान"
-                        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                        android:textColor="@color/text_on_sandy_brown"/>
-
-                    <!-- Secondary Info -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginTop="24dp">
+                        android:gravity="center_vertical">
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:src="@drawable/ic_weather_humidity"
-                                app:tint="@color/theme_reseda_green"
-                                android:layout_marginEnd="8dp"/>
-                            <TextView
-                                android:id="@+id/tvHumidity"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tools:text="45%"
-                                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"/>
-                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:src="@drawable/ic_sprout"
+                            app:tint="#2E7D32"
+                            android:layout_marginEnd="8dp" />
 
-                        <LinearLayout
-                            android:layout_width="0dp"
+                        <TextView
+                            android:id="@+id/tvAdvisoryTitle"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:src="@drawable/ic_weather_wind"
-                                app:tint="@color/theme_reseda_green"
-                                android:layout_marginEnd="8dp"/>
-                            <TextView
-                                android:id="@+id/tvWind"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tools:text="10 km/h"
-                                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"/>
-                        </LinearLayout>
+                            android:text="Farming Impact &amp; Advice / किसान सलाह"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="#2E7D32" />
                     </LinearLayout>
+
+                    <!-- Spraying Advice Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="top"
+                        android:layout_marginTop="12dp">
+
+                        <ImageView
+                            android:id="@+id/ivSprayingStatus"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_check_circle"
+                            app:tint="#2E7D32"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginTop="2dp" />
+
+                        <TextView
+                            android:id="@+id/tvSprayingAdvice"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Good conditions for pesticide/fertilizer spraying today."
+                            android:textSize="13sp"
+                            android:textColor="#333333"
+                            android:lineSpacingExtra="2dp" />
+                    </LinearLayout>
+
+                    <!-- Irrigation Advice Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="top"
+                        android:layout_marginTop="10dp">
+
+                        <ImageView
+                            android:id="@+id/ivIrrigationStatus"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_water_drop"
+                            app:tint="#1976D2"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginTop="2dp" />
+
+                        <TextView
+                            android:id="@+id/tvIrrigationAdvice"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Normal irrigation schedule recommended."
+                            android:textSize="13sp"
+                            android:textColor="#333333"
+                            android:lineSpacingExtra="2dp" />
+                    </LinearLayout>
+
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
     </ScrollView>
 
