@@ -1,102 +1,109 @@
-# Jai Kisan 🌾
+Jai Kisan 🌾
 
-**Jai Kisan** is a comprehensive Android application designed to empower farmers by providing essential tools, real-time data, and intelligent assistance. The app offers a wide range of features aimed at maximizing agricultural productivity, from disease detection to yield estimation, weather forecasts, and market prices.
+Jai Kisan is a free Android app that gives farmers practical tools, real-time information and AI-powered guidance in one place: weather forecasts, mandi (market) prices, farming calculators, crop disease detection and a hands-free voice assistant.
 
-## 🚀 Features
+The app is built and maintained by a solo developer, and it is used by real farmers who regularly send feedback and crop questions that shape each update.
 
-*   **Weather Forecast:** Get real-time weather updates and forecasts tailored to your location to plan farming activities securely.
-*   **Mandi Prices:** Access up-to-date market prices for various crops and agricultural commodities.
-*   **Farming Tools Hub:** A centralized portal for vital farming calculators:
-    *   **Cost Calculator:** Estimate and track detailed farming expenses.
-    *   **Fertilizer Calculator:** Determine the exact amount of fertilizer required for optimal soil health.
-    *   **Irrigation Planner:** Schedule and manage optimal crop watering cycles.
-    *   **Yield Estimator:** Predict your harvest yield based on crop type, area, and current conditions.
-*   **Disease Detection:** Quickly identify crop diseases using intuitive detection tools.
-*   **Voice Assistant:** An intelligent, voice-activated assistant powered by the **Gemini API** that helps you find answers and guidance hands-free while working in the field.
-*   **How To Use Guide:** Detailed instructions and an intuitive help section ensuring farmers can easily navigate the app.
+📌 Project Status
+Status: Active and maintained
+In use: Farmers were still actively using the app and sending feedback as of October 2026
+Reach: 1,000+ installs on Google Play
+Latest production release: v1.0.3 (Safety & UI Update), March 2026
+🚀 Features
+Weather Forecast: Real-time weather and forecasts for your location to help plan farming activities.
+Mandi Prices: Up-to-date market prices for crops and agricultural commodities.
+Farming Tools Hub:
+Cost Calculator: Estimate and track farming expenses.
+Fertilizer Calculator: Work out the amount of fertilizer needed for healthy soil and crops.
+Irrigation Planner: Plan and manage crop watering cycles.
+Yield Estimator: Predict harvest yield from crop type, area and conditions.
+Disease Detection: Identify common crop diseases using simple detection tools.
+Voice Assistant: A voice-activated assistant powered by the Google Gemini API that answers farming questions hands-free while working in the field.
+How To Use Guide: A built-in help section so farmers can easily learn the app.
+📱 Get the App
 
-  ## 📱 Live Application
+Available for free on Google Play:
 
-The application is publicly available on the Google Play Store:
-
-https://play.google.com/store/apps/details?id=com.rcc.jai_kisan
-
-## 📅 Project Timeline
-
-- **Oct 21, 2025** – Initial Alpha Release (Closed Testing - Alpha)
-- **Oct 24, 2025** – Internal Testing Release
-- **Nov 17, 2025** – Open Testing Release (Available to Testers) and Full Rollout (Available to Everyone) – Live on Google Play Store
-- **Mar 16, 2026** – Production Release (v1.0.3 - Safety & UI Update) – Live on Google Play Store
-
-*All releases and updates are verifiable via Google Play Console records.*
-
-## 🔄 Version History
-
-- v1.0 – Initial release and testing phases
-- v1.0.3 – Safety & UI Update (Production Release)![Uploading image.png…]()
+👉 https://play.google.com/store/apps/details?id=com.rcc.jai_kisan
 
 
-## 🛠️ Tech Stack & Architecture
+📅 Project Timeline
+Date	Milestone
+Oct 21, 2025	Initial alpha release (closed testing)
+Oct 24, 2025	Internal testing release
+Nov 17, 2025	Open testing and full rollout, live on Google Play
+Mar 16, 2026	Production release v1.0.3 (Safety & UI Update)
+Oct 20, 2026   Major Update, bug fixes and UI Improvements v1.0.5
+Oct 2026	Still active and used by farmers
 
-*   **Language:** Java (Android API 24 to API 36)
-*   **UI/Design:** Material Design (`com.google.android.material:material:1.12.0`), ConstraintLayout, CardView
-*   **Local Storage:** Room Database (`androidx.room:room-runtime:2.6.1`) for persistent, offline-capable storage.
-*   **Architecture Components:** Lifecycle ViewModel & LiveData (`androidx.lifecycle:lifecycle-viewmodel:2.6.1`)
-*   **Networking & APIs:**
-    *   OkHttp3 (`com.squareup.okhttp3:okhttp:4.12.0`) & HttpLoggingInterceptor
-    *   Gson (`com.google.code.gson:gson:2.10.1`) for JSON parsing
-*   **Image Loading:** Picasso (`com.squareup.picasso:picasso:2.71828`)
-*   **Location Services:** Google Play Services Location (`libs.play.services.location`)
-*   **Markdown Rendering:** Markwon Core (`io.noties.markwon:core:4.6.2`)
+All releases are verifiable through Google Play Console records.
 
-## ⚙️ Prerequisites
+🛠️ Tech Stack & Architecture
+Language: Java (Android API 24 to API 36)
+UI/Design: Material Design (com.google.android.material:material:1.12.0), ConstraintLayout, CardView
+Local Storage: Room Database (androidx.room:room-runtime:2.6.1) for persistent, offline-capable storage
+Architecture Components: Lifecycle ViewModel & LiveData (androidx.lifecycle:lifecycle-viewmodel:2.6.1)
+Networking & APIs:
+OkHttp3 (com.squareup.okhttp3:okhttp:4.12.0) with HttpLoggingInterceptor
+Gson (com.google.code.gson:gson:2.10.1) for JSON parsing
+Google Gemini API for the voice assistant
+Image Loading: Picasso (com.squareup.picasso:picasso:2.71828)
+Location Services: Google Play Services Location
+Markdown Rendering: Markwon Core (io.noties.markwon:core:4.6.2)
+⚙️ Prerequisites
+Android Studio Ladybug or newer
+Android SDK 36 (target SDK)
+A physical device or emulator running Android 7.0 (API 24) or higher
+🔑 Setup & API Keys
 
-Before you begin, ensure you have met the following requirements:
-*   Android Studio Ladybug or newer.
-*   Android SDK version 36 (Target SDK).
-*   A physical Android device or Emulator running Android 7.0 (API 24) or higher.
+The Voice Assistant uses the Google Gemini API, so you need your own API key to run that feature.
 
-## 🔑 Setup & API Keys
+Clone the repository:
+bash
+   git clone https://github.com/1412prateek/Jai-Kisan-App.git
+   cd Jai-Kisan-App
+Open the project in Android Studio.
+In the project root, create or open local.properties and add your key:
+properties
+   GEMINI_API_KEY=your_gemini_api_key_here
 
-This application integrates with the **Google Gemini API** for its Voice Assistant feature.
+build.gradle reads this value and injects it into the app through BuildConfig. 4. Sync the project with Gradle files. 5. Build and run on a device or emulator.
 
-1.  Clone the repository:
-    ```bash
-    git clone https://github.com/yourusername/jai-kisan.git
-    cd jai-kisan
-    ```
-2.  Open the project in Android Studio.
-3.  In the root directory of the project, locate or create a file named `local.properties`.
-4.  Add your Gemini API Key to `local.properties`:
-    ```properties
-    GEMINI_API_KEY=your_gemini_api_key_here
-    ```
-    *Note: The `build.gradle` file automatically reads this local property and injects it securely into the app using `BuildConfig`.*
-5.  Sync the project with Gradle files.
-6.  Build and run the app on your desired device/emulator.
+Security note: Never commit local.properties or any API key to the repository.
 
-## 🛡️ Permissions
+🛡️ Permissions
+INTERNET: fetch weather data and mandi prices, and answer voice assistant queries via Gemini
+ACCESS_FINE_LOCATION and ACCESS_COARSE_LOCATION: provide localized weather forecasts and relevant crop information
+🤝 Contributing
 
-The app requires the following key permissions to function fully:
-*   `INTERNET`: For fetching weather data, mandi prices, and answering voice assistant queries via Gemini.
-*   `ACCESS_FINE_LOCATION` & `ACCESS_COARSE_LOCATION`: For providing localized weather forecasts and relevant crop information.
+Contributions are welcome. Good ways to help:
 
-## 👨‍💻 Developed By & Ownership
+Report bugs or suggest features by opening an issue
+Improve translations and make the app easier for more farmers to use
+Improve disease detection accuracy and crop coverage
+Improve documentation and add tests
 
-This application is independently conceptualized, architected, designed, and fully developed by **Prateek Kumar**.
+To contribute:
 
-## ⚖️ License & Intellectual Property
+Fork the repository
+Create a branch (git checkout -b feature/your-feature)
+Commit your changes and push the branch
+Open a pull request describing what you changed and why
+🗺️ Roadmap
+Wider crop and disease coverage
+More languages and simpler voice interaction
+Better offline support
+Improved accuracy of AI-generated farming guidance
+👨‍💻 Maintainer
 
-**© 2025-Present Prateek Kumar and RSVP Studios. All Rights Reserved.**
+Created and maintained by Prateek Kumar (@1412prateek), published under RSVP Studios.
 
-*   **Proprietary Software:** This is **NOT** an open-source project. The source code is hosted on GitHub strictly for demonstrative, educational, and explanatory purposes.
-*   **Ownership:** The **Jai Kisan** app, its core ideas, source code, UI/UX designs, and all related intellectual property are the sole property of **Prateek Kumar**.
-*   **Publisher:** This application is published and distributed under **RSVP Studios**.
-*   **Studio Ownership:** **RSVP Studios** is wholly and exclusively owned by **Prateek Kumar**.
-*   **Exclusive Usage:** The application is owned and maintained by Prateek Kumar under RSVP Studios. Any collaboration or usage requires explicit permission from the owner.
-*   **Usage Restriction:** The source code and all associated functionalities are strictly intended for demonstrative and educational purposes only. Any usage, reproduction, or distribution requires explicit permission from the owner.
-*   **Rights Reserved:** All current assets, mechanics, and any future associated work or updates are strictly protected. No part of this application, its concept, or its presentation may be reproduced, distributed, copied, or transmitted in any form or by any means without the prior written permission of the owner.
-*   **Protection:** This project is protected as intellectual property to prevent unauthorized replication of the app, its ideas, or its execution.
+Farmers and users can reach out through the Google Play listing or by opening an issue here.
 
----
-*Empowering farmers, securing the future.*
+⚖️ License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+The "Jai Kisan" name, logo and RSVP Studios branding are not covered by the license, so please do not use them to publish a competing or misleading app.
+
+Empowering farmers, securing the future.
