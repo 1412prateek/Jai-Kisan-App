@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/liveDoctorRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#05080E">
+
+    <!-- CameraX Fullscreen Viewfinder -->
+    <androidx.camera.view.PreviewView
+        android:id="@+id/cameraPreview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Cinematic Vignette & Ambient Overlays -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_gravity="top"
+        android:background="@drawable/gradient_camera_top" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/gradient_camera_bottom" />
+
+    <!-- Central Gemini Live Nebula Wave Visualizer -->
+    <com.rcc.jai_kisan.GeminiLiveVisualizerView
+        android:id="@+id/geminiLiveVisualizer"
+        android:layout_width="320dp"
+        android:layout_height="320dp"
+        android:layout_gravity="center" />
+
+    <!-- Scanning Reticle / Center Leaf Target Ring -->
+    <ImageView
+        android:id="@+id/ivScanReticle"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:layout_gravity="center"
+        android:alpha="0.80"
+        android:src="@drawable/bg_scan_reticle"
+        android:contentDescription="Aim at Crop Leaf" />
+
+    <!-- ==================== TOP BAR HUD ==================== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="top"
+        android:paddingHorizontal="14dp"
+        android:paddingTop="36dp">
+
+        <!-- Header: Back, Live Pill, Flashlight -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_seaglass_circle_control"
+                android:src="@drawable/ic_arrow_back_24"
+                app:tint="#FFFFFF"
+                android:contentDescription="Back" />
+
+            <!-- Frosted Sea-Glass Live Status Pill -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="10dp"
+                app:cardCornerRadius="22dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="#55FFFFFF"
+                app:cardBackgroundColor="#450A1926">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="14dp">
+
+                    <View
+                        android:id="@+id/pulseLiveDot"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/bg_dot_live_red" />
+
+                    <TextView
+                        android:id="@+id/tvLiveHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="GEMINI LIVE • CROP DOCTOR"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.04"
+                        android:layout_marginStart="8dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <ImageButton
+                android:id="@+id/btnFlashlight"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_seaglass_circle_control"
+                android:src="@drawable/ic_flashlight_white_24"
+                app:tint="#FFFFFF"
+                android:contentDescription="Flashlight" />
+        </LinearLayout>
+
+        <!-- Dynamic Live HUD Card (Plant Name, Health Status Badge, Spoken Diagnosis) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardLiveHud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:cardCornerRadius="22dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1.2dp"
+            app:strokeColor="#50FFFFFF"
+            app:cardBackgroundColor="#550D1D2D">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_sprout"
+                        app:tint="#6EE7B7" />
+
+                    <TextView
+                        android:id="@+id/tvPlantIdentified"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Aim camera at crop leaf / फसल की ओर देखें"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:layout_marginStart="8dp" />
+
+                    <!-- Health Pill Badge -->
+                    <TextView
+                        android:id="@+id/badgeHealthStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="STANDBY"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/bg_badge_standby"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="4dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvLiveDiagnosis"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tap mic or hold to speak. Ask any question about your crop's health, pests, or fertilizers."
+                    android:textColor="#E0FFFFFF"
+                    android:textSize="12.5sp"
+                    android:lineSpacingExtra="3dp"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+
+    <!-- ==================== BOTTOM INTERACTION BAR ==================== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="28dp">
+
+        <!-- Real-Time Speech Recognition Transcript Bubble -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardTranscriptBubble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#70FFFFFF"
+            app:cardBackgroundColor="#800A1926">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="9dp">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_mic_white_24"
+                    app:tint="#6EE7B7"
+                    android:layout_marginEnd="6dp" />
+
+                <TextView
+                    android:id="@+id/tvTranscriptText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxWidth="280dp"
+                    android:text="Listening..."
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Floating Sea-Glass Controls Container -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical|center_horizontal">
+
+            <!-- Snap Frame / Diagnose Leaf Now -->
+            <ImageButton
+                android:id="@+id/btnSnapAnalyze"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:background="@drawable/bg_seaglass_circle_control"
+                android:src="@drawable/ic_modern_search"
+                app:tint="#FFFFFF"
+                android:contentDescription="Analyze Leaf Now" />
+
+            <!-- Primary Glowing Sea-Glass Mic Button -->
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="26dp">
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/progressThinking"
+                    android:layout_width="86dp"
+                    android:layout_height="86dp"
+                    android:layout_gravity="center"
+                    android:indeterminate="true"
+                    android:visibility="gone"
+                    app:indicatorColor="#6EE7B7"
+                    app:indicatorSize="86dp"
+                    app:trackThickness="4dp" />
+
+                <ImageButton
+                    android:id="@+id/btnMicTalk"
+                    android:layout_width="74dp"
+                    android:layout_height="74dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_seaglass_mic_button"
+                    android:src="@drawable/ic_mic_white_24"
+                    app:tint="#FFFFFF"
+                    android:scaleType="centerInside"
+                    android:contentDescription="Tap or Hold to Talk" />
+            </FrameLayout>
+
+            <!-- Speaker / Read-Aloud Audio Toggle -->
+            <ImageButton
+                android:id="@+id/btnSpeakerToggle"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:background="@drawable/bg_seaglass_circle_control"
+                android:src="@drawable/ic_volume_up_white_24"
+                app:tint="#FFFFFF"
+                android:contentDescription="Toggle Voice Output" />
+        </LinearLayout>
+
+        <!-- Dynamic Instructions Hint -->
+        <TextView
+            android:id="@+id/tvMicInstruction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tap mic to ask • Aim camera at leaf"
+            android:textColor="#CCFFFFFF"
+            android:textSize="12sp"
+            android:shadowColor="#80000000"
+            android:shadowRadius="3"
+            android:layout_marginTop="12dp" />
+
+    </LinearLayout>
+
+</FrameLayout>

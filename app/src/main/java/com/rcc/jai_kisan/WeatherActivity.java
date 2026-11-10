@@ -50,10 +50,10 @@ public class WeatherActivity extends BaseActivity {
     private ImageView ivWeatherIcon;
     private Button btnDetectLocation;
     private AutoCompleteTextView spinnerState, citySpinner;
-    private MaterialCardView cardResult, cardFarmingAdvisory;
+    private MaterialCardView cardResult, cardFarmingAdvisory, cardToolbar, cardLocationPicker;
     private FrameLayout heroWeatherContainer;
     private ScrollView weatherScrollView;
-    private View layoutWeatherLoading;
+    private View layoutWeatherLoading, weatherRoot;
     private ImageButton btnRefreshWeather;
 
     // Advisory views
@@ -88,6 +88,9 @@ public class WeatherActivity extends BaseActivity {
         }
 
         // --- Find Views ---
+        weatherRoot = findViewById(R.id.weatherRoot);
+        cardToolbar = findViewById(R.id.cardToolbar);
+        cardLocationPicker = findViewById(R.id.cardLocationPicker);
         weatherScrollView = findViewById(R.id.weatherScrollView);
         tvTemperature = findViewById(R.id.tvTemperature);
         tvFeelsLike = findViewById(R.id.tvFeelsLike);
@@ -362,18 +365,39 @@ public class WeatherActivity extends BaseActivity {
     private void updateAtmosphericTheme(String iconCode) {
         if (heroWeatherContainer == null) return;
 
-        if (iconCode.contains("01")) {
-            if (iconCode.contains("n")) {
-                heroWeatherContainer.setBackgroundResource(R.drawable.bg_weather_night);
-            } else {
-                heroWeatherContainer.setBackgroundResource(R.drawable.bg_weather_sunny);
-            }
+        int pageGradientRes;
+        int statusBarColor;
+
+        if (iconCode.contains("01") && !iconCode.contains("n")) {
+            // === SUNNY / CLEAR DAY ===
+            // Soft, warm, light yellowish-orange gradient
+            pageGradientRes = R.drawable.bg_weather_page_sunny;
+            statusBarColor = 0xFFC8661E;
         } else if (iconCode.contains("09") || iconCode.contains("10") || iconCode.contains("11")) {
-            heroWeatherContainer.setBackgroundResource(R.drawable.bg_weather_rainy);
+            // === RAINY / THUNDERSTORM ===
+            // Deep Indigo / Storm Marine Gradient across whole page
+            pageGradientRes = R.drawable.bg_weather_page_rainy;
+            statusBarColor = 0xFF14243C;
         } else if (iconCode.contains("n")) {
-            heroWeatherContainer.setBackgroundResource(R.drawable.bg_weather_night);
+            // === NIGHT / CLEAR OR CLOUDY NIGHT ===
+            // Midnight Cosmic Gradient across whole page
+            pageGradientRes = R.drawable.bg_weather_page_night;
+            statusBarColor = 0xFF0A1017;
         } else {
-            heroWeatherContainer.setBackgroundResource(R.drawable.bg_weather_cloudy);
+            // === CLOUDY / OVERCAST / MIST / FOG ===
+            // Slate Blue-Grey Cloud Gradient across whole page
+            pageGradientRes = R.drawable.bg_weather_page_cloudy;
+            statusBarColor = 0xFF263238;
+        }
+
+        // Apply full page dynamic atmospheric gradient
+        if (weatherRoot != null) {
+            weatherRoot.setBackgroundResource(pageGradientRes);
+        }
+
+        // Tint status bar to match top of gradient seamlessly
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(statusBarColor);
         }
     }
 

@@ -189,6 +189,7 @@ public class LanguageManager {
         hi.put("home_voice_assistant", "आवाज़ सहायक");
         hi.put("home_mandi_prices", "मंडी के भाव");
         hi.put("home_how_to_use", "कैसे इस्तेमाल करे");
+        hi.put("home_live_doctor", "लाइव फसल डॉक्टर");
         hi.put("home_weather_info", "मौसम जानकारी");
         hi.put("home_farming_tools", "खेती उपकरण");
         hi.put("home_about", "परिचय");
@@ -361,6 +362,7 @@ public class LanguageManager {
         bn.put("home_voice_assistant", "ভয়েস সহকারী");
         bn.put("home_mandi_prices", "মান্ডির দর");
         bn.put("home_how_to_use", "ব্যবহার নির্দেশিকা");
+        bn.put("home_live_doctor", "লাইভ শস্য ডাক্তার");
         bn.put("home_weather_info", "আবহাওয়া তথ্য");
         bn.put("home_farming_tools", "কৃষি সরঞ্জাম");
         bn.put("home_about", "পরিচিতি");
@@ -533,6 +535,7 @@ public class LanguageManager {
         te.put("home_voice_assistant", "వాయిస్ అసిస్టెంట్");
         te.put("home_mandi_prices", "మార్కెట్ ధరలు");
         te.put("home_how_to_use", "ఎలా ఉపయోగించాలి");
+        te.put("home_live_doctor", "లైవ్ పంట డాక్టర్");
         te.put("home_weather_info", "వాతావరణ సమాచారం");
         te.put("home_farming_tools", "వ్యవసాయ పరికరాలు");
         te.put("home_about", "గురించి");
@@ -705,6 +708,7 @@ public class LanguageManager {
         mr.put("home_voice_assistant", "व्हॉइस सहाय्यक");
         mr.put("home_mandi_prices", "बाजार भाव");
         mr.put("home_how_to_use", "कसे वापरावे");
+        mr.put("home_live_doctor", "थेट पीक डॉक्टर");
         mr.put("home_weather_info", "हवामान माहिती");
         mr.put("home_farming_tools", "शेती अवजारे");
         mr.put("home_about", "माहिती");
@@ -877,6 +881,7 @@ public class LanguageManager {
         ta.put("home_voice_assistant", "குரல் உதவியாளர்");
         ta.put("home_mandi_prices", "சந்தை விலைகள்");
         ta.put("home_how_to_use", "எப்படி உபயோகிப்பது");
+        ta.put("home_live_doctor", "நேரடி பயிர் மருத்துவர்");
         ta.put("home_weather_info", "வானிலை தகவல்");
         ta.put("home_farming_tools", "விவசாயக் கருவிகள்");
         ta.put("home_about", "பற்றி");
@@ -1049,6 +1054,7 @@ public class LanguageManager {
         gu.put("home_voice_assistant", "વોઇસ સહાયક");
         gu.put("home_mandi_prices", "બજાર ભાવ");
         gu.put("home_how_to_use", "કેવી રીતે ઉપયોગ કરવો");
+        gu.put("home_live_doctor", "લાઇવ પાક ડૉક્ટર");
         gu.put("home_weather_info", "હવામાન માહિતી");
         gu.put("home_farming_tools", "ખેતી સાધનો");
         gu.put("home_about", "પરિચય");
@@ -1221,6 +1227,7 @@ public class LanguageManager {
         kn.put("home_voice_assistant", "ಧ್ವನಿ ಸಹಾಯಕ");
         kn.put("home_mandi_prices", "ಮಾರುಕಟ್ಟೆ ದರಗಳು");
         kn.put("home_how_to_use", "ಬಳಸುವುದು ಹೇಗೆ");
+        kn.put("home_live_doctor", "ಲೈವ್ ಬೆಳೆ ವೈದ್ಯ");
         kn.put("home_weather_info", "ಹವಾಮಾನ ಮಾಹಿತಿ");
         kn.put("home_farming_tools", "ಕೃಷಿ ಉಪಕರಣಗಳು");
         kn.put("home_about", "ಕುರಿತು");
@@ -1393,6 +1400,7 @@ public class LanguageManager {
         ml.put("home_voice_assistant", "വോയ്സ് അസിസ്റ്റന്റ്");
         ml.put("home_mandi_prices", "മാർക്കറ്റ് നിരക്കുകൾ");
         ml.put("home_how_to_use", "ഉപയോഗിക്കേണ്ട വിധം");
+        ml.put("home_live_doctor", "തത്സമയ വിള ഡോക്ടർ");
         ml.put("home_weather_info", "കാലാവസ്ഥ വിവരം");
         ml.put("home_farming_tools", "കാർഷിക ഉപകരണങ്ങൾ");
         ml.put("home_about", "വിവരണം");
@@ -1565,6 +1573,7 @@ public class LanguageManager {
         pa.put("home_voice_assistant", "ਆਵਾਜ਼ ਸਹਾਇਕ");
         pa.put("home_mandi_prices", "ਮੰਡੀ ਦੇ ਭਾਅ");
         pa.put("home_how_to_use", "ਕਿਵੇਂ ਵਰਤਣਾ ਹੈ");
+        pa.put("home_live_doctor", "ਲਾਈਵ ਫ਼ਸਲ ਡਾਕਟਰ");
         pa.put("home_weather_info", "ਮੌਸਮ ਜਾਣਕਾਰੀ");
         pa.put("home_farming_tools", "ਖੇਤੀ ਸੰਦ");
         pa.put("home_about", "ਬਾਰੇ");

@@ -32,6 +32,10 @@ public class SettingsActivity extends BaseActivity {
         tvLanguageTitle = findViewById(R.id.tvLanguageTitle);
 
         CardView cardLanguageSetting = findViewById(R.id.cardLanguageSetting);
+        CardView cardSettingsHowToUse = findViewById(R.id.cardSettingsHowToUse);
+        if (cardSettingsHowToUse != null) {
+            cardSettingsHowToUse.setOnClickListener(v -> startActivity(new Intent(SettingsActivity.this, HowToUseActivity.class)));
+        }
 
         toolbarSettings.setNavigationOnClickListener(v -> finish());
 
@@ -49,6 +53,15 @@ public class SettingsActivity extends BaseActivity {
         tvHeaderPreferences.setText(LanguageManager.getDual(this, "Preferences", "settings"));
         tvLanguageTitle.setText(LanguageManager.getDual(this, "Language", "language"));
         tvCurrentLanguage.setText(LanguageManager.getActiveLanguageDisplayName(this));
+
+        TextView tvSettingsHowToUseTitle = findViewById(R.id.tvSettingsHowToUseTitle);
+        if (tvSettingsHowToUseTitle != null) {
+            tvSettingsHowToUseTitle.setText(LanguageManager.getDual(this, "How to Use", "home_how_to_use"));
+        }
+        TextView tvSettingsHowToUseSubtitle = findViewById(R.id.tvSettingsHowToUseSubtitle);
+        if (tvSettingsHowToUseSubtitle != null) {
+            tvSettingsHowToUseSubtitle.setText(LanguageManager.getDual(this, "App Guide & Instructions", "how_to_use_title"));
+        }
 
         TextView tvSettingsTransparencyTitle = findViewById(R.id.tvSettingsTransparencyTitle);
         if (tvSettingsTransparencyTitle != null) {

@@ -18,25 +18,27 @@
         app:elevation="0dp">
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
-            app:cardCornerRadius="28dp"
-            app:cardElevation="3dp"
-            app:strokeWidth="0dp"
-            app:cardBackgroundColor="@color/theme_sandy_brown">
+            android:layout_marginBottom="6dp"
+            app:cardCornerRadius="26dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#35FFFFFF"
+            app:cardBackgroundColor="#20FFFFFF">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 app:title="Weather Info / मौसम जानकारी"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:titleTextColor="@color/text_on_sandy_brown"
+                app:titleTextColor="#FFFFFF"
                 app:navigationIcon="@drawable/ic_arrow_back_24"
-                app:navigationIconTint="@color/text_on_sandy_brown" />
+                app:navigationIconTint="#FFFFFF" />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -55,20 +57,20 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingHorizontal="14dp"
-            android:paddingTop="8dp"
+            android:paddingTop="6dp"
             android:paddingBottom="24dp">
 
-            <!-- Location Selection Card (Sleek Modern Glass/White Design) -->
+            <!-- Location Selection Card (Frosted Glass Container) -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardLocationPicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
                 app:strokeWidth="1dp"
-                app:strokeColor="#E6DFCC"
-                android:layout_marginBottom="14dp"
-                app:cardBackgroundColor="#FFFFFF">
+                app:strokeColor="#35FFFFFF"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="#22FFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -86,10 +88,12 @@
                         android:textStyle="bold"
                         app:icon="@drawable/ic_weather_location"
                         app:iconTint="#FFFFFF"
-                        app:backgroundTint="@color/green"
+                        app:backgroundTint="#35FFFFFF"
                         android:textColor="#FFFFFF"
-                        app:cardElevation="2dp"
-                        app:cornerRadius="16dp"/>
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#50FFFFFF"
+                        app:elevation="0dp"
+                        app:cornerRadius="26dp"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -102,7 +106,7 @@
                             android:layout_width="0dp"
                             android:layout_height="1dp"
                             android:layout_weight="1"
-                            android:background="#E0DBCF" />
+                            android:background="#35FFFFFF" />
 
                         <TextView
                             android:id="@+id/tvOrDivider"
@@ -111,20 +115,22 @@
                             android:text="OR SELECT MANUALLY / या चुनें"
                             android:textSize="11sp"
                             android:textStyle="bold"
-                            android:textColor="#8D805B"
-                            android:paddingHorizontal="10dp" />
+                            android:textColor="#D0FFFFFF"
+                            android:letterSpacing="0.05"
+                            android:paddingHorizontal="12dp" />
 
                         <View
                             android:layout_width="0dp"
                             android:layout_height="1dp"
                             android:layout_weight="1"
-                            android:background="#E0DBCF" />
+                            android:background="#35FFFFFF" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:baselineAligned="false">
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/layout_spinner_state"
@@ -132,19 +138,26 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:minHeight="56dp"
                             android:hint="State / राज्य *"
-                            app:boxCornerRadiusTopStart="14dp"
-                            app:boxCornerRadiusTopEnd="14dp"
-                            app:boxCornerRadiusBottomStart="14dp"
-                            app:boxCornerRadiusBottomEnd="14dp"
-                            app:boxStrokeColor="@color/green"
-                            app:hintTextColor="@color/green"
+                            app:boxCornerRadiusTopStart="16dp"
+                            app:boxCornerRadiusTopEnd="16dp"
+                            app:boxCornerRadiusBottomStart="16dp"
+                            app:boxCornerRadiusBottomEnd="16dp"
+                            app:boxStrokeColor="#80FFFFFF"
+                            app:boxBackgroundColor="#26FFFFFF"
+                            app:hintTextColor="#FFFFFF"
+                            android:textColorHint="#E6FFFFFF"
+                            app:endIconTint="#FFFFFF"
                             android:layout_marginEnd="6dp">
                             <AutoCompleteTextView
                                 android:id="@+id/spinnerState"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
+                                android:minHeight="56dp"
                                 android:textSize="13sp"
+                                android:textColor="#FFFFFF"
+                                android:paddingVertical="14dp"
                                 android:inputType="none" />
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -154,19 +167,26 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:minHeight="56dp"
                             android:hint="City / शहर चुनें"
-                            app:boxCornerRadiusTopStart="14dp"
-                            app:boxCornerRadiusTopEnd="14dp"
-                            app:boxCornerRadiusBottomStart="14dp"
-                            app:boxCornerRadiusBottomEnd="14dp"
-                            app:boxStrokeColor="@color/green"
-                            app:hintTextColor="@color/green"
+                            app:boxCornerRadiusTopStart="16dp"
+                            app:boxCornerRadiusTopEnd="16dp"
+                            app:boxCornerRadiusBottomStart="16dp"
+                            app:boxCornerRadiusBottomEnd="16dp"
+                            app:boxStrokeColor="#80FFFFFF"
+                            app:boxBackgroundColor="#26FFFFFF"
+                            app:hintTextColor="#FFFFFF"
+                            android:textColorHint="#E6FFFFFF"
+                            app:endIconTint="#FFFFFF"
                             android:layout_marginStart="6dp">
                             <AutoCompleteTextView
                                 android:id="@+id/citySpinner"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
+                                android:minHeight="56dp"
                                 android:textSize="13sp"
+                                android:textColor="#FFFFFF"
+                                android:paddingVertical="14dp"
                                 android:inputType="none" />
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -208,18 +228,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="24dp"
-                app:cardElevation="4dp"
-                app:strokeWidth="0dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="#35FFFFFF"
                 android:visibility="gone"
                 tools:visibility="visible"
-                app:cardBackgroundColor="@android:color/transparent">
+                app:cardBackgroundColor="#22FFFFFF">
 
-                <!-- Inner Frame for Atmospheric Gradients -->
+                <!-- Inner Frame for Atmospheric Weather Card -->
                 <FrameLayout
                     android:id="@+id/heroWeatherContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_weather_sunny"
                     android:padding="20dp">
 
                     <LinearLayout
@@ -514,19 +534,19 @@
                 </FrameLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Farmer Agricultural Impact / Farming Advisory Card -->
+            <!-- Farmer Agricultural Impact / Farming Advisory Card (Frosted Glass Style) -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardFarmingAdvisory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="2dp"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
                 app:strokeWidth="1dp"
-                app:strokeColor="#C8E6C9"
+                app:strokeColor="#35FFFFFF"
                 android:visibility="gone"
                 tools:visibility="visible"
-                app:cardBackgroundColor="#F1F8F3">
+                app:cardBackgroundColor="#22FFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -544,7 +564,7 @@
                             android:layout_width="22dp"
                             android:layout_height="22dp"
                             android:src="@drawable/ic_sprout"
-                            app:tint="#2E7D32"
+                            app:tint="#FFFFFF"
                             android:layout_marginEnd="8dp" />
 
                         <TextView
@@ -554,25 +574,26 @@
                             android:text="Farming Impact &amp; Advice / किसान सलाह"
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            android:textColor="#2E7D32" />
+                            android:textColor="#FFFFFF" />
                     </LinearLayout>
 
-                    <!-- Spraying Advice Row -->
+                    <!-- Spraying Advice Row (Frosted Glass Widget Pill) -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:gravity="top"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_weather_glass_widget"
+                        android:padding="12dp"
                         android:layout_marginTop="12dp">
 
                         <ImageView
                             android:id="@+id/ivSprayingStatus"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
                             android:src="@drawable/ic_check_circle"
-                            app:tint="#2E7D32"
-                            android:layout_marginEnd="10dp"
-                            android:layout_marginTop="2dp" />
+                            app:tint="#FFFFFF"
+                            android:layout_marginEnd="10dp" />
 
                         <TextView
                             android:id="@+id/tvSprayingAdvice"
@@ -581,26 +602,27 @@
                             android:layout_weight="1"
                             android:text="Good conditions for pesticide/fertilizer spraying today."
                             android:textSize="13sp"
-                            android:textColor="#333333"
+                            android:textColor="#FFFFFF"
                             android:lineSpacingExtra="2dp" />
                     </LinearLayout>
 
-                    <!-- Irrigation Advice Row -->
+                    <!-- Irrigation Advice Row (Frosted Glass Widget Pill) -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:gravity="top"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_weather_glass_widget"
+                        android:padding="12dp"
                         android:layout_marginTop="10dp">
 
                         <ImageView
                             android:id="@+id/ivIrrigationStatus"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
                             android:src="@drawable/ic_water_drop"
-                            app:tint="#1976D2"
-                            android:layout_marginEnd="10dp"
-                            android:layout_marginTop="2dp" />
+                            app:tint="#FFFFFF"
+                            android:layout_marginEnd="10dp" />
 
                         <TextView
                             android:id="@+id/tvIrrigationAdvice"
@@ -609,7 +631,7 @@
                             android:layout_weight="1"
                             android:text="Normal irrigation schedule recommended."
                             android:textSize="13sp"
-                            android:textColor="#333333"
+                            android:textColor="#FFFFFF"
                             android:lineSpacingExtra="2dp" />
                     </LinearLayout>
 

@@ -14,7 +14,7 @@ public class HomePageActivity extends BaseActivity {
     CardView cardWeather;
     CardView cardMandi;
     CardView cardFarmingTools;
-    CardView cardHowToUse;
+    CardView cardLiveDoctor;
     CardView cardVoiceAssistant;
     View btnHomeSettings;
     MaterialTextView homeTitle;
@@ -22,7 +22,7 @@ public class HomePageActivity extends BaseActivity {
     TextView tvCardDetectDisease;
     TextView tvCardVoiceAssistant;
     TextView tvCardMandi;
-    TextView tvCardHowToUse;
+    TextView tvCardLiveDoctor;
     TextView tvCardWeather;
     TextView tvCardFarmingTools;
     TextView tvCardAbout;
@@ -51,7 +51,7 @@ public class HomePageActivity extends BaseActivity {
         tvCardDetectDisease = findViewById(R.id.tvCardDetectDisease);
         tvCardVoiceAssistant = findViewById(R.id.tvCardVoiceAssistant);
         tvCardMandi = findViewById(R.id.tvCardMandi);
-        tvCardHowToUse = findViewById(R.id.tvCardHowToUse);
+        tvCardLiveDoctor = findViewById(R.id.tvCardLiveDoctor);
         tvCardWeather = findViewById(R.id.tvCardWeather);
         tvCardFarmingTools = findViewById(R.id.tvCardFarmingTools);
         tvCardAbout = findViewById(R.id.tvCardAbout);
@@ -72,9 +72,11 @@ public class HomePageActivity extends BaseActivity {
         CardView cardDetectDisease = findViewById(R.id.cardDetectDisease);
         cardDetectDisease.setOnClickListener(v -> startActivity(new Intent(HomePageActivity.this, DetectDiseaseActivity.class)));
 
-        // Initialize the How to Use card
-        cardHowToUse = findViewById(R.id.cardHowToUse);
-        cardHowToUse.setOnClickListener(v -> startActivity(new Intent(HomePageActivity.this, HowToUseActivity.class)));
+        // Initialize the Live Crop Doctor card
+        cardLiveDoctor = findViewById(R.id.cardLiveDoctor);
+        if (cardLiveDoctor != null) {
+            cardLiveDoctor.setOnClickListener(v -> startActivity(new Intent(HomePageActivity.this, LiveCropDoctorActivity.class)));
+        }
 
         // Initialize the Voice Assistant card
         cardVoiceAssistant = findViewById(R.id.cardVoiceAssistant);
@@ -107,7 +109,7 @@ public class HomePageActivity extends BaseActivity {
         if (tvCardDetectDisease != null) tvCardDetectDisease.setText(formatCardText("Detect Disease", "home_detect_disease"));
         if (tvCardVoiceAssistant != null) tvCardVoiceAssistant.setText(formatCardText("Voice Assistant", "home_voice_assistant"));
         if (tvCardMandi != null) tvCardMandi.setText(formatCardText("Mandi Prices", "home_mandi_prices"));
-        if (tvCardHowToUse != null) tvCardHowToUse.setText(formatCardText("How to Use", "home_how_to_use"));
+        if (tvCardLiveDoctor != null) tvCardLiveDoctor.setText(formatCardText("Live Doctor", "home_live_doctor"));
         if (tvCardWeather != null) tvCardWeather.setText(formatCardText("Weather Info", "home_weather_info"));
         if (tvCardFarmingTools != null) tvCardFarmingTools.setText(formatCardText("Farming Tools", "home_farming_tools"));
         if (tvCardAbout != null) tvCardAbout.setText(formatCardText("About", "home_about"));

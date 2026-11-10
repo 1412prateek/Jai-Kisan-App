@@ -189,7 +189,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardHowToUse"
+        android:id="@+id/cardLiveDoctor"
         style="@style/Widget.Material3.CardView.Elevated"
         android:layout_width="0dp"
         android:layout_height="150dp"
@@ -214,13 +214,13 @@
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/ic_how_to_use" />
+                android:src="@drawable/ic_live_crop_doctor" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvCardHowToUse"
+                android:id="@+id/tvCardLiveDoctor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="How to Use\n(कैसे इस्तेमाल करे)"
+                android:text="Live Doctor\n(लाइव फसल डॉक्टर)"
                 android:textAlignment="center"
                 android:textSize="16sp"
                 android:textColor="#000"
@@ -281,7 +281,7 @@
         app:cardCornerRadius="16dp"
         app:cardElevation="6dp"
         app:rippleColor="?attr/colorControlHighlight"
-        app:layout_constraintTop_toBottomOf="@id/cardHowToUse"
+        app:layout_constraintTop_toBottomOf="@id/cardLiveDoctor"
         app:layout_constraintStart_toEndOf="@id/cardWeather"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintWidth_percent="0.45">
